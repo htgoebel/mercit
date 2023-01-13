@@ -5,10 +5,10 @@ include default.mk
 
 .PHONY: lisp docs \
 	install install-lisp install-docs install-info \
-	test test-interactive magit \
+	test test-interactive mercit \
 	clean clean-lisp clean-docs clean-archives \
 	stats bump-versions bump-snapshots \
-	dist versionlib magit-$(VERSION).tar.gz
+	dist versionlib mercit-$(VERSION).tar.gz
 
 all: lisp docs
 
@@ -115,8 +115,8 @@ test-interactive:
 emacs-Q: clean-lisp
 	@$(EMACS) -Q $(LOAD_PATH) --debug-init --eval "(progn\
 	(setq debug-on-error t)\
-	(require 'magit)\
-	(global-set-key \"\\C-xg\" 'magit-status))"
+	(require 'mercit)\
+	(global-set-key \"\\C-xg\" 'mercit-status))"
 
 check-declare:
 	@$(MAKE) -C lisp check-declare
@@ -127,7 +127,7 @@ clean: clean-lisp clean-docs clean-archives
 	@printf "Cleaning...\n"
 	@$(RM) *.elc $(ELGS) # temporary cleanup kludge
 	@$(RM) docs/*.texi~ docs/*.info-1 docs/*.info-2
-	@$(RM) magit-pkg.el t/magit-tests.elc
+	@$(RM) mercit-pkg.el t/mercit-tests.elc
 
 clean-lisp:
 	@$(MAKE) -C lisp clean
@@ -136,8 +136,8 @@ clean-docs:
 	@$(MAKE) -C docs clean
 
 clean-archives:
-	@$(RM) *.tar.gz *.tar lisp/magit-version.el
-	@$(RMDIR) magit-$(VERSION)
+	@$(RM) *.tar.gz *.tar lisp/mercit-version.el
+	@$(RMDIR) mercit-$(VERSION)
 
 clean-all: clean clean-stats
 
@@ -158,28 +158,28 @@ publish:
 release:
 	@$(MAKE) -C docs release
 
-dist: magit-$(VERSION).tar.gz
+dist: mercit-$(VERSION).tar.gz
 
 versionlib:
 	@$(MAKE) -C lisp versionlib
 
 DIST_ROOT_FILES = LICENSE default.mk Makefile README.md
-DIST_LISP_FILES = $(addprefix lisp/,$(ELS) magit-version.el Makefile)
+DIST_LISP_FILES = $(addprefix lisp/,$(ELS) mercit-version.el Makefile)
 DIST_DOCS_FILES = $(addprefix docs/,$(TEXIPAGES) AUTHORS.md Makefile)
 ifneq ("$(wildcard docs/RelNotes/$(VERSION).txt)","")
   DIST_DOCS_FILES += docs/RelNotes/$(VERSION).txt
 endif
 
-magit-$(VERSION).tar.gz: lisp versionlib info
+mercit-$(VERSION).tar.gz: lisp versionlib info
 	@printf "Packing $@\n"
-	@$(MKDIR) magit-$(VERSION)
-	@$(CP) $(DIST_ROOT_FILES) magit-$(VERSION)
-	@$(MKDIR) magit-$(VERSION)/lisp
-	@$(CP) $(DIST_LISP_FILES) magit-$(VERSION)/lisp
-	@$(MKDIR) magit-$(VERSION)/docs
-	@$(CP) $(DIST_DOCS_FILES) magit-$(VERSION)/docs
-	@$(TAR) cz --mtime=./magit-$(VERSION) -f magit-$(VERSION).tar.gz magit-$(VERSION)
-	@$(RMDIR) magit-$(VERSION)
+	@$(MKDIR) mercit-$(VERSION)
+	@$(CP) $(DIST_ROOT_FILES) mercit-$(VERSION)
+	@$(MKDIR) mercit-$(VERSION)/lisp
+	@$(CP) $(DIST_LISP_FILES) mercit-$(VERSION)/lisp
+	@$(MKDIR) mercit-$(VERSION)/docs
+	@$(CP) $(DIST_DOCS_FILES) mercit-$(VERSION)/docs
+	@$(TAR) cz --mtime=./mercit-$(VERSION) -f mercit-$(VERSION).tar.gz mercit-$(VERSION)
+	@$(RMDIR) mercit-$(VERSION)
 
 define set_package_requires_nongnu
 
@@ -196,35 +196,35 @@ define set_package_requires_nongnu
   (delete-region (point) (line-end-position))
   (insert "$(GIT_COMMIT_VERSION)"))
 
-(with-temp-file "lisp/magit.el"
-  (insert-file-contents "lisp/magit.el")
+(with-temp-file "lisp/mercit.el"
+  (insert-file-contents "lisp/mercit.el")
   (re-search-forward "^;; Package-Requires: ")
   (delete-region (point) (line-end-position))
   (insert (format "%S"
 `((emacs ,emacs-version) ;`
   (dash ,dash-version)
   (git-commit ,git-commit-version)
-  (magit-section ,magit-section-version)
+  (mercit-section ,mercit-section-version)
   (transient ,transient-version)
   (with-editor ,with-editor-version))))
   (re-search-forward "^;; Package-Version: ")
   (delete-region (point) (line-end-position))
   (insert "$(MAGIT_SECTION_VERSION)"))
 
-(with-temp-file "lisp/magit-libgit.el"
-  (insert-file-contents "lisp/magit-libgit.el")
+(with-temp-file "lisp/mercit-libgit.el"
+  (insert-file-contents "lisp/mercit-libgit.el")
   (re-search-forward "^;; Package-Requires: ")
   (delete-region (point) (line-end-position))
   (insert (format "%S"
 `((emacs "$(LIBGIT_EMACS_VERSION)") ;`
   (libgit ,libgit-version)
-  (magit ,magit-version))))
+  (mercit ,mercit-version))))
   (re-search-forward "^;; Package-Version: ")
   (delete-region (point) (line-end-position))
   (insert "$(MAGIT_LIBGIT_VERSION)"))
 
-(with-temp-file "lisp/magit-section.el"
-  (insert-file-contents "lisp/magit-section.el")
+(with-temp-file "lisp/mercit-section.el"
+  (insert-file-contents "lisp/mercit-section.el")
   (re-search-forward "^;; Package-Requires: ")
   (delete-region (point) (line-end-position))
   (insert (format "%S"
@@ -245,52 +245,52 @@ define set_package_requires_melpa
   '((emacs %S)
     (transient %S)
     (with-editor %S))
-  :homepage \"https://magit.vc\"
+  :homepage \"https://mercit.vc\"
   :keywords '(\"git\" \"tools\" \"vc\"))
 "   emacs-version
     dash-version
     transient-version
     with-editor-version)))
 
-(with-temp-file "lisp/magit-pkg.el"
+(with-temp-file "lisp/mercit-pkg.el"
   (insert (format
-"(define-package \"magit\" \"$(MAGIT_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit\" \"$(MAGIT_VERSION)$(DEV_SUFFIX)\"
   \"A Git porcelain inside Emacs.\"
   '((emacs %S)
     (dash %S)
     (git-commit %S)
-    (magit-section %S)
+    (mercit-section %S)
     (transient %S)
     (with-editor %S))
-  :homepage \"https://magit.vc\"
+  :homepage \"https://mercit.vc\"
   :keywords '(\"git\" \"tools\" \"vc\"))
 "   emacs-version
     dash-version
     git-commit-version
-    magit-section-version
+    mercit-section-version
     transient-version
     with-editor-version)))
 
-(with-temp-file "lisp/magit-libgit-pkg.el"
+(with-temp-file "lisp/mercit-libgit-pkg.el"
   (insert (format
-"(define-package \"magit-libgit\" \"$(MAGIT_LIBGIT_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit-libgit\" \"$(MAGIT_LIBGIT_VERSION)$(DEV_SUFFIX)\"
   \".\"
   '((emacs %S)
     (libgit %S)
-    (magit %S))
-  :homepage \"https://magit.vc\"
+    (mercit %S))
+  :homepage \"https://mercit.vc\"
   :keywords '(\"git\" \"tools\" \"vc\"))
 "   emacs-version
     libgit-version
-    magit-version)))
+    mercit-version)))
 
-(with-temp-file "lisp/magit-section-pkg.el"
+(with-temp-file "lisp/mercit-section-pkg.el"
   (insert (format
-"(define-package \"magit-section\" \"$(MAGIT_SECTION_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit-section\" \"$(MAGIT_SECTION_VERSION)$(DEV_SUFFIX)\"
   \"Sections for read-only buffers\"
   '((emacs %S)
     (dash %S))
-  :homepage \"https://magit.vc\"
+  :homepage \"https://mercit.vc\"
   :keywords '(\"tools\"))
 "   emacs-version
     dash-version)))
@@ -302,9 +302,9 @@ define set_package_versions
 (dash-version "$(DASH_VERSION)")
 (git-commit-version "$(GIT_COMMIT_VERSION)")
 (libgit-version "$(LIBGIT_VERSION)")
-(magit-version "$(MAGIT_VERSION)")
-(magit-libgit-version "$(MAGIT_LIBGIT_VERSION)")
-(magit-section-version "$(MAGIT_SECTION_VERSION)")
+(mercit-version "$(MAGIT_VERSION)")
+(mercit-libgit-version "$(MAGIT_LIBGIT_VERSION)")
+(mercit-section-version "$(MAGIT_SECTION_VERSION)")
 (transient-version "$(TRANSIENT_VERSION)")
 (with-editor-version "$(WITH_EDITOR_VERSION)")
 endef
@@ -315,9 +315,9 @@ define set_package_snapshots
 (dash-version "$(DASH_MELPA_SNAPSHOT)")
 (git-commit-version "$(GIT_COMMIT_MELPA_SNAPSHOT)")
 (libgit-version "$(LIBGIT_MELPA_SNAPSHOT)")
-(magit-version "$(MAGIT_MELPA_SNAPSHOT)")
-(magit-libgit-version "$(MAGIT_LIBGIT_MELPA_SNAPSHOT)")
-(magit-section-version "$(MAGIT_SECTION_MELPA_SNAPSHOT)")
+(mercit-version "$(MAGIT_MELPA_SNAPSHOT)")
+(mercit-libgit-version "$(MAGIT_LIBGIT_MELPA_SNAPSHOT)")
+(mercit-section-version "$(MAGIT_SECTION_MELPA_SNAPSHOT)")
 (transient-version "$(TRANSIENT_MELPA_SNAPSHOT)")
 (with-editor-version "$(WITH_EDITOR_MELPA_SNAPSHOT)")
 endef

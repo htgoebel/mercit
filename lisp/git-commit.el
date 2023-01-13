@@ -8,7 +8,7 @@
 ;;     Marius Vollmer <marius.vollmer@gmail.com>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
-;; Homepage: https://github.com/magit/magit
+;; Homepage: https://github.com/mercit/mercit
 ;; Keywords: git tools vc
 
 ;; Package-Version: 3.3.0.50-git
@@ -34,7 +34,7 @@
 ;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; You should have received a copy of the AUTHORS.md file, which
-;; lists all contributors.  If not, see https://magit.vc/authors.
+;; lists all contributors.  If not, see https://mercit.vc/authors.
 
 ;;; Commentary:
 
@@ -128,15 +128,15 @@
 (require 'with-editor)
 
 ;; For historic reasons Magit isn't a hard dependency.
-(unless (and (require 'magit-base nil t)
-             (require 'magit-git nil t))
-  (declare-function magit-completing-read "magit-base"
+(unless (and (require 'mercit-base nil t)
+             (require 'mercit-git nil t))
+  (declare-function mercit-completing-read "mercit-base"
                     ( prompt collection &optional predicate require-match
                       initial-input hist def fallback))
-  (declare-function magit-expand-git-file-name "magit-git" (filename))
-  (declare-function magit-git-lines "magit-git" (&rest args))
-  (declare-function magit-hook-custom-get "magit-base" (symbol))
-  (declare-function magit-list-local-branch-names "magit-git" ()))
+  (declare-function mercit-expand-git-file-name "mercit-git" (filename))
+  (declare-function mercit-git-lines "mercit-git" (&rest args))
+  (declare-function mercit-hook-custom-get "mercit-base" (symbol))
+  (declare-function mercit-list-local-branch-names "mercit-git" ()))
 
 (defvar diff-default-read-only)
 (defvar flyspell-generic-check-word-predicate)
@@ -150,7 +150,7 @@
 (defgroup git-commit nil
   "Edit Git commit messages."
   :prefix "git-commit-"
-  :link '(info-link "(magit)Editing Commit Messages")
+  :link '(info-link "(mercit)Editing Commit Messages")
   :group 'tools)
 
 (define-minor-mode global-git-commit-mode
@@ -164,7 +164,7 @@ provide such a commit message.
 Loading the library `git-commit' by default enables this mode,
 but the library is not automatically loaded because doing that
 would pull in many dependencies and increase startup time too
-much.  You can either rely on `magit' loading this library or
+much.  You can either rely on `mercit' loading this library or
 you can load it explicitly.  Autoloading is not an alternative
 because in this case autoloading would immediately trigger
 full loading."
@@ -210,10 +210,10 @@ The major mode configured here is turned on by the minor mode
   "Hook run at the end of `git-commit-setup'."
   :group 'git-commit
   :type 'hook
-  :get (and (featurep 'magit-base) #'magit-hook-custom-get)
+  :get (and (featurep 'mercit-base) #'mercit-hook-custom-get)
   :options '(git-commit-save-message
              git-commit-setup-changelog-support
-             magit-generate-changelog
+             mercit-generate-changelog
              git-commit-turn-on-auto-fill
              git-commit-turn-on-orglink
              git-commit-turn-on-flyspell
@@ -232,15 +232,15 @@ user typing a message into a buffer, then this hook is not run.
 This hook is not run until the new commit has been created.  If
 that takes Git longer than `git-commit-post-finish-hook-timeout'
 seconds, then this hook isn't run at all.  For certain commands
-such as `magit-rebase-continue' this hook is never run because
+such as `mercit-rebase-continue' this hook is never run because
 doing so would lead to a race condition.
 
-This hook is only run if `magit' is available.
+This hook is only run if `mercit' is available.
 
-Also see `magit-post-commit-hook'."
+Also see `mercit-post-commit-hook'."
   :group 'git-commit
   :type 'hook
-  :get (and (featurep 'magit-base) #'magit-hook-custom-get))
+  :get (and (featurep 'mercit-base) #'mercit-hook-custom-get))
 
 (defcustom git-commit-post-finish-hook-timeout 1
   "Time in seconds to wait for git to create a commit.
@@ -372,8 +372,8 @@ In this context a \"keyword\" is text surrounded by brackets."
   :group 'git-commit-faces)
 
 (defface git-commit-comment-branch-local
-  (if (featurep 'magit)
-      '((t :inherit magit-branch-local))
+  (if (featurep 'mercit)
+      '((t :inherit mercit-branch-local))
     '((t :inherit font-lock-variable-name-face)))
   "Face used for names of local branches in commit message comments."
   :group 'git-commit-faces)
@@ -382,8 +382,8 @@ In this context a \"keyword\" is text surrounded by brackets."
   'git-commit-comment-branch-local "Git-Commit 2.12.0")
 
 (defface git-commit-comment-branch-remote
-  (if (featurep 'magit)
-      '((t :inherit magit-branch-remote))
+  (if (featurep 'mercit)
+      '((t :inherit mercit-branch-remote))
     '((t :inherit font-lock-variable-name-face)))
   "Face used for names of remote branches in commit message comments.
 This is only used if Magit is available."
@@ -500,11 +500,11 @@ This is only used if Magit is available."
                                            buffer-file-name)))
                   (not (file-accessible-directory-p
                         (file-name-directory buffer-file-name)))
-                  (if (require 'magit-git nil t)
+                  (if (require 'mercit-git nil t)
                       ;; Emacs prepends a "c:".
-                      (magit-expand-git-file-name
+                      (mercit-expand-git-file-name
                        (substring buffer-file-name 2))
-                    ;; Fallback if we can't load `magit-git'.
+                    ;; Fallback if we can't load `mercit-git'.
                     (and (string-match
                           "\\`[a-z]:/\\(cygdrive/\\)?\\([a-z]\\)/\\(.*\\)"
                           buffer-file-name)
@@ -525,11 +525,11 @@ Type \\[with-editor-finish] to finish, \
 to recover older messages")
 
 (defun git-commit-setup ()
-  (when (fboundp 'magit-toplevel)
-    ;; `magit-toplevel' is autoloaded and defined in magit-git.el,
+  (when (fboundp 'mercit-toplevel)
+    ;; `mercit-toplevel' is autoloaded and defined in mercit-git.el,
     ;; That library declares this functions without loading
-    ;; magit-process.el, which defines it.
-    (require 'magit-process nil t))
+    ;; mercit-process.el, which defines it.
+    (require 'mercit-process nil t))
   (when git-commit-major-mode
     (let ((auto-mode-alist (list (cons (concat "\\`"
                                                (regexp-quote buffer-file-name)
@@ -550,8 +550,8 @@ to recover older messages")
                   ;; because the maintainer can use the latter
                   ;; to enforce conventions, while s/he has no
                   ;; control over the former.
-                  (fboundp 'magit-toplevel)  ; silence byte-compiler
-                  (magit-toplevel))
+                  (fboundp 'mercit-toplevel)  ; silence byte-compiler
+                  (mercit-toplevel))
              default-directory)))
     (let ((buffer-file-name nil)         ; trick hack-dir-local-variables
           (major-mode 'git-commit-mode)) ; trick dir-locals-collect-variables
@@ -569,23 +569,23 @@ to recover older messages")
             #'git-commit-save-message nil t)
   (add-hook 'with-editor-pre-cancel-hook
             #'git-commit-save-message nil t)
-  (when (fboundp 'magit-commit--reset-command)
-    (add-hook 'with-editor-post-finish-hook #'magit-commit--reset-command)
-    (add-hook 'with-editor-post-cancel-hook #'magit-commit--reset-command))
-  (when (and (fboundp 'magit-rev-parse)
+  (when (fboundp 'mercit-commit--reset-command)
+    (add-hook 'with-editor-post-finish-hook #'mercit-commit--reset-command)
+    (add-hook 'with-editor-post-cancel-hook #'mercit-commit--reset-command))
+  (when (and (fboundp 'mercit-rev-parse)
              (not (memq last-command
-                        '(magit-sequencer-continue
-                          magit-sequencer-skip
-                          magit-am-continue
-                          magit-am-skip
-                          magit-rebase-continue
-                          magit-rebase-skip))))
+                        '(mercit-sequencer-continue
+                          mercit-sequencer-skip
+                          mercit-am-continue
+                          mercit-am-skip
+                          mercit-rebase-continue
+                          mercit-rebase-skip))))
     (add-hook 'with-editor-post-finish-hook
               (apply-partially #'git-commit-run-post-finish-hook
-                               (magit-rev-parse "HEAD"))
+                               (mercit-rev-parse "HEAD"))
               nil t)
-    (when (fboundp 'magit-wip-maybe-add-commit-hook)
-      (magit-wip-maybe-add-commit-hook)))
+    (when (fboundp 'mercit-wip-maybe-add-commit-hook)
+      (mercit-wip-maybe-add-commit-hook)))
   (setq with-editor-cancel-message
         #'git-commit-cancel-message)
   (git-commit-mode 1)
@@ -603,13 +603,13 @@ to recover older messages")
 
 (defun git-commit-run-post-finish-hook (previous)
   (when (and git-commit-post-finish-hook
-             (require 'magit nil t)
-             (fboundp 'magit-rev-parse))
+             (require 'mercit nil t)
+             (fboundp 'mercit-rev-parse))
     (cl-block nil
       (let ((break (time-add (current-time)
                              (seconds-to-time
                               git-commit-post-finish-hook-timeout))))
-        (while (equal (magit-rev-parse "HEAD") previous)
+        (while (equal (mercit-rev-parse "HEAD") previous)
           (if (time-less-p (current-time) break)
               (sit-for 0.01)
             (message "No commit created after 1 second.  Not running %s."
@@ -776,8 +776,8 @@ Save current message first."
           (ring-remove log-edit-comment-ring index))
         (ring-insert log-edit-comment-ring message)
         (when (and git-commit-use-local-message-ring
-                   (fboundp 'magit-repository-local-set))
-          (magit-repository-local-set 'log-edit-comment-ring
+                   (fboundp 'mercit-repository-local-set))
+          (mercit-repository-local-set 'log-edit-comment-ring
                                       log-edit-comment-ring))
         (message "Message saved"))
     (message "Only whitespace and/or comments; message not saved")))
@@ -785,9 +785,9 @@ Save current message first."
 (defun git-commit-prepare-message-ring ()
   (make-local-variable 'log-edit-comment-ring-index)
   (when (and git-commit-use-local-message-ring
-             (fboundp 'magit-repository-local-get))
+             (fboundp 'mercit-repository-local-get))
     (setq-local log-edit-comment-ring
-                (magit-repository-local-get
+                (mercit-repository-local-get
                  'log-edit-comment-ring
                  (make-ring log-edit-maximum-comment-ring-size)))))
 
@@ -815,8 +815,8 @@ Save current message first."
 ;;; Utilities
 
 (defsubst git-commit-executable ()
-  (if (fboundp 'magit-git-executable)
-      (magit-git-executable)
+  (if (fboundp 'mercit-git-executable)
+      (mercit-git-executable)
     "git"))
 
 ;;; Headers
@@ -905,11 +905,11 @@ Save current message first."
 (defvar git-commit-read-ident-history nil)
 
 (defun git-commit-read-ident (prompt)
-  (if (require 'magit-git nil t)
-      (let ((str (magit-completing-read
+  (if (require 'mercit-git nil t)
+      (let ((str (mercit-completing-read
                   prompt
                   (sort (delete-dups
-                         (magit-git-lines "log" "-n9999" "--format=%aN <%ae>"))
+                         (mercit-git-lines "log" "-n9999" "--format=%aN <%ae>"))
                         #'string<)
                   nil nil nil 'git-commit-read-ident-history)))
         (save-match-data
@@ -1085,14 +1085,14 @@ Added to `font-lock-extend-region-functions'."
     (setq-local comment-end-skip "\n")
     (setq-local comment-use-syntax nil)
     (setq-local git-commit--branch-name-regexp
-                (if (and (featurep 'magit-git)
+                (if (and (featurep 'mercit-git)
                          ;; When using cygwin git, we may end up in a
                          ;; non-existing directory, which would cause
                          ;; any git calls to signal an error.
                          (file-accessible-directory-p default-directory))
                     (progn
                       ;; Make sure the below functions are available.
-                      (require 'magit)
+                      (require 'mercit)
                       ;; Font-Lock wants every submatch to succeed, so
                       ;; also match the empty string.  Avoid listing
                       ;; remote branches and using `regexp-quote',
@@ -1100,7 +1100,7 @@ Added to `font-lock-extend-region-functions'."
                       ;; branches that would be very slow.  See #4353.
                       (format "\\(\\(?:%s\\)\\|\\)\\([^']+\\)"
                               (mapconcat #'identity
-                                         (magit-list-local-branch-names)
+                                         (mercit-list-local-branch-names)
                                          "\\|")))
                   "\\([^']*\\)"))
     (setq-local font-lock-multiline t)

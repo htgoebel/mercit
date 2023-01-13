@@ -4,7 +4,7 @@ the Magit [crowdfunding campaign][1] was a huge success!
 A special thanks goes to [Mojotech][2], [Directangular][3] and
 [Google Open Source][4] for their very generous contributions.
 
-[1]: https://www.kickstarter.com/projects/1681258897/its-magit-the-magical-git-client
+[1]: https://www.kickstarter.com/projects/1681258897/its-mercit-the-magical-git-client
 [2]: https://www.mojotech.com
 [3]: https://www.directangular.com
 [4]: https://opensource.google.com
@@ -485,7 +485,7 @@ here but are not, then please fill out the backer survey.)
 - Glenn R. Martin
 - Gordon Freeman
 - Gordon Gustafson
-- Greece <3 magit
+- Greece <3 mercit
 - Greg Chevalley
 - Greg Leppert
 - Gregg Hernandez

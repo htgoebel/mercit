@@ -4,5 +4,5 @@
     (compat      "28.1.1.2")
     (transient   "20210920")
     (with-editor "20211001"))
-  :homepage "https://magit.vc"
+  :homepage "https://mercit.vc"
   :keywords '("git" "tools" "vc"))

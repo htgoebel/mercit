@@ -15,9 +15,9 @@ TOP := $(dir $(lastword $(MAKEFILE_LIST)))
 
 PREFIX   ?= /usr/local
 sharedir ?= $(PREFIX)/share
-lispdir  ?= $(sharedir)/emacs/site-lisp/magit
+lispdir  ?= $(sharedir)/emacs/site-lisp/mercit
 infodir  ?= $(sharedir)/info
-docdir   ?= $(sharedir)/doc/magit
+docdir   ?= $(sharedir)/doc/mercit
 
 CP       ?= install -p -m 644
 MKDIR    ?= install -p -m 755 -d
@@ -36,14 +36,14 @@ MANUAL_HTML_ARGS ?= --css-ref /assets/page.css
 
 GITSTATS      ?= gitstats
 GITSTATS_DIR  ?= $(TOP)docs/stats
-GITSTATS_ARGS ?= -c style=https://magit.vc/assets/stats.css -c max_authors=999
+GITSTATS_ARGS ?= -c style=https://mercit.vc/assets/stats.css -c max_authors=999
 
 BUILD_MAGIT_LIBGIT ?= false
 
 ## Files #############################################################
 
-PKG       = magit
-PACKAGES  = magit magit-section git-commit
+PKG       = mercit
+PACKAGES  = mercit mercit-section git-commit
 
 TEXIPAGES = $(addsuffix .texi,$(filter-out git-commit,$(PACKAGES)))
 INFOPAGES = $(addsuffix .info,$(filter-out git-commit,$(PACKAGES)))
@@ -53,58 +53,58 @@ PDFFILES  = $(addsuffix .pdf,$(filter-out git-commit,$(PACKAGES)))
 EPUBFILES = $(addsuffix .epub,$(filter-out git-commit,$(PACKAGES)))
 
 ELS  = git-commit.el
-ELS += magit-section.el
-ELS += magit-base.el
+ELS += mercit-section.el
+ELS += mercit-base.el
 ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
-ELS += magit-libgit.el
+ELS += mercit-libgit.el
 endif
-ELS += magit-git.el
-ELS += magit-mode.el
-ELS += magit-margin.el
-ELS += magit-process.el
-ELS += magit-transient.el
-ELS += magit-autorevert.el
-ELS += magit-core.el
-ELS += magit-diff.el
-ELS += magit-log.el
-ELS += magit-wip.el
-ELS += magit-reflog.el
-ELS += magit-apply.el
-ELS += magit-repos.el
-ELS += magit.el
-ELS += magit-status.el
-ELS += magit-refs.el
-ELS += magit-files.el
-ELS += magit-reset.el
-ELS += magit-branch.el
-ELS += magit-merge.el
-ELS += magit-tag.el
-ELS += magit-worktree.el
-ELS += magit-notes.el
-ELS += magit-obsolete.el
-ELS += magit-sequence.el
-ELS += magit-commit.el
-ELS += magit-remote.el
-ELS += magit-clone.el
-ELS += magit-fetch.el
-ELS += magit-pull.el
-ELS += magit-push.el
-ELS += magit-patch.el
-ELS += magit-bisect.el
-ELS += magit-stash.el
-ELS += magit-blame.el
-ELS += magit-sparse-checkout.el
-ELS += magit-submodule.el
-ELS += magit-subtree.el
-ELS += magit-ediff.el
-ELS += magit-gitignore.el
-ELS += magit-bundle.el
-ELS += magit-extras.el
+ELS += mercit-git.el
+ELS += mercit-mode.el
+ELS += mercit-margin.el
+ELS += mercit-process.el
+ELS += mercit-transient.el
+ELS += mercit-autorevert.el
+ELS += mercit-core.el
+ELS += mercit-diff.el
+ELS += mercit-log.el
+ELS += mercit-wip.el
+ELS += mercit-reflog.el
+ELS += mercit-apply.el
+ELS += mercit-repos.el
+ELS += mercit.el
+ELS += mercit-status.el
+ELS += mercit-refs.el
+ELS += mercit-files.el
+ELS += mercit-reset.el
+ELS += mercit-branch.el
+ELS += mercit-merge.el
+ELS += mercit-tag.el
+ELS += mercit-worktree.el
+ELS += mercit-notes.el
+ELS += mercit-obsolete.el
+ELS += mercit-sequence.el
+ELS += mercit-commit.el
+ELS += mercit-remote.el
+ELS += mercit-clone.el
+ELS += mercit-fetch.el
+ELS += mercit-pull.el
+ELS += mercit-push.el
+ELS += mercit-patch.el
+ELS += mercit-bisect.el
+ELS += mercit-stash.el
+ELS += mercit-blame.el
+ELS += mercit-sparse-checkout.el
+ELS += mercit-submodule.el
+ELS += mercit-subtree.el
+ELS += mercit-ediff.el
+ELS += mercit-gitignore.el
+ELS += mercit-bundle.el
+ELS += mercit-extras.el
 ELS += git-rebase.el
-ELS += magit-bookmark.el
+ELS += mercit-bookmark.el
 ELCS = $(ELS:.el=.elc)
-ELMS = magit.el $(filter-out $(addsuffix .el,$(PACKAGES)),$(ELS))
-ELGS = magit-autoloads.el magit-version.el
+ELMS = mercit.el $(filter-out $(addsuffix .el,$(PACKAGES)),$(ELS))
+ELGS = mercit-autoloads.el mercit-version.el
 
 ## Versions ##########################################################
 
@@ -144,7 +144,7 @@ endif
 
 ## Load-Path #########################################################
 
-# Remember to also update magit-emacs-Q-command!
+# Remember to also update mercit-emacs-Q-command!
 
 ifndef LOAD_PATH
 
@@ -194,7 +194,7 @@ ifeq "$(WITH_EDITOR_DIR)" ""
 endif
 
 MAGIT_SECTION_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/magit-section-[.0-9]*' 2> /dev/null | \
+  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/mercit-section-[.0-9]*' 2> /dev/null | \
   sort | tail -n 1)
 
 SYSTYPE := $(shell $(EMACS) -Q --batch --eval "(princ system-type)")
@@ -206,7 +206,7 @@ LOAD_PATH = -L $(TOP)lisp
 
 # When making changes here, then don't forget to adjust "Makefile",
 # ".github/workflows/test.yml", ".github/ISSUE_TEMPLATE/bug_report.md",
-# `magit-emacs-Q-command' and the "Installing from the Git Repository"
+# `mercit-emacs-Q-command' and the "Installing from the Git Repository"
 # info node accordingly.  Also don't forget to "rgrep \b<pkg>\b".
 
 ifdef CYGPATH
@@ -237,7 +237,7 @@ endif
 
 ## Publish ###########################################################
 
-DOMAIN      ?= magit.vc
+DOMAIN      ?= mercit.vc
 CFRONT_DIST ?= E2LUHBKU1FBV02
 
 PUBLISH_TARGETS ?= html html-dir pdf

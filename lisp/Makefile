@@ -3,68 +3,68 @@ include ../default.mk
 
 ## ###################################################################
 
-.PHONY: magit-version.el check-declare install
+.PHONY: mercit-version.el check-declare install
 
 all: lisp
 
 ## Build order #######################################################
 
 git-commit.elc:
-magit-section.elc:
-magit-base.elc:            magit-section.elc
+mercit-section.elc:
+mercit-base.elc:            mercit-section.elc
 ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
-magit-libgit.elc:
-magit-git.elc:             magit-base.elc magit-libgit.elc
+mercit-libgit.elc:
+mercit-git.elc:             mercit-base.elc mercit-libgit.elc
 else
-magit-git.elc:             magit-base.elc
+mercit-git.elc:             mercit-base.elc
 endif
-magit-mode.elc:            magit-base.elc magit-git.elc
-magit-margin.elc:          magit-base.elc magit-mode.elc
-magit-process.elc:         magit-base.elc magit-git.elc magit-mode.elc
-magit-transient.elc:       magit-git.elc magit-mode.elc magit-process.elc
-magit-autorevert.elc:      magit-git.elc magit-process.elc
-magit-core.elc:            magit-base.elc magit-git.elc magit-mode.elc \
-                           magit-margin.elc magit-process.elc \
-                           magit-transient.elc magit-autorevert.elc
-magit-diff.elc:            git-commit.elc magit-core.elc
-magit-log.elc:             magit-core.elc magit-diff.elc
-magit-wip.elc:             magit-core.elc magit-log.elc
-magit-reflog.elc:          magit-core.elc magit-log.elc
-magit-apply.elc:           magit-core.elc magit-diff.elc magit-wip.elc
-magit-repos.elc:           magit-core.elc
-magit.elc:                 git-commit.elc magit-core.elc magit-diff.elc \
-                           magit-log.elc magit-apply.elc magit-repos.elc
-magit-status.elc:          magit.elc
-magit-refs.elc:            magit.elc
-magit-files.elc:           magit.elc
-magit-reset.elc:           magit.elc
-magit-branch.elc:          magit.elc magit-reset.elc
-magit-merge.elc:           magit.elc magit-diff.elc
-magit-tag.elc:             magit.elc
-magit-worktree.elc:        magit.elc
-magit-notes.elc:           magit.elc
-magit-sequence.elc:        magit.elc
-magit-commit.elc:          magit.elc magit-sequence.elc
-magit-remote.elc:          magit.elc
-magit-clone.elc:           magit.elc
-magit-fetch.elc:           magit.elc
-magit-pull.elc:            magit.elc magit-remote.elc
-magit-push.elc:            magit.elc
-magit-bisect.elc:          magit.elc
-magit-stash.elc:           magit.elc magit-sequence.elc magit-reflog.elc
-magit-blame.elc:           magit.elc
-magit-obsolete.elc:        magit.elc
-magit-submodule.elc:       magit.elc
-magit-patch.elc:           magit.elc
-magit-subtree.elc:         magit.elc
-magit-ediff.elc:           magit.elc
-magit-gitignore.elc:       magit.elc
-magit-sparse-checkout.elc: magit.elc
-magit-bundle.elc:          magit.elc
-magit-extras.elc:          magit.elc magit-merge.elc
-git-rebase.elc:            magit.elc
-magit-bookmark.elc:        magit.elc
-magit-obsolete.elc:        magit.elc
+mercit-mode.elc:            mercit-base.elc mercit-git.elc
+mercit-margin.elc:          mercit-base.elc mercit-mode.elc
+mercit-process.elc:         mercit-base.elc mercit-git.elc mercit-mode.elc
+mercit-transient.elc:       mercit-git.elc mercit-mode.elc mercit-process.elc
+mercit-autorevert.elc:      mercit-git.elc mercit-process.elc
+mercit-core.elc:            mercit-base.elc mercit-git.elc mercit-mode.elc \
+                           mercit-margin.elc mercit-process.elc \
+                           mercit-transient.elc mercit-autorevert.elc
+mercit-diff.elc:            git-commit.elc mercit-core.elc
+mercit-log.elc:             mercit-core.elc mercit-diff.elc
+mercit-wip.elc:             mercit-core.elc mercit-log.elc
+mercit-reflog.elc:          mercit-core.elc mercit-log.elc
+mercit-apply.elc:           mercit-core.elc mercit-diff.elc mercit-wip.elc
+mercit-repos.elc:           mercit-core.elc
+mercit.elc:                 git-commit.elc mercit-core.elc mercit-diff.elc \
+                           mercit-log.elc mercit-apply.elc mercit-repos.elc
+mercit-status.elc:          mercit.elc
+mercit-refs.elc:            mercit.elc
+mercit-files.elc:           mercit.elc
+mercit-reset.elc:           mercit.elc
+mercit-branch.elc:          mercit.elc mercit-reset.elc
+mercit-merge.elc:           mercit.elc mercit-diff.elc
+mercit-tag.elc:             mercit.elc
+mercit-worktree.elc:        mercit.elc
+mercit-notes.elc:           mercit.elc
+mercit-sequence.elc:        mercit.elc
+mercit-commit.elc:          mercit.elc mercit-sequence.elc
+mercit-remote.elc:          mercit.elc
+mercit-clone.elc:           mercit.elc
+mercit-fetch.elc:           mercit.elc
+mercit-pull.elc:            mercit.elc mercit-remote.elc
+mercit-push.elc:            mercit.elc
+mercit-bisect.elc:          mercit.elc
+mercit-stash.elc:           mercit.elc mercit-sequence.elc mercit-reflog.elc
+mercit-blame.elc:           mercit.elc
+mercit-obsolete.elc:        mercit.elc
+mercit-submodule.elc:       mercit.elc
+mercit-patch.elc:           mercit.elc
+mercit-subtree.elc:         mercit.elc
+mercit-ediff.elc:           mercit.elc
+mercit-gitignore.elc:       mercit.elc
+mercit-sparse-checkout.elc: mercit.elc
+mercit-bundle.elc:          mercit.elc
+mercit-extras.elc:          mercit.elc mercit-merge.elc
+git-rebase.elc:            mercit.elc
+mercit-bookmark.elc:        mercit.elc
+mercit-obsolete.elc:        mercit.elc
 
 ## Build #############################################################
 
@@ -109,7 +109,7 @@ check-declare:
 
 install: lisp versionlib
 	@$(MKDIR) $(DESTDIR)$(lispdir)
-	$(CP) $(ELS) magit-autoloads.el magit-version.el $(ELCS) $(DESTDIR)$(lispdir)
+	$(CP) $(ELS) mercit-autoloads.el mercit-version.el $(ELCS) $(DESTDIR)$(lispdir)
 
 ## Clean #############################################################
 

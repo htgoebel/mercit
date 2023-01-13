@@ -5,7 +5,7 @@
 #+date: 2015-{{{year}}}
 
 #+texinfo_dir_category: Emacs
-#+texinfo_dir_title: Magit-Section: (magit-section).
+#+texinfo_dir_title: Magit-Section: (mercit-section).
 #+texinfo_dir_desc: Use Magit sections in your own packages.
 #+subtitle: for version 3.3.0.50-git
 
@@ -17,7 +17,7 @@ to be distributed as part of Magit but how it can also be used by
 other packages that have nothing to do with Magit or Git.
 
 To learn more about the section abstraction and available commands and
-user options see [[info:magit#Sections]].  This manual documents how you
+user options see [[info:mercit#Sections]].  This manual documents how you
 can use sections in your own packages.
 
 #+texinfo: @noindent
@@ -33,7 +33,7 @@ to be distributed as part of Magit but how it can also be used by
 other packages that have nothing to do with Magit or Git.
 
 To learn more about the section abstraction and available commands
-and user options see [[info:magit#Sections]].  This manual documents
+and user options see [[info:mercit#Sections]].  This manual documents
 how you can use sections in your own packages.
 
 When the documentation leaves something unaddressed, then please
@@ -42,11 +42,11 @@ source for suitable examples before asking me for help.  Thanks!
 
 * Creating Sections
 
-- Macro: magit-insert-section [name] (type &optional value hide) &rest body ::
+- Macro: mercit-insert-section [name] (type &optional value hide) &rest body ::
 
   Create a section object of type CLASS, storing VALUE in its
   ~value~ slot, and insert the section at point.  CLASS is a
-  subclass of `magit-section' or has the form ~(eval FORM)~, in
+  subclass of `mercit-section' or has the form ~(eval FORM)~, in
   which case FORM is evaluated at runtime and should return a
   subclass.  In other places a sections class is oftern referred
   to as its "type".
@@ -65,7 +65,7 @@ source for suitable examples before asking me for help.  Thanks!
   When optional HIDE is non-nil collapse the section body by
   default, i.e. when first creating the section, but not when
   refreshing the buffer.  Else expand it by default.  This can be
-  overwritten using ~magit-section-set-visibility-hook~.  When a
+  overwritten using ~mercit-section-set-visibility-hook~.  When a
   section is recreated during a refresh, then the visibility of
   predecessor is inherited and HIDE is ignored (but the hook is
   still honored).
@@ -81,16 +81,16 @@ source for suitable examples before asking me for help.  Thanks!
   ~point~ forward.
 
   If it turns out inside BODY that the section is empty, then
-  ~magit-cancel-section~ can be used to abort and remove all traces
+  ~mercit-cancel-section~ can be used to abort and remove all traces
   of the partially inserted section.  This can happen when creating
   a section by washing Git's output and Git didn't actually output
   anything this time around.
 
-- Function: magit-insert-heading &rest args ::
+- Function: mercit-insert-heading &rest args ::
 
   Insert the heading for the section currently being inserted.
 
-  This function should only be used inside ~magit-insert-section~.
+  This function should only be used inside ~mercit-insert-section~.
 
   When called without any arguments, then just set the ~content~
   slot of the object representing the section being inserted to
@@ -102,7 +102,7 @@ source for suitable examples before asking me for help.  Thanks!
   contain any text before this happens and afterwards it should
   again only contain a single line.  If the ~face~ property is set
   anywhere inside any of these strings, then insert all of them
-  unchanged.  Otherwise use the `magit-section-heading' face for
+  unchanged.  Otherwise use the `mercit-section-heading' face for
   all inserted text.
 
   The ~content~ property of the section object is the end of the
@@ -115,19 +115,19 @@ source for suitable examples before asking me for help.  Thanks!
   getting it right.  The only exception is that this function does
   insert a newline character if necessary.
 
-- Macro: magit-insert-section-body &rest body ::
+- Macro: mercit-insert-section-body &rest body ::
 
   Use BODY to insert the section body, once the section is expanded.
   If the section is expanded when it is created, then this is
   like ~progn~.  Otherwise BODY isn't evaluated until the section
   is explicitly expanded.
 
-- Function: magit-cancel-section ::
+- Function: mercit-cancel-section ::
 
   Cancel inserting the section that is currently being inserted.
   Remove all traces of that section.
 
-- Function: magit-wash-sequence function ::
+- Function: mercit-wash-sequence function ::
 
   Repeatedly call FUNCTION until it returns ~nil~ or the end of the
   buffer is reached.  FUNCTION has to move point forward or return
@@ -135,28 +135,28 @@ source for suitable examples before asking me for help.  Thanks!
 
 * Core Functions
 
-- Function: magit-current-section ::
+- Function: mercit-current-section ::
 
   Return the section at point or where the context menu was invoked.
   When using the context menu, return the section that the user
   clicked on, provided the current buffer is the buffer in which
   the click occurred.  Otherwise return the section at point.
 
-- Function magit-section-at &optional position ::
+- Function mercit-section-at &optional position ::
 
   Return the section at POSITION, defaulting to point.  Default to
   point even when the context menu is used.
 
-- Function: magit-section-ident section ::
+- Function: mercit-section-ident section ::
 
   Return an unique identifier for SECTION. The return value has the
   form ~((TYPE . VALUE)...)~.
 
-- Function: magit-section-ident-value value ::
+- Function: mercit-section-ident-value value ::
 
   Return a constant representation of VALUE.
 
-  VALUE is the value of a ~magit-section~ object.  If that is an
+  VALUE is the value of a ~mercit-section~ object.  If that is an
   object itself, then that is not suitable to be used to identify
   the section because two objects may represent the same thing but
   not be equal.  If possible a method should be added for such
@@ -164,25 +164,25 @@ source for suitable examples before asking me for help.  Thanks!
   catch-all method is used, which just returns the argument
   itself.
 
-- Function: magit-get-section ident &optional root ::
+- Function: mercit-get-section ident &optional root ::
 
   Return the section identified by IDENT.
-  IDENT has to be a list as returned by ~magit-section-ident~.
+  IDENT has to be a list as returned by ~mercit-section-ident~.
   If optional ROOT is non-nil, then search in that section tree
-  instead of in the one whose root ~magit-root-section~ is.
+  instead of in the one whose root ~mercit-root-section~ is.
 
-- Function: magit-section-lineage section ::
+- Function: mercit-section-lineage section ::
 
   Return the lineage of SECTION.
   The return value has the form ~(TYPE...)~.
 
-- Function: magit-section-content-p section ::
+- Function: mercit-section-content-p section ::
 
   Return non-nil if SECTION has content or an unused washer function.
 
 The next two functions are replacements for the Emacs functions that
-have the same name except for the ~magit-~ prefix.  Like
-~magit-current-section~ they do not act on point, the cursors position,
+have the same name except for the ~mercit-~ prefix.  Like
+~mercit-current-section~ they do not act on point, the cursors position,
 but on the position where the user clicked to invoke the context menu.
 
 If your package provides a context menu and some of its commands act
@@ -190,14 +190,14 @@ on the "thing at point", even if just as a default, then use the
 prefixed functions to teach them to instead use the click location
 when appropriate.
 
-- Function magit-point ::
+- Function mercit-point ::
 
   Return point or the position where the context menu was invoked.
   When using the context menu, return the position the user clicked
   on, provided the current buffer is the buffer in which the click
   occurred.  Otherwise return the same value as ~point~.
 
-- Function magit-thing-at-point thing &optional no-properties ::
+- Function mercit-thing-at-point thing &optional no-properties ::
 
   Return the THING at point or where the context menu was invoked.
   When using the context menu, return the thing the user clicked
@@ -207,7 +207,7 @@ when appropriate.
 
 * Matching Functions
 
-- Function: magit-section-match condition &optional (section (magit-current-section)) ::
+- Function: mercit-section-match condition &optional (section (mercit-current-section)) ::
 
   Return t if SECTION matches CONDITION.
 
@@ -230,18 +230,18 @@ when appropriate.
                   of the classes of the parent sections.
 
   Each CLASS should be a class symbol, identifying a class that
-  derives from ~magit-section~.  For backward compatibility CLASS
+  derives from ~mercit-section~.  For backward compatibility CLASS
   can also be a "type symbol".  A section matches such a symbol
   if the value of its ~type~ slot is ~eq~.  If a type symbol has
-  an entry in ~magit--section-type-alist~, then a section also
+  an entry in ~mercit--section-type-alist~, then a section also
   matches that type if its class is a subclass of the class that
   corresponds to the type as per that alist.
 
   Note that it is not necessary to specify the complete section
-  lineage as printed by ~magit-describe-section-briefly~, unless
+  lineage as printed by ~mercit-describe-section-briefly~, unless
   of course you want to be that precise.
 
-- Function: magit-section-value-if condition &optional section ::
+- Function: mercit-section-value-if condition &optional section ::
 
   If the section at point matches CONDITION, then return its value.
 
@@ -250,9 +250,9 @@ when appropriate.
   then return nil.  If the section does not match, then return
   nil.
 
-  See ~magit-section-match~ for the forms CONDITION can take.
+  See ~mercit-section-match~ for the forms CONDITION can take.
 
-- Macro: magit-section-case &rest clauses ::
+- Macro: mercit-section-case &rest clauses ::
 
   Choose among clauses on the type of the section at point.
 
@@ -263,7 +263,7 @@ when appropriate.
   section at point.  If no clause succeeds or if there is no
   section at point, return nil.
 
-  See ~magit-section-match~ for the forms CONDITION can take.
+  See ~mercit-section-match~ for the forms CONDITION can take.
   Additionally a CONDITION of t is allowed in the final clause, and
   matches if no other CONDITION match, even if there is no section
   at point.
@@ -289,12 +289,12 @@ General Public License for more details.
 
 #  LocalWords:  ARGS CONDITIONs EVAL Git Git's IDENT
 #  LocalWords:  LocalWords MERCHANTABILITY Magit Makefile
-#  LocalWords:  alist eval featurep ident keymap magit ol
+#  LocalWords:  alist eval featurep ident keymap mercit ol
 #  LocalWords:  runtime src texinfo utils
 
 # IMPORTANT: Also update ORG_ARGS and ORG_EVAL in the Makefile.
 # Local Variables:
-# eval: (require 'magit-base nil t)
+# eval: (require 'mercit-base nil t)
 # eval: (require 'ol-man nil t)
 # indent-tabs-mode: nil
 # org-src-preserve-indentation: nil

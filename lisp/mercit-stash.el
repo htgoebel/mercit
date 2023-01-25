@@ -172,7 +172,7 @@ while two prefix arguments are equivalent to `--all'."
                           (or (mercit-get-current-branch) "(no branch)")))
          (input (mercit-read-string "Stash message" default)))
     (if (equal input default)
-        (concat default (mercit-rev-format "%h %s"))
+        (concat default (mercit-rev-format "{node|short} {desc|firstline}"))
       input)))
 
 ;;;###autoload
@@ -300,7 +300,9 @@ current branch or `HEAD' as the start-point."
 (defun mercit-stash-format-patch (stash)
   "Create a patch from STASH"
   (interactive (list (mercit-read-stash "Create patch from stash")))
-  (with-temp-file (mercit-rev-format "0001-%f.patch" stash)
+  (with-temp-file (mercit-rev-format
+                   "0001-{sub(' ', '-', desc|firstline|stringify)}.patch" ;; TODO was %f
+                   stash)
     (mercit-git-insert "stash" "show" "-p" stash))
   (mercit-refresh))
 
@@ -367,7 +369,7 @@ current branch or `HEAD' as the start-point."
 
 (defun mercit-stash-summary ()
   (concat (or (mercit-get-current-branch) "(no branch)")
-          ": " (mercit-rev-format "%h %s")))
+          ": " (mercit-rev-format "{node|short} {desc|firstline}")))
 
 ;;; Sections
 
@@ -506,7 +508,8 @@ If there is no stash buffer in the same frame, then do nothing."
 (defun mercit-stash-refresh-buffer ()
   (mercit-set-header-line-format
    (concat (capitalize mercit-buffer-revision) " "
-           (propertize (mercit-rev-format "%s" mercit-buffer-revision)
+           (propertize (mercit-rev-format "{desc|firstline}"
+                                          mercit-buffer-revision)
                        'font-lock-face
                        (list :weight 'normal :foreground
                              (face-attribute 'default :foreground)))))
@@ -520,7 +523,8 @@ If there is no stash buffer in the same frame, then do nothing."
 (defun mercit-stash-insert-section (commit range message &optional files)
   (mercit-insert-section (commit commit)
     (mercit-insert-heading message)
-    (mercit--insert-diff "diff" range "-p" "--no-prefix" mercit-buffer-diff-args
+    (mercit--insert-diff "diff" range "--noprefix" mercit-buffer-diff-args
+    			 "--unified=3"  ;; TODO? make num lines configurable?
                         "--" (or files mercit-buffer-diff-files))))
 
 (defun mercit-insert-stash-notes ()

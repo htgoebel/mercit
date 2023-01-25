@@ -1171,7 +1171,7 @@ is saved without asking, the user is asked about each modified
 buffer which visits a file in the current repository.  Optional
 argument (the prefix) non-nil means save all with no questions."
   (interactive "P")
-  (when-let ((topdir (mercit-rev-parse-safe "--show-toplevel")))
+  (when-let ((topdir (mercit-identify-safe "--template" "{reporoot}")))
     (let ((remote (file-remote-p default-directory))
           (save-some-buffers-action-alist
            `((?Y (lambda (buffer)
@@ -1204,7 +1204,7 @@ argument (the prefix) non-nil means save all with no questions."
                      ;; Delayed checks that are more expensive for remote
                      ;; repositories, due to the required network access.
                      ;; - Check whether the file is inside the repository.
-                     (equal (mercit-rev-parse-safe "--show-toplevel") topdir)
+                     (equal (mercit-identify "--template" "{reporoot}") topdir)
                      ;; - Check whether the file is actually writable.
                      (file-writable-p buffer-file-name)))))))))
 

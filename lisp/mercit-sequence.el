@@ -175,7 +175,7 @@ This discards all changes made since the sequence started."
                                       #'mercit-read-other-branch-or-commit)
                                     (format "%s cherry" (capitalize verb))))))
         (current (or (mercit-get-current-branch)
-                     (and allow-detached (mercit-rev-parse "HEAD")))))
+                     (and allow-detached (mercit-identify "--rev=.")))))
     (unless current
       (user-error "Cannot %s cherries while HEAD is detached" verb))
     (let ((reachable (mercit-rev-ancestor-p (car commits) current))
@@ -250,7 +250,7 @@ process manually.  `HEAD' is allowed to be detached initially."
      'allow-detached))
   (mercit--cherry-move commits
                       (or (mercit-get-current-branch)
-                          (mercit-rev-parse "HEAD"))
+                          (mercit-identify "--rev=."))
                       branch args))
 
 ;;;###autoload
@@ -538,7 +538,7 @@ This discards all changes made since the sequence started."
   [:if-not mercit-rebase-in-progress-p
    :description (lambda ()
                   (format (propertize "Rebase %s onto" 'face 'transient-heading)
-                          (propertize (or (mercit-get-current-branch) "HEAD")
+                          (propertize (or (mercit-get-current-branch) "--rev=.")
                                       'face 'mercit-branch-local)))
    ("p" mercit-rebase-onto-pushremote)
    ("u" mercit-rebase-onto-upstream)
@@ -667,8 +667,8 @@ START has to be selected from a list of recent commits."
     (if (eq commit :merge-base)
         (setq commit
               (and-let* ((upstream (mercit-get-upstream-branch)))
-                (mercit-git-string "merge-base" upstream "HEAD")))
-      (unless (mercit-rev-ancestor-p commit "HEAD")
+                (mercit-git-string "merge-base" upstream "--rev=.")))
+      (unless (mercit-rev-ancestor-p commit "--rev=.")
         (user-error "%s isn't an ancestor of HEAD" commit))
       (if (mercit-commit-parents commit)
           (when (or (not (eq this-command 'mercit-rebase-interactive))
@@ -1015,7 +1015,7 @@ status buffer (i.e. the reverse of how they will be applied)."
   (directory-files (mercit-git-dir "rebase-apply") t "^[0-9]\\{4\\}$"))
 
 (defun mercit-sequence-insert-sequence (stop onto &optional orig)
-  (let ((head (mercit-rev-parse "HEAD")) done)
+  (let ((head (mercit-identify "--rev=.")) done)
     (setq onto (if onto (mercit-rev-parse onto) head))
     (setq done (mercit-git-lines "log" "--format=%H" (concat onto "..HEAD")))
     (when (and stop (not (member (mercit-rev-parse stop) done)))
@@ -1034,7 +1034,7 @@ status buffer (i.e. the reverse of how they will be applied)."
             ;; ...and the dust hasn't settled yet...
             (mercit-sequence-insert-commit
              (let* ((mercit--refresh-cache nil)
-                    (staged   (mercit-commit-tree "oO" nil "HEAD"))
+                    (staged   (mercit-commit-tree "oO" nil "--rev=."))
                     (unstaged (mercit-commit-worktree "oO" "--reset")))
                (cond
                 ;; ...but we could end up at the same tree just by committing.

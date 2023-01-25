@@ -465,7 +465,7 @@ If the region is active, act on all lines touched by the region."
   "Read an arbitrary commit and insert it below current line."
   (interactive (list (mercit-read-branch-or-commit "Insert revision")))
   (forward-line)
-  (--if-let (mercit-rev-format "%h %s" rev)
+  (--if-let (mercit-rev-format "{node|short} {desc|firstline}" rev)
       (let ((inhibit-read-only t))
         (insert "pick " it ?\n))
     (user-error "Unknown revision")))

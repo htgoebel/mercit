@@ -132,7 +132,7 @@ then only after asking.  A non-nil value for REVERT is ignored if REV is
           (setq mercit-buffer-revision
                 (if (equal rev "{index}")
                     "{index}"
-                  (mercit-rev-format "%H" rev)))
+                  (mercit-rev-format "{node}" rev)))
           (setq mercit-buffer-refname rev)
           (setq mercit-buffer-file-name (expand-file-name file topdir))
           (setq default-directory
@@ -375,7 +375,7 @@ the same location in the respective file in the working tree."
     (pcase-let ((`(,rev ,file) blob-or-file))
       (mercit-find-file rev file)
       (apply #'message "%s (%s %s ago)"
-             (mercit-rev-format "%s" rev)
+             (mercit-rev-format "{desc|firstline}" rev)
              (mercit--age (mercit-rev-format "%ct" rev))))))
 
 (defun mercit-blob-ancestor (rev file)

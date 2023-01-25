@@ -2064,8 +2064,8 @@ keymap is the parent of their keymaps.")
 (defun mercit-insert-diff ()
   "Insert the diff into this `mercit-diff-mode' buffer."
   (mercit--insert-diff
-    "diff" mercit-buffer-range "-p" "--no-prefix"
-    (and (member "--stat" mercit-buffer-diff-args) "--numstat")
+    "diff" mercit-buffer-range "-p" "--noprefix"
+    (and (member "--stat" mercit-buffer-diff-args) "--numstat")  ;; TODO
     mercit-buffer-typearg
     mercit-buffer-diff-args "--"
     mercit-buffer-diff-files))
@@ -2076,15 +2076,15 @@ keymap is the parent of their keymaps.")
                (flatten-tree args))
               (mercit-git-global-arguments
                (remove "--literal-pathspecs" mercit-git-global-arguments)))
-    ;; As of Git 2.19.0, we need to generate diffs with
-    ;; --ita-visible-in-index so that `mercit-stage' can work with
-    ;; intent-to-add files (see #4026).
-    (when (and (not (equal cmd "merge-tree"))
-               (mercit-git-version>= "2.19.0"))
-      (push "--ita-visible-in-index" args))
+    ;; ;; As of Git 2.19.0, we need to generate diffs with
+    ;; ;; --ita-visible-in-index so that `mercit-stage' can work with
+    ;; ;; intent-to-add files (see #4026).
+    ;; (when (and (not (equal cmd "merge-tree"))
+    ;;            (mercit-git-version>= "2.19.0"))
+    ;;   (push "--ita-visible-in-index" args))
     (setq args (mercit-diff--maybe-add-stat-arguments args))
     (when (cl-member-if (lambda (arg) (string-prefix-p "--color-moved" arg)) args)
-      (push "--color=always" args)
+      (push "--config=color.mode=terminfo" args)
       (setq mercit-git-global-arguments
             (append mercit-diff--reset-non-color-moved
                     mercit-git-global-arguments)))
@@ -2515,11 +2515,11 @@ Staging and applying changes is documented in info node
 (cl-defmethod mercit-buffer-value (&context (major-mode mercit-revision-mode))
   (cons mercit-buffer-revision mercit-buffer-diff-files))
 
-(defun mercit-insert-revision-diff ()
+(defun mercit-insert-revision-diff ()  ;; TODO
   "Insert the diff into this `mercit-revision-mode' buffer."
   (mercit--insert-diff
-    "show" "-p" "--cc" "--format=" "--no-prefix"
-    (and (member "--stat" mercit-buffer-diff-args) "--numstat")
+    "show" "-p" "--cc" "--format=" "--noprefix"
+    (and (member "--stat" mercit-buffer-diff-args) "--numstat") ;; TODO
     mercit-buffer-diff-args
     (mercit--rev-dereference mercit-buffer-revision)
     "--" mercit-buffer-diff-files))
@@ -2589,7 +2589,7 @@ or a ref which is not a branch, then it inserts nothing."
     (let ((beg (point))
           (rev mercit-buffer-revision))
       (insert (with-temp-buffer
-                (mercit-rev-insert-format "%B" rev)
+                (mercit-rev-insert-format "{desc}" rev)
                 (mercit-revision--wash-message)))
       (if (= (point) (+ beg 2))
           (progn (backward-delete-char 2)
@@ -2704,7 +2704,7 @@ or a ref which is not a branch, then it inserts nothing."
     (when mercit-revision-insert-related-refs
       (dolist (parent (mercit-commit-parents mercit-buffer-revision))
         (mercit-insert-section (commit parent)
-          (let ((line (mercit-rev-format "%h %s" parent)))
+          (let ((line (mercit-rev-format "{node|short} {desc|firstline}" parent)))
             (string-match "^\\([^ ]+\\) \\(.*\\)" line)
             (mercit-bind-match-strings (hash msg) line
               (insert "Parent:     ")
@@ -2914,7 +2914,7 @@ It the SECTION has a different type, then do nothing."
   (mercit-insert-section (unstaged)
     (mercit-insert-heading "Unstaged changes:")
     (mercit--insert-diff
-      "diff" mercit-buffer-diff-args "--no-prefix"
+      "diff" mercit-buffer-diff-args "--noprefix"
       "--" mercit-buffer-diff-files)))
 
 (defvar mercit-staged-section-map
@@ -2935,7 +2935,7 @@ It the SECTION has a different type, then do nothing."
     (mercit-insert-section (staged)
       (mercit-insert-heading "Staged changes:")
       (mercit--insert-diff
-        "diff" "--cached" mercit-buffer-diff-args "--no-prefix"
+        "diff" mercit-buffer-diff-args "--noprefix" ;; FIXME was "--cached"
         "--" mercit-buffer-diff-files))))
 
 ;;; Diff Type

@@ -47,8 +47,8 @@
 (eval-when-compile (require 'ido))
 (declare-function Info-get-token "info" (pos start all &optional errorstring))
 
-(eval-when-compile (require 'vc-git))
-(declare-function vc-git--run-command-string "vc-git" (file &rest args))
+(eval-when-compile (require 'vc-hg))
+(declare-function vc-git--run-command-string "vc-hg" (file &rest args))
 
 (eval-when-compile (require 'which-func))
 (declare-function which-function "which-func" ())
@@ -838,7 +838,7 @@ DEFAULT may be a number or a numeric string."
 ;;; Debug Utilities
 
 ;;;###autoload
-(defun mercit-emacs-Q-command ()
+(defun mercit-emacs-Q-command ()  ;; TODO
   "Show a shell command that runs an uncustomized Emacs with only Mercit loaded.
 See info node `(mercit)Debugging Tools' for more information."
   (interactive)
@@ -860,7 +860,7 @@ See info node `(mercit)Debugging Tools' for more information."
                      '(;; Like `LOAD_PATH' in `default.mk'.
                        "compat"
                        "dash"
-                       "libgit"
+                       ;; "libgit"
                        "transient"
                        "with-editor"
                        ;; Obviously `mercit' itself is needed too.
@@ -868,7 +868,7 @@ See info node `(mercit)Debugging Tools' for more information."
                        ;; While these are part of the Mercit repository,
                        ;; they are distributed as separate packages.
                        "mercit-section"
-                       "git-commit"
+                       "git-commit"  ;; TODO
                        ))))
                 ;; Avoid Emacs bug#16406 by using full path.
                 "-l" ,(file-name-sans-extension (locate-library "mercit")))
@@ -1020,48 +1020,48 @@ and https://github.com/mercit/mercit/issues/2295."
   (and (file-directory-p filename)
        (file-accessible-directory-p filename)))
 
-(when (< emacs-major-version 27)
-  ;; Work around https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559.
-  ;; Fixed by cb55ccae8be946f1562d74718086a4c8c8308ee5 in Emacs 27.1.
-  (with-eval-after-load 'vc-git
-    (defun vc-git-conflicted-files (directory)
-      "Return the list of files with conflicts in DIRECTORY."
-      (let* ((status
-              (vc-git--run-command-string directory "diff-files"
-                                          "--name-status"))
-             (lines (when status (split-string status "\n" 'omit-nulls)))
-             files)
-        (dolist (line lines files)
-          (when (string-match "\\([ MADRCU?!]\\)[ \t]+\\(.+\\)" line)
-            (let ((state (match-string 1 line))
-                  (file (match-string 2 line)))
-              (when (equal state "U")
-                (push (expand-file-name file directory) files)))))))))
+;; (when (< emacs-major-version 27)
+;;   ;; Work around https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559.
+;;   ;; Fixed by cb55ccae8be946f1562d74718086a4c8c8308ee5 in Emacs 27.1.
+;;   (with-eval-after-load 'vc-git
+;;     (defun vc-git-conflicted-files (directory)
+;;       "Return the list of files with conflicts in DIRECTORY."
+;;       (let* ((status
+;;               (vc-git--run-command-string directory "diff-files"
+;;                                           "--name-status"))
+;;              (lines (when status (split-string status "\n" 'omit-nulls)))
+;;              files)
+;;         (dolist (line lines files)
+;;           (when (string-match "\\([ MADRCU?!]\\)[ \t]+\\(.+\\)" line)
+;;             (let ((state (match-string 1 line))
+;;                   (file (match-string 2 line)))
+;;               (when (equal state "U")
+;;                 (push (expand-file-name file directory) files)))))))))
 
-(when (< emacs-major-version 27)
-  (defun vc-git--call@bug21559 (fn buffer command &rest args)
-    "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
-    (let ((process-environment process-environment))
-      (when revert-buffer-in-progress-p
-        (push "GIT_OPTIONAL_LOCKS=0" process-environment))
-      (apply fn buffer command args)))
-  (advice-add 'vc-git--call :around 'vc-git--call@bug21559)
+;; (when (< emacs-major-version 27)
+;;   (defun vc-git--call@bug21559 (fn buffer command &rest args)
+;;     "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
+;;     (let ((process-environment process-environment))
+;;       (when revert-buffer-in-progress-p
+;;         (push "GIT_OPTIONAL_LOCKS=0" process-environment))
+;;       (apply fn buffer command args)))
+;;   (advice-add 'vc-git--call :around 'vc-git--call@bug21559)
 
-  (defun vc-git-command@bug21559
-      (fn buffer okstatus file-or-list &rest flags)
-    "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
-    (let ((process-environment process-environment))
-      (when revert-buffer-in-progress-p
-        (push "GIT_OPTIONAL_LOCKS=0" process-environment))
-      (apply fn buffer okstatus file-or-list flags)))
-  (advice-add 'vc-git-command :around 'vc-git-command@bug21559)
+;;   (defun vc-git-command@bug21559
+;;       (fn buffer okstatus file-or-list &rest flags)
+;;     "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
+;;     (let ((process-environment process-environment))
+;;       (when revert-buffer-in-progress-p
+;;         (push "GIT_OPTIONAL_LOCKS=0" process-environment))
+;;       (apply fn buffer okstatus file-or-list flags)))
+;;   (advice-add 'vc-git-command :around 'vc-git-command@bug21559)
 
-  (defun auto-revert-handler@bug21559 (fn)
-    "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
-    (let ((revert-buffer-in-progress-p t))
-      (funcall fn)))
-  (advice-add 'auto-revert-handler :around 'auto-revert-handler@bug21559)
-  )
+;;   (defun auto-revert-handler@bug21559 (fn)
+;;     "Backport https://debbugs.gnu.org/cgi/bugreport.cgi?bug=21559."
+;;     (let ((revert-buffer-in-progress-p t))
+;;       (funcall fn)))
+;;   (advice-add 'auto-revert-handler :around 'auto-revert-handler@bug21559)
+;;   )
 
 (when (< emacs-major-version 26)
   ;; In Emacs 25 `completion-pcm--all-completions' reverses the

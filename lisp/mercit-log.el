@@ -75,9 +75,9 @@
   :options '("--follow" "--grep" "-G" "-S" "-L"))
 
 (defcustom mercit-log-revision-headers-format "\
-%+b%+N
-Author:    %aN <%aE>
-Committer: %cN <%cE>"
+{notes}
+Author:    {author}
+Committer: {committer}"  ;; TODO was {desc}{notes}
   "Additional format string used with the `++header' argument."
   :package-version '(mercit . "3.2.0")
   :group 'mercit-log
@@ -602,7 +602,7 @@ commits before and half after."
   :reader #'mercit-read-file-trace)
 
 (defun mercit-read-file-trace (&rest _ignored)
-  (let ((file  (mercit-read-file-from-rev "HEAD" "File"))
+  (let ((file  (mercit-read-file-from-rev "--rev=." "File"))
         (trace (mercit-read-string "Trace")))
     (concat trace ":" file)))
 
@@ -645,7 +645,7 @@ one or more revs read from the minibuffer."
 (defun mercit-log-head (&optional args files)
   "Show log for `HEAD'."
   (interactive (mercit-log-arguments))
-  (mercit-log-setup-buffer (list "HEAD") args files))
+  (mercit-log-setup-buffer (list "--rev=.") args files))
 
 ;;;###autoload
 (defun mercit-log-related (revs &optional args files)
@@ -661,7 +661,7 @@ previously checked out branch and its upstream and push-target."
              (cond (rebase
                     (setq rebase (mercit-ref-abbrev rebase))
                     (setq current rebase)
-                    (setq head "HEAD"))
+                    (setq head "--rev=."))
                    (t (setq current (mercit-get-previous-branch)))))
            (cond (current
                   (setq current
@@ -671,7 +671,7 @@ previously checked out branch and its upstream and push-target."
                   (when upstream
                     (setq upup (and (mercit-local-branch-p upstream)
                                     (mercit-get-upstream-branch upstream)))))
-                 (t (setq head "HEAD")))
+                 (t (setq head "--rev=.")))
            (delq nil (list current head target upstream upup)))
          (mercit-log-arguments)))
   (mercit-log-setup-buffer revs args files))
@@ -688,46 +688,46 @@ completion candidates."
   (mercit-log-setup-buffer revs args files))
 
 ;;;###autoload
-(defun mercit-log-branches (&optional args files)
+(defun mercit-log-branches (&optional args files)  ;; TODO?
   "Show log for all local branches and `HEAD'."
   (interactive (mercit-log-arguments))
   (mercit-log-setup-buffer (if (mercit-get-current-branch)
-                              (list "--branches")
-                            (list "HEAD" "--branches"))
+                              (list "--git")
+                            (list "--rev=." "--git"))
                           args files))
 
 ;;;###autoload
 (defun mercit-log-matching-branches (pattern &optional args files)
-  "Show log for all branches matching PATTERN and `HEAD'."
+  "Show log for all branches matching PATTERN and `HEAD'."  ;; TODO: branches AND head
   (interactive (cons (mercit-log-read-pattern "--branches") (mercit-log-arguments)))
   (mercit-log-setup-buffer
-   (list "HEAD" (format "--branches=%s" pattern))
+   (list "--rev=." "--git" "--branch" pattern)  ;; TODO: actually handle pattern
    args files))
 
 ;;;###autoload
 (defun mercit-log-matching-tags (pattern &optional args files)
-  "Show log for all tags matching PATTERN and `HEAD'."
+  "Show log for all tags matching PATTERN and `HEAD'."  ;; TODO: tags AND head
   (interactive (cons (mercit-log-read-pattern "--tags") (mercit-log-arguments)))
   (mercit-log-setup-buffer
-   (list "HEAD" (format "--tags=%s" pattern))
+   (list "--rev=." (format "--tags=%s" pattern))
    args files))
 
 ;;;###autoload
-(defun mercit-log-all-branches (&optional args files)
+(defun mercit-log-all-branches (&optional args files)  ;; TODO
   "Show log for all local and remote branches and `HEAD'."
   (interactive (mercit-log-arguments))
   (mercit-log-setup-buffer (if (mercit-get-current-branch)
                               (list "--branches" "--remotes")
-                            (list "HEAD" "--branches" "--remotes"))
+                            (list "--rev=." "--branches" "--remotes"))
                           args files))
 
 ;;;###autoload
-(defun mercit-log-all (&optional args files)
+(defun mercit-log-all (&optional args files)  ;;TODO
   "Show log for all references and `HEAD'."
   (interactive (mercit-log-arguments))
   (mercit-log-setup-buffer (if (mercit-get-current-branch)
-                              (list "--all")
-                            (list "HEAD" "--all"))
+                              (list "--git" "--all")
+                            (list "--rev=." "--git" "--all"))
                           args files))
 
 ;;;###autoload
@@ -755,14 +755,14 @@ restrict the log to the lines that the region touches."
       (mercit-log-setup-buffer
        (list (or mercit-buffer-refname
                  (mercit-get-current-branch)
-                 "HEAD"))
+                 "--rev=."))
        (let ((args (car (mercit-log-arguments))))
          (when (and follow (not (member "--follow" args)))
            (push "--follow" args))
          (when (and (file-regular-p
                      (expand-file-name file (mercit-toplevel)))
                     beg end)
-           (setq args (cons (format "-L%s,%s:%s" beg end file)
+           (setq args (cons (format "-L%s,%s:%s" beg end file)  ;; TODO
                             (cl-delete "-L" args :test
                                        #'string-prefix-p)))
            (setq file nil))
@@ -780,7 +780,7 @@ restrict the log to the lines that the region touches."
                          (user-error "No function at point found"))
                      (or mercit-buffer-refname
                          (mercit-get-current-branch)
-                         "HEAD")))
+                         "--rev=.")))
   (require 'mercit)
   (mercit-log-setup-buffer
    (list rev)
@@ -884,12 +884,12 @@ limit.  Otherwise set it to 256."
     (setq val (delete arg val))
     (setq mercit-buffer-log-args
           (if (and num (> num 0))
-              (cons (format "-n%i" num) val)
+              (cons (format "--limit=%i" num) val)
             val)))
   (mercit-refresh))
 
 (defun mercit-log-get-commit-limit ()
-  (and-let* ((str (--first (string-match "^-n\\([0-9]+\\)?$" it)
+  (and-let* ((str (--first (string-match "^--limit=\\([0-9]+\\)?$" it)
                            mercit-buffer-log-args)))
     (string-to-number (match-string 1 str))))
 
@@ -1037,7 +1037,7 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
   (setq mercit--imenu-item-types 'commit))
 
 (put 'mercit-log-mode 'mercit-log-default-arguments
-     '("--graph" "-n256" "--decorate"))
+     '("--graph" "--limit=256"))  ;; was "--decorate"
 
 (defun mercit-log-setup-buffer (revs args files &optional locked focus)
   (require 'mercit)
@@ -1121,32 +1121,41 @@ Do not add this to a hook variable."
          (remove "--literal-pathspecs" mercit-git-global-arguments)))
     (mercit-git-wash (apply-partially #'mercit-log-wash-log 'log)
       "log"
-      (format "--format=%s%%h%%x0c%s%%x0c%s%%x0c%%aN%%x0c%s%%x0c%%s%s"
-              (if (and (member "--left-right" args)
-                       (not (member "--graph" args)))
-                  "%m "
-                "")
-              (if (member "--decorate" args) "%D" "")
-              (if (member "--show-signature" args)
-                  (progn (setq args (remove "--show-signature" args)) "%G?")
-                "")
-              (if mercit-log-margin-show-committer-date "%ct" "%at")
-              (if (member "++header" args)
-                  (if (member "--graph" (setq args (remove "++header" args)))
-                      (concat "\n" mercit-log-revision-headers-format "\n")
-                    (concat "\n" mercit-log-revision-headers-format "\n"))
-                ""))
+      "--template"  ;; TODO refine template
+      (concat
+       (if (and (member "--left-right" args)
+                (not (member "--graph" args)))
+           "%m " ;; left (<), right (>) or boundary (-) mark  TODO
+         "")
+       "{node|short}"
+       (if (member "--decorate" args) "{branch}" "") ;; ref names without the " (", ")" wrapping.
+       (if (member "--show-signature" args)
+           (progn (setq args (remove "--show-signature" args)) "%G?")
+         "")
+       "{author}"
+       (if mercit-log-margin-show-committer-date
+           "{date(commitdate, '%s')}\"
+         "{date(date, '%s')}")
+       ;; (if (member "++header" args)
+       ;;     (if (member "--graph" (setq args (remove "++header" args)))
+       ;;         (concat "\n" mercit-log-revision-headers-format "\n")
+       ;;       (concat "\n" mercit-log-revision-headers-format "\n"))
+       ;;   "")
+       "{desc}")
       (progn
         (--when-let (--first (string-match "^\\+\\+order=\\(.+\\)$" it) args)
           (setq args (cons (format "--%s-order" (match-string 1 it))
                            (remove it args))))
-        (when (member "--decorate" args)
-          (setq args (cons "--decorate=full" (remove "--decorate" args))))
-        (when (member "--reverse" args)
-          (setq args (remove "--graph" args)))
+        ;; TODO
+        ;; (when (member "--decorate" args)
+        ;;   (setq args (cons "--decorate=full" (remove "--decorate" args))))
+        ;; (when (member "--reverse" args)
+        ;;   (setq args (remove "--graph" args)))
         (setq args (mercit-diff--maybe-add-stat-arguments args))
         args)
-      "--use-mailmap" "--no-prefix" revs "--" files)))
+      ;; TODO "--use-mailmap"
+      "--noprefix"
+      revs "--" files)))
 
 (cl-defmethod mercit-menu-common-value ((_section mercit-commit-section))
   (or (mercit-diff--region-range)
@@ -1495,7 +1504,7 @@ If there is no blob buffer in the same frame, then do nothing."
                                             mercit-buffer-file-name)))))))))))))
 
 (defun mercit-log-goto-commit-section (rev)
-  (let ((abbrev (mercit-rev-format "%h" rev)))
+  (let ((abbrev (mercit-rev-format "{node|short}" rev)))
     (when-let ((section (--first (equal (oref it value) abbrev)
                                  (oref mercit-root-section children))))
       (goto-char (oref section start)))))
@@ -1624,7 +1633,7 @@ Type \\[mercit-log-select-quit] to abort without selecting a commit."
   (hack-dir-local-variables-non-file-buffer))
 
 (put 'mercit-log-select-mode 'mercit-log-default-arguments
-     '("--graph" "-n256" "--decorate"))
+     '("--graph" "--limit=256"))  ;; was  "--decorate"
 
 (defun mercit-log-select-setup-buffer (revs args)
   (mercit-setup-buffer #'mercit-log-select-mode nil
@@ -1647,7 +1656,7 @@ Type \\[mercit-log-select-quit] to abort without selecting a commit."
   (unless initial
     (setq initial (mercit-commit-at-point)))
   (mercit-log-select-setup-buffer
-   (or branch (mercit-get-current-branch) "HEAD")
+   (or branch (mercit-get-current-branch) "--rev=.")
    (append args
            (car (mercit-log--get-value 'mercit-log-select-mode
                                       mercit-direct-use-buffer-arguments))))
@@ -1799,12 +1808,12 @@ in the pushremote case."
 (defun mercit-insert-unpulled-from-upstream ()
   "Insert commits that haven't been pulled from the upstream yet."
   (when-let ((upstream (mercit-get-upstream-branch)))
-    (mercit-insert-section (unpulled "..@{upstream}" t)
+    (mercit-insert-section (unpulled "--rev=-10" t) ;; FIXME ..@{upstream}
       (mercit-insert-heading
         (format (propertize "Unpulled from %s."
                             'font-lock-face 'mercit-section-heading)
                 upstream))
-      (mercit-insert-log "..@{upstream}" mercit-buffer-log-args)
+      (mercit-insert-log "--rev=-10" mercit-buffer-log-args) ;; FIXME ..@{upstream}
       (mercit-log-insert-child-count))))
 
 (mercit-define-section-jumper mercit-jump-to-unpulled-from-pushremote
@@ -1836,12 +1845,12 @@ many commands would fail because of that.  But here that does
 not matter and we need an unique value so we use that string
 in the pushremote case."
   (let ((value (oref section value)))
-    (if (equal value "@{upstream}..") value "@{push}..")))
+    (if (equal value "@{upstream}..") value "@{push}..")))  ;; TODO
 
 (mercit-define-section-jumper mercit-jump-to-unpushed-to-upstream
   "Unpushed to @{upstream}" unpushed "@{upstream}..")
 
-(defun mercit-insert-unpushed-to-upstream-or-recent ()
+(defun mercit-insert-unpushed-to-upstream-or-recent ()  ;; TODO
   "Insert section showing unpushed or other recent commits.
 If an upstream is configured for the current branch and it is
 behind of the current branch, then show the commits that have
@@ -1850,7 +1859,7 @@ configured or if the upstream is not behind of the current branch,
 then show the last `mercit-log-section-commit-count' commits."
   (let ((upstream (mercit-get-upstream-branch)))
     (if (or (not upstream)
-            (mercit-rev-ancestor-p "HEAD" upstream))
+            (mercit-rev-ancestor-p "--rev=." upstream))
         (mercit-insert-recent-commits 'unpushed "@{upstream}..")
       (mercit-insert-unpushed-to-upstream))))
 
@@ -1865,26 +1874,26 @@ then show the last `mercit-log-section-commit-count' commits."
       (mercit-insert-log "@{upstream}.." mercit-buffer-log-args)
       (mercit-log-insert-child-count))))
 
-(defun mercit-insert-recent-commits (&optional type value)
+(defun mercit-insert-recent-commits (&optional type value)  ;; TODO refine
   "Insert section showing recent commits.
 Show the last `mercit-log-section-commit-count' commits."
-  (let* ((start (format "HEAD~%s" mercit-log-section-commit-count))
+  (let* ((start (format "-%s" mercit-log-section-commit-count))
          (range (and (mercit-rev-verify start)
-                     (concat start "..HEAD"))))
+                     (concat "--rev=.:" start))))
     (mercit-insert-section ((eval (or type 'recent))
                            (or value range)
                            t)
       (mercit-insert-heading "Recent commits")
       (mercit-insert-log range
-                        (cons (format "-n%d" mercit-log-section-commit-count)
-                              (--remove (string-prefix-p "-n" it)
+                        (cons (format "--limit=%d" mercit-log-section-commit-count)
+                              (--remove (string-prefix-p "--limit=" it)
                                         mercit-buffer-log-args))))))
 
-(mercit-define-section-jumper mercit-jump-to-unpushed-to-pushremote
+(mercit-define-section-jumper mercit-jump-to-unpushed-to-pushremote ;; TODO
   "Unpushed to <push-remote>" unpushed
-  (concat (mercit-get-push-branch) ".."))
+  (concat (mercit-get-push-branch) ":"))
 
-(defun mercit-insert-unpushed-to-pushremote ()
+(defun mercit-insert-unpushed-to-pushremote () ;; TODO
   "Insert commits that haven't been pushed to the push-remote yet."
   (--when-let (mercit-get-push-branch)
     (when (mercit--insert-pushremote-log-p)

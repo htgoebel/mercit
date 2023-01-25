@@ -374,7 +374,7 @@ init file: (global-set-key (kbd \"C-x g\") \\='mercit-status-quick)."
    [("i" "Using Imenu" imenu)]])
 
 (define-derived-mode mercit-status-mode mercit-mode "Mercit"
-  "Mode for looking at Git status.
+  "Mode for looking at Mercurial status.
 
 This mode is documented in info node `(mercit)Status Buffer'.
 
@@ -407,9 +407,9 @@ Type \\[mercit-commit] to create a commit.
   (setq mercit--imenu-group-types '(not branch commit)))
 
 (put 'mercit-status-mode 'mercit-diff-default-arguments
-     '("--no-ext-diff"))
+     '("--git"))  ;; was "--no-ext-diff"
 (put 'mercit-status-mode 'mercit-log-default-arguments
-     '("-n256" "--decorate"))
+     '("--limit=256" ))  ;; TODO: "--decorate" ?
 
 ;;;###autoload
 (defun mercit-status-setup-buffer (&optional directory)
@@ -492,7 +492,7 @@ If there is no blob buffer in the same frame, then do nothing."
   "Insert header sections appropriate for `mercit-status-mode' buffers.
 The sections are inserted by running the functions on the hook
 `mercit-status-headers-hook'."
-  (if (mercit-rev-verify "HEAD")
+  (if (mercit-rev-verify ".")
       (mercit-insert-headers 'mercit-status-headers-hook)
     (insert "In the beginning there was darkness\n\n")))
 
@@ -512,7 +512,7 @@ generating a diff, then that error won't be inserted.  Refreshing
 the status buffer causes this section to disappear again."
   (when mercit-this-error
     (mercit-insert-section (error 'git)
-      (insert (propertize (format "%-10s" "GitError! ")
+      (insert (propertize (format "%-16s" "MercurialError! ")
                           'font-lock-face 'mercit-section-heading))
       (insert (propertize mercit-this-error 'font-lock-face 'error))
       (when-let ((key (car (where-is-internal 'mercit-process-buffer))))
@@ -542,7 +542,8 @@ the status buffer causes this section to disappear again."
 If `HEAD' is detached, then insert information about that commit
 instead.  The optional BRANCH argument is for internal use only."
   (let ((branch (or branch (mercit-get-current-branch)))
-        (output (mercit-rev-format "%h %s" (or branch "HEAD"))))
+        (output (mercit-rev-format "{node|short} {desc|firstline}"
+                                   (concat "--rev=" (or branch ".")))))
     (string-match "^\\([^ ]+\\) \\(.*\\)" output)
     (mercit-bind-match-strings (commit summary) output
       (when (equal summary "")
@@ -731,8 +732,8 @@ value of that variable can be set using \"D -- DIRECTORY RET g\"."
               (insert ?\n)))
         (when-let ((files
                     (--mapcat (and (eq (aref it 0) ??)
-                                   (list (substring it 3)))
-                              (mercit-git-items "status" "-z" "--porcelain"
+                                   (list (substring it 2)))
+                              (mercit-git-items "status" "--print0"
                                                (mercit-ignore-submodules-p t)
                                                "--" base))))
           (mercit-insert-section (untracked)

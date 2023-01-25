@@ -207,10 +207,8 @@ to inverse the meaning of the prefix argument.  \n(git commit
   (when (setq args (mercit-commit-assert args))
     (mercit-commit-amend-assert)
     (if override-date
-        (mercit-run-git-with-editor "commit" "--amend" "--no-edit" args)
-      (with-environment-variables
-          (("GIT_COMMITTER_DATE" (mercit-rev-format "%cD")))
-        (mercit-run-git-with-editor "commit" "--amend" "--no-edit" args)))))
+        (mercit-run-git-with-editor "amend" "--current-date" args)
+      (mercit-run-git-with-editor "amend" args))))
 
 ;;;###autoload
 (defun mercit-commit-reword (&optional args override-date)
@@ -230,10 +228,8 @@ and ignore the option.
   (mercit-commit-amend-assert)
   (cl-pushnew "--allow-empty" args :test #'equal)
   (if override-date
-      (mercit-run-git-with-editor "commit" "--amend" "--only" args)
-    (with-environment-variables
-        (("GIT_COMMITTER_DATE" (mercit-rev-format "%cD")))
-      (mercit-run-git-with-editor "commit" "--amend" "--only" args))))
+      (mercit-run-git-with-editor "amend" "--only" "--current-date" args)
+    (mercit-run-git-with-editor "amend" "--only" args)))
 
 ;;;###autoload
 (defun mercit-commit-fixup (&optional commit args)

@@ -63,10 +63,10 @@
 
 ;;; Git implementations
 
-(defvar mercit-inhibit-libgit nil
+(defvar mercit-inhibit-libgit t
   "Whether to inhibit the use of libgit.")
 
-(defvar mercit--libgit-available-p 'unknown
+(defvar mercit--libgit-available-p nil
   "Whether libgit is available.
 Use the function by the same name instead of this variable.")
 
@@ -126,7 +126,7 @@ successfully.")
   (or (and (eq system-type 'windows-nt)
            ;; Avoid the wrappers "cmd/git.exe" and "cmd/git.cmd",
            ;; which are much slower than using "bin/git.exe" directly.
-           (and-let* ((exec (executable-find "git")))
+           (and-let* ((exec (executable-find "hg")))
              (ignore-errors
                ;; Git for Windows 2.x provides cygpath so we can
                ;; ask it for native paths.
@@ -135,7 +135,7 @@ successfully.")
                         (process-lines
                          exec "-c"
                          "alias.X=!x() { which \"$1\" | cygpath -mf -; }; x"
-                         "X" "git")))
+                         "X" "hg")))
                       (hack-entry (assoc core-exe mercit-git-w32-path-hack))
                       ;; Running the libexec/git-core executable
                       ;; requires some extra PATH entries.
@@ -153,15 +153,15 @@ successfully.")
                    (push (cons core-exe path-hack) mercit-git-w32-path-hack))
                  core-exe))))
       (and (eq system-type 'darwin)
-           (executable-find "git"))
-      "git")
+           (executable-find "hg"))
+      "hg")
   "The Git executable used by Mercit on the local host.
 On remote machines `mercit-remote-git-executable' is used instead."
   :package-version '(mercit . "3.2.0")
   :group 'mercit-process
   :type 'string)
 
-(defcustom mercit-remote-git-executable "git"
+(defcustom mercit-remote-git-executable "hg"
   "The Git executable used by Mercit on remote machines.
 On the local host `mercit-git-executable' is used instead.
 Consider customizing `tramp-remote-path' instead of this
@@ -171,13 +171,14 @@ option."
   :type 'string)
 
 (defcustom mercit-git-global-arguments
-  `("--no-pager" "--literal-pathspecs"
-    "-c" "core.preloadindex=true"
-    "-c" "log.showSignature=false"
-    "-c" "color.ui=false"
-    "-c" "color.diff=false"
-    ,@(and (eq system-type 'windows-nt)
-           (list "-c" "i18n.logOutputEncoding=UTF-8")))
+  `("--pager" "never"
+    ;; "--literal-pathspecs"
+    ;; "--config" "core.preloadindex=true"
+    ;; "--config" "log.showSignature=false"
+    "--config" "color.mode=no"
+    "--config" "color.pagermode=no"
+    "--encoding" "UTF-8"
+    )
   "Global Git arguments.
 
 The arguments set here are used every time the git executable is
@@ -305,7 +306,7 @@ See info node `(mercit)Debugging Tools' for more information."
                value)))
        ,@body)))
 
-(defvar mercit-with-editor-envvar "GIT_EDITOR"
+(defvar mercit-with-editor-envvar "EDITOR"
   "The environment variable exported by `mercit-with-editor'.
 Set this to \"GIT_SEQUENCE_EDITOR\" if you do not want to use
 Emacs to edit commit messages but would like to do so to edit
@@ -453,40 +454,43 @@ ignore `mercit-git-debug'."
       (mercit-process-git (list t nil) args)
       (buffer-substring-no-properties (point-min) (point-max)))))
 
-(define-error 'mercit-invalid-git-boolean "Not a Git boolean")
+(define-error 'mercit-invalid-git-boolean "Not a Mercurial boolean")
+
+(defun mercit--mercurial-bool (value)
+  (pcase (downcase value)
+    ((or "true"  "true\n"  "on"  "on\n" "yes" "yes\n" "1" "1\n") t)
+    ((or "false" "false\n" "off" "off\n" "no" "no\n"  "0" "0\n") nil)
+    (output (signal 'mercit-invalid-git-boolean (list output)))))
 
 (defun mercit-git-true (&rest args)
-  "Execute Git with ARGS, returning t if it prints \"true\".
-If it prints \"false\", then return nil.  For any other output
-signal `mercit-invalid-git-boolean'."
-  (pcase (mercit-git-output args)
-    ((or "true"  "true\n")  t)
-    ((or "false" "false\n") nil)
-    (output (signal 'mercit-invalid-git-boolean (list output)))))
+  "Execute Git with ARGS, returning t if it prints any of \"1\",
+\"yes\", \"true\", or \"on\" (all case insensitive).  If it
+prints \"0\", \"no\", \"false\", or \"off\" (all case
+insensitive), then return nil .  For any other output signal
+`mercit-invalid-git-boolean'."
+  (mercit--mercurial-bool (mercit-git-output args)))
 
 (defun mercit-git-false (&rest args)
-  "Execute Git with ARGS, returning t if it prints \"false\".
-If it prints \"true\", then return nil.  For any other output
-signal `mercit-invalid-git-boolean'."
-  (pcase (mercit-git-output args)
-    ((or "true"  "true\n")  nil)
-    ((or "false" "false\n") t)
-    (output (signal 'mercit-invalid-git-boolean (list output)))))
+  "Execute Git with ARGS, returning t if it prints any of \"0\",
+\"no\", \"false\", or \"off\" (all case insensitive).  If it
+prints \"1\", \"yes\", \"true\", or \"on\" (all case
+insensitive), then return nil.  For any other output signal
+`mercit-invalid-git-boolean'."
+  (not (mercit--mercurial-bool (mercit-git-output args))))
 
 (defun mercit-git-config-p (variable &optional default)
   "Return the boolean value of the Git variable VARIABLE.
 VARIABLE has to be specified as a string.  Return DEFAULT (which
 defaults to nil) if VARIABLE is unset.  If VARIABLE's value isn't
 a boolean, then raise an error."
-  (let ((args (list "config" "--bool" "--default" (if default "true" "false")
-                    variable)))
+  (let ((args (list "config" variable)))
     (mercit--with-refresh-cache (cons default-directory args)
       (mercit--with-temp-process-buffer
         (let ((status (mercit-process-git t args))
               (output (buffer-substring (point-min) (1- (point-max)))))
           (if (zerop status)
-              (equal output "true")
-            (signal 'mercit-invalid-git-boolean (list output))))))))
+              (mercit--mercurial-bool output)
+            (if default t nil)))))))
 
 (defun mercit-git-insert (&rest args)
   "Execute Git with ARGS, inserting its output at point.
@@ -501,7 +505,7 @@ add a section in the respective process buffer."
               (delete-file log)
               (let ((exit (mercit-process-git (list t log) args)))
                 (when (> exit 0)
-                  (let ((msg "Git failed"))
+                  (let ((msg "mercurial failed"))
                     (when (file-exists-p log)
                       (setq msg (with-temp-buffer
                                   (insert-file-contents log)
@@ -555,7 +559,7 @@ If Git exits with a non-zero exit status, then report show a
 message and add a section in the respective process buffer."
   (mercit--with-temp-process-buffer
     (apply #'mercit-git-insert args)
-    (split-string (buffer-string) "\0" t)))
+    (split-string (buffer-string) "\\0" t)))
 
 (defun mercit-git-wash (washer &rest args)
   "Execute Git with ARGS, inserting washed output at point.
@@ -584,19 +588,12 @@ call function WASHER with ARGS as its sole argument."
   "Search for COMMAND in Git's exec path, falling back to `exec-path'.
 Like `executable-find', return the absolute file name of the
 executable."
-  (or (locate-file command
-                   (list (concat
-                          (file-remote-p default-directory)
-                          (or (mercit-git-string "--exec-path")
-                              (error "`git --exec-path' failed"))))
-                   exec-suffixes
-                   #'file-executable-p)
-      (compat-call executable-find command t)))
+  (executable-find "hg"))
 
 ;;; Git Version
 
 (defconst mercit--git-version-regexp
-  "\\`git version \\([0-9]+\\(\\.[0-9]+\\)\\{1,2\\}\\)")
+  "\\`Mercurial Distributed SCM (version \\([0-9]+\\(\\.[0-9]+\\)\\{1,2\\}\\))")
 
 (defvar mercit--host-git-version-cache nil)
 
@@ -627,11 +624,11 @@ format."
                  'mercit
                  (format "%S\n\nRunning \"%s --version\" failed with output:\n\n%s"
                          (if host
-                             (format "Mercit cannot find Git on host %S.\n
+                             (format "Mercit cannot find Mercurial on host %S.\n
 Check the value of `mercit-remote-git-executable' using
 `mercit-debug-git-executable' and consult the info node
 `(tramp)Remote programs'." host)
-                           "Mercit cannot find Git.\n
+                           "Mercit cannot find Mercurial.\n
 Check the values of `mercit-git-executable' and `exec-path'
 using `mercit-debug-git-executable'.")
                          (mercit-git-executable)
@@ -655,17 +652,17 @@ needs at least MINIMAL, otherwise it defaults to \"Mercit\"."
     (let* ((host (file-remote-p default-directory))
            (msg (format-spec
                  (cond (host "\
-%w requires Git %m or greater, but on %h the version is %m.
+%w requires Mercurial %m or greater, but on %h the version is %m.
 
-If multiple Git versions are installed on the host, then the
+If multiple Mercurial versions are installed on the host, then the
 problem might be that TRAMP uses the wrong executable.
 
 Check the value of `mercit-remote-git-executable' and consult
 the info node `(tramp)Remote programs'.\n")
                        (t "\
-%w requires Git %m or greater, but you are using %v.
+%w requires Mercurial %m or greater, but you are using %v.
 
-If you have multiple Git versions installed, then check the
+If you have multiple Mercurial versions installed, then check the
 values of `mercit-remote-git-executable' and `exec-path'.\n"))
                  `((?w . ,(or who "Mercit"))
                    (?m . ,(or minimal mercit--minimal-git))
@@ -712,7 +709,7 @@ See info node `(mercit)Debugging Tools' for more information."
       (when (file-directory-p execdir)
         (dolist (exec (directory-files
                        execdir t (concat
-                                  "\\`git" (regexp-opt exec-suffixes) "\\'")))
+                                  "\\`hg" (regexp-opt exec-suffixes) "\\'")))
           (insert (format "    %s (%s)\n" exec
                           (mercit--safe-git-version))))))))
 
@@ -726,7 +723,7 @@ See info node `(mercit)Debugging Tools' for more information."
      key)
    (mercit--with-refresh-cache (cons (mercit-toplevel) 'config)
      (let ((configs (make-hash-table :test #'equal)))
-       (dolist (conf (mercit-git-items "config" "--list" "-z"))
+       (dolist (conf (mercit-git-items "config" "--template" "{name}={value}\\0"))
          (let* ((nl-pos (cl-position ?\n conf))
                 (key (substring conf 0 nl-pos))
                 (val (if nl-pos (substring conf (1+ nl-pos)) "")))
@@ -738,6 +735,7 @@ See info node `(mercit)Debugging Tools' for more information."
   (car (last (apply #'mercit-get-all keys))))
 
 (defun mercit-get-all (&rest keys)
+  ;; FIXME: Mercurial has no multi-value config vars
   "Return all values of the Git variable specified by KEYS."
   (let ((mercit-git-debug nil)
         (arg (and (or (null (car keys))
@@ -746,7 +744,7 @@ See info node `(mercit)Debugging Tools' for more information."
         (key (mapconcat #'identity keys ".")))
     (if (and mercit--refresh-cache (not arg))
         (mercit-config-get-from-cached-list key)
-      (mercit-git-items "config" arg "-z" "--get-all" key))))
+      (mercit-git-items "config" arg "--template" "{value}\\0" key))))  ;; FIXME
 
 (defun mercit-get-boolean (&rest keys)
   "Return the boolean value of the Git variable specified by KEYS.
@@ -757,10 +755,11 @@ Also see `mercit-git-config-p'."
         (key (mapconcat #'identity keys ".")))
     (equal (if mercit--refresh-cache
                (car (last (mercit-config-get-from-cached-list key)))
-             (mercit-git-str "config" arg "--bool" key))
+             (mercit-git-str "config" arg "--bool" key))  ;; FIXME
            "true")))
 
 (defun mercit-set (value &rest keys)
+  ;; FIXME Can't set variables using the mercurial command line
   "Set the value of the Git variable specified by KEYS to VALUE."
   (let ((arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
@@ -768,22 +767,23 @@ Also see `mercit-git-config-p'."
         (key (mapconcat #'identity keys ".")))
     (if value
         (mercit-git-success "config" arg key value)
-      (mercit-git-success "config" arg "--unset" key))
+      (mercit-git-success "config" arg "--unset" key))  ;; FIXME
     value))
 
 (gv-define-setter mercit-get (val &rest keys)
   `(mercit-set ,val ,@keys))
 
 (defun mercit-set-all (values &rest keys)
+  ;; FIXME Can't set variables using the mercurial command line
   "Set all values of the Git variable specified by KEYS to VALUES."
   (let ((arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
                   (pop keys)))
         (var (mapconcat #'identity keys ".")))
     (when (mercit-get var)
-      (mercit-call-git "config" arg "--unset-all" var))
+      (mercit-call-git "config" arg "--unset-all" var))  ;; FIXME
     (dolist (v values)
-      (mercit-call-git "config" arg "--add" var v))))
+      (mercit-call-git "config" arg "--add" var v))))  ;; FIXME
 
 ;;; Files
 
@@ -823,7 +823,7 @@ the directory is not located inside a Git repository, then return
 nil."
   (mercit--with-refresh-cache (list default-directory 'mercit-git-dir path)
     (mercit--with-safe-default-directory nil
-      (and-let* ((dir (mercit-rev-parse-safe "--git-dir"))
+      (and-let* ((dir (mercit-identify-safe "--template" "{reporoot}/.hg"))
                  (dir (file-name-as-directory (mercit-expand-git-file-name dir)))
                  (dir (if (file-remote-p dir)
                           dir
@@ -832,7 +832,7 @@ nil."
 
 (defvar mercit--separated-gitdirs nil)
 
-(defun mercit--record-separated-gitdir ()
+(defun mercit--record-separated-gitdir ()  ;; TODO
   (let ((topdir (mercit-toplevel))
         (gitdir (mercit-git-dir)))
     ;; Kludge: git-annex converts submodule gitdirs to symlinks. See #3599.
@@ -844,7 +844,7 @@ nil."
     (setq mercit--separated-gitdirs (cl-delete topdir
                                               mercit--separated-gitdirs
                                               :key #'car :test #'equal))
-    (unless (equal (file-name-as-directory (expand-file-name ".git" topdir))
+    (unless (equal (file-name-as-directory (expand-file-name ".hg" topdir))
                    gitdir)
       (push (cons topdir gitdir) mercit--separated-gitdirs))))
 
@@ -870,13 +870,14 @@ returning the truename."
   (mercit--with-refresh-cache
       (cons (or directory default-directory) 'mercit-toplevel)
     (mercit--with-safe-default-directory directory
-      (if-let ((topdir (mercit-rev-parse-safe "--show-toplevel")))
+      (if-let ((topdir (mercit-identify-safe "--template" "{reporoot}")))
           (let (updir)
             (setq topdir (mercit-expand-git-file-name topdir))
             (if (and
+                 nil ;; TODO enable fetching the true name
                  ;; Always honor these settings.
                  (not find-file-visit-truename)
-                 (not (getenv "GIT_WORK_TREE"))
+                 ;; (not (getenv "GIT_WORK_TREE"))  ;; TODO
                  ;; `--show-cdup' is the relative path to the toplevel
                  ;; from `(file-truename default-directory)'.  Here we
                  ;; pretend it is relative to `default-directory', and
@@ -896,12 +897,12 @@ returning the truename."
                        ((default-directory updir)
                         (top (and (string-equal
                                    (mercit-rev-parse-safe "--show-cdup") "")
-                                  (mercit-rev-parse-safe "--show-toplevel"))))
+                                  (mercit-identify-safe "--template" "{reporoot}"))))
                      (string-equal (mercit-expand-git-file-name top) topdir))))
                 updir
               (concat (file-remote-p default-directory)
                       (file-name-as-directory topdir))))
-        (and-let* ((gitdir (mercit-rev-parse-safe "--git-dir"))
+        (and-let* ((gitdir (mercit-identify-safe "--template" "{reporoot}/.hg"))
                    (gitdir (file-name-as-directory
                             (if (file-name-absolute-p gitdir)
                                 ;; We might have followed a symlink.
@@ -910,14 +911,14 @@ returning the truename."
                               (expand-file-name gitdir)))))
           (if (mercit-bare-repo-p)
               gitdir
-            (let* ((link (expand-file-name "gitdir" gitdir))
+            (let* ((link (expand-file-name "gitdir" gitdir)) ;; TODO
                    (wtree (and (file-exists-p link)
                                (mercit-file-line link))))
               (cond
                ((and wtree
                      ;; Ignore .git/gitdir files that result from a
                      ;; Git bug.  See #2364.
-                     (not (equal wtree ".git")))
+                     (not (equal wtree ".hg")))
                 ;; Return the linked working tree.
                 (concat (file-remote-p default-directory)
                         (file-name-directory wtree)))
@@ -938,10 +939,10 @@ returning the truename."
   `(let ((default-directory (mercit--toplevel-safe)))
      ,@body))
 
-(define-error 'mercit-outside-git-repo "Not inside Git repository")
-(define-error 'mercit-corrupt-git-config "Corrupt Git configuration")
+(define-error 'mercit-outside-git-repo "Not inside Mercurial repository")
+(define-error 'mercit-corrupt-git-config "Corrupt Mercurial configuration")
 (define-error 'mercit-git-executable-not-found
-  "Git executable cannot be found (see https://mercit.vc/goto/e6a78ed2)")
+  "Mercurial executable cannot be found (see https://mercit.vc/goto/e6a78ed2)")
 
 (defun mercit--assert-usable-git ()
   (if (not (compat-call executable-find (mercit-git-executable) t))
@@ -950,11 +951,7 @@ returning the truename."
            (lambda (err)
              (signal 'mercit-corrupt-git-config
                      (format "%s: %s" default-directory err)))))
-      ;; This should always succeed unless there's a corrupt config
-      ;; (or at least a similarly severe failing state).  Note that
-      ;; git-config's --default is avoided because it's not available
-      ;; until Git 2.18.
-      (mercit-git-string "config" "--get-color" "" "reset"))
+      (mercit-git-string "config" "ui.interactive"))
     nil))
 
 (defun mercit--not-inside-repository-error ()
@@ -980,19 +977,21 @@ is non-nil, in which case return nil."
 If it is below the repository directory, then return nil.
 If it isn't below either, then signal an error unless NOERROR
 is non-nil, in which case return nil."
-  (and (mercit--assert-default-directory noerror)
+  (and nil  ;; TODO worktree
+       (mercit--assert-default-directory noerror)
        (condition-case nil
            (mercit-rev-parse-true "--is-inside-work-tree")
          (mercit-invalid-git-boolean
           (and (not noerror)
                (signal 'mercit-outside-git-repo default-directory))))))
 
-(cl-defgeneric mercit-bare-repo-p (&optional noerror)
+(cl-defgeneric mercit-bare-repo-p (&optional noerror)  ;; TODO
   "Return t if the current repository is bare.
 If it is non-bare, then return nil.  If `default-directory'
 isn't below a Git repository, then signal an error unless
 NOERROR is non-nil, in which case return nil."
-  (and (mercit--assert-default-directory noerror)
+  (and nil  ;;  hg status --rev null
+       (mercit--assert-default-directory noerror)
        (condition-case nil
            (mercit-rev-parse-true "--is-bare-repository")
          (mercit-invalid-git-boolean
@@ -1004,7 +1003,7 @@ NOERROR is non-nil, in which case return nil."
       (and (not noerror)
            (let ((exists (file-exists-p default-directory)))
              (signal (if exists 'file-error 'file-missing)
-                     (list "Running git in directory"
+                     (list "Running hg in directory"
                            (if exists
                                "Not a directory"
                              "No such file or directory")
@@ -1015,12 +1014,12 @@ NOERROR is non-nil, in which case return nil."
 When optional NON-BARE is non-nil also return nil if DIRECTORY is
 a bare repository."
   (and (file-directory-p directory) ; Avoid archives, see #3397.
-       (or (file-regular-p (expand-file-name ".git" directory))
-           (file-directory-p (expand-file-name ".git" directory))
+       (or (file-regular-p (expand-file-name ".hg" directory))
+           (file-directory-p (expand-file-name ".hg" directory))
            (and (not non-bare)
-                (file-regular-p (expand-file-name "HEAD" directory))
-                (file-directory-p (expand-file-name "refs" directory))
-                (file-directory-p (expand-file-name "objects" directory))))))
+                (file-regular-p (expand-file-name "00changelog.i" directory))
+                (file-directory-p (expand-file-name "cache" directory))
+                (file-directory-p (expand-file-name "store" directory))))))
 
 (defun mercit-file-relative-name (&optional file tracked)
   "Return the path of FILE relative to the repository root.
@@ -1044,61 +1043,63 @@ tracked file."
       (file-relative-name file dir))))
 
 (defun mercit-file-tracked-p (file)
-  (mercit-git-success "ls-files" "--error-unmatch" file))
+  ;; need to use --all files to get a (templated) output, otherwise an untracked file would result in no outout an thus raise an error
+  (mercit-git-true "status" "--all"
+                   "--template" "{if(strip(status, 'I?'), 1, 0)}"
+                   file))
 
 (defun mercit-list-files (&rest args)
-  (apply #'mercit-git-items "ls-files" "-z" "--full-name" args))
+  ;; with full path  ;; FIXME:  "--cached"
+  (apply #'mercit-git-items "status" "--template" "{path}\\0" args))
 
 (defun mercit-tracked-files ()
-  (mercit-list-files "--cached"))
+  (mercit-list-files "-mardc"))  ;; modified, added, removed, deleted, changed
 
 (defun mercit-untracked-files (&optional all files)
-  (mercit-list-files "--other" (unless all "--exclude-standard") "--" files))
+  ;;  TODO: (unless all "--exclude-standard")
+  (mercit-list-files "--unknown" "--" files))
 
 (defun mercit-modified-files (&optional nomodules files)
-  (mercit-git-items "diff-index" "-z" "--name-only"
-                   (and nomodules "--ignore-submodules")
-                   (mercit-headish) "--" files))
+  (mercit-list-files "--modified"  ;; FIXME:  "--cached"
+                     (or nomodules "--subrepos")
+                     ;; FIXME: (mercit-headish)
+                     "--" files))
 
 (defun mercit-unstaged-files (&optional nomodules files)
-  (mercit-git-items "diff-files" "-z" "--name-only"
-                   (and nomodules "--ignore-submodules")
-                   "--" files))
+  (mercit-list-files "--modified"
+                     (or nomodules "--subrepos")
+                     ;; FIXME: (mercit-headish)
+                     "--" files))
 
 (defun mercit-staged-files (&optional nomodules files)
-  (mercit-git-items "diff-index" "-z" "--name-only" "--cached"
-                   (and nomodules "--ignore-submodules")
-                   (mercit-headish) "--" files))
+  (mercit-list-files "--modified" ;; FIXME:  "--cached"
+                     (or nomodules "--subrepos")
+                     ;; FIXME: (mercit-headish)
+                     "--" files))
 
-(defun mercit-binary-files (&rest args)
+(defun mercit-binary-files (&rest args)  ;; FIXME
   (--mapcat (and (string-match "^-\t-\t\\(.+\\)" it)
                  (list (match-string 1 it)))
             (apply #'mercit-git-items
                    "diff" "-z" "--numstat" "--ignore-submodules"
                    args)))
 
-(defun mercit-unmerged-files ()
+(defun mercit-unmerged-files ()  ;; FIXME
   (mercit-git-items "diff-files" "-z" "--name-only" "--diff-filter=U"))
 
 (defun mercit-ignored-files ()
-  (mercit-git-items "ls-files" "-z" "--others" "--ignored"
-                   "--exclude-standard" "--directory"))
+  ;;  TODO: "--exclude-standard" "--directory"
+  (mercit-list-files "--unknown"))
 
-(defun mercit-skip-worktree-files ()
-  (--keep (and (= (aref it 0) ?S)
-               (substring it 2))
-          (mercit-list-files "-t")))
+(defun mercit-skip-worktree-files () ())  ;; mercurial has no worktrees
 
-(defun mercit-assume-unchanged-files ()
-  (--keep (and (memq (aref it 0) '(?h ?s ?m ?r ?c ?k))
-               (substring it 2))
-          (mercit-list-files "-v")))
+(defun mercit-assume-unchanged-files () ())  ;; concept unknown to mercurial
 
-(defun mercit-revision-files (rev)
+(defun mercit-revision-files (rev)  ;; TODO
   (mercit-with-toplevel
     (mercit-git-items "ls-tree" "-z" "-r" "--name-only" rev)))
 
-(defun mercit-revision-directories (rev)
+(defun mercit-revision-directories (rev)  ;; TODO
   "List directories that contain a tracked file in revision REV."
   (mercit-with-toplevel
     (mapcar #'file-name-as-directory
@@ -1110,9 +1111,12 @@ If OTHER-REV is non-nil, REV-OR-RANGE should be a revision, not a
 range.  Otherwise, it can be any revision or range accepted by
 \"git diff\" (i.e., <rev>, <revA>..<revB>, or <revA>...<revB>)."
   (mercit-with-toplevel
-    (mercit-git-items "diff" "-z" "--name-only" rev-or-range other-rev)))
+   (mercit-list-files "--rev"
+                      (if other-rev
+                          (concat rev-or-range ":" other-rev)
+                        rev-or-range))))
 
-(defun mercit-renamed-files (revA revB)
+(defun mercit-renamed-files (revA revB)  ;; TODO
   (mapcar (pcase-lambda (`(,_status ,fileA ,fileB))
             (cons fileA fileB))
           (seq-partition (mercit-git-items "diff" "-z" "--name-status"
@@ -1120,7 +1124,7 @@ range.  Otherwise, it can be any revision or range accepted by
                                           "--diff-filter=R" revA revB)
                          3)))
 
-(defun mercit--rev-file-name (file rev other-rev)
+(defun mercit--rev-file-name (file rev other-rev)  ;; TODO
   "For FILE, potentially renamed between REV and OTHER-REV, return name in REV.
 Return nil, if FILE appears neither in REV nor OTHER-REV,
 or if no rename is detected."
@@ -1128,16 +1132,16 @@ or if no rename is detected."
       (and-let* ((renamed (mercit-renamed-files rev other-rev)))
         (car (rassoc file renamed)))))
 
-(defun mercit-file-status (&rest args)
+(defun mercit-file-status (&rest args)  ;; TODO
   (mercit--with-temp-process-buffer
-    (save-excursion (mercit-git-insert "status" "-z" args))
+    (save-excursion (mercit-git-insert "status" "--print0" args))
     (let ((pos (point)) status)
       (while (> (skip-chars-forward "[:print:]") 0)
         (let ((x (char-after     pos))
               (y (char-after (1+ pos)))
               (file (buffer-substring (+ pos 3) (point))))
           (forward-char)
-          (if (memq x '(?R ?C))
+          (if (memq x '(?R ?C))  ;; renamed, copied
               (progn
                 (setq pos (point))
                 (skip-chars-forward "[:print:]")
@@ -1223,7 +1227,7 @@ Sorted from longest to shortest CYGWIN name."
 
 (defun mercit-no-commit-p ()
   "Return t if there is no commit in the current Git repository."
-  (not (mercit-rev-verify "HEAD")))
+  (not (mercit-rev-verify ".")))
 
 (defun mercit-merge-commit-p (commit)
   "Return t if COMMIT is a merge commit."
@@ -1233,16 +1237,16 @@ Sorted from longest to shortest CYGWIN name."
   "Return t if there are any staged changes.
 If optional FILES is non-nil, then only changes to those files
 are considered."
-  (mercit-git-failure "diff" "--quiet" "--cached"
-                     (and ignore-submodules "--ignore-submodules")
+  (mercit-git-failure "diff" "--quiet" "--cached"  ;; FIXME
+                     (or ignore-submodules "--subrepos")
                      "--" files))
 
 (defun mercit-anything-unstaged-p (&optional ignore-submodules &rest files)
   "Return t if there are any unstaged changes.
 If optional FILES is non-nil, then only changes to those files
 are considered."
-  (mercit-git-failure "diff" "--quiet"
-                     (and ignore-submodules "--ignore-submodules")
+  (mercit-git-failure "diff" "--quiet"  ;; FIXME
+                     (or ignore-submodules "--subrepos")
                      "--" files))
 
 (defun mercit-anything-modified-p (&optional ignore-submodules &rest files)
@@ -1256,16 +1260,16 @@ are considered."
   "Return t if there are any merge conflicts.
 If optional FILES is non-nil, then only conflicts in those files
 are considered."
-  (and (mercit-git-string "ls-files" "--unmerged" files) t))
+  (and (mercit-git-string "ls-files" "--unmerged" files) t)) ;; FIXME
 
 (defun mercit-module-worktree-p (module)
   (mercit-with-toplevel
-    (file-exists-p (expand-file-name (expand-file-name ".git" module)))))
+    (file-exists-p (expand-file-name (expand-file-name ".hg" module)))))
 
 (defun mercit-module-no-worktree-p (module)
   (not (mercit-module-worktree-p module)))
 
-(defun mercit-ignore-submodules-p (&optional return-argument)
+(defun mercit-ignore-submodules-p (&optional return-argument)  ;; TODO
   (or (cl-find-if (lambda (arg)
                     (string-prefix-p "--ignore-submodules" arg))
                   mercit-buffer-diff-args)
@@ -1276,37 +1280,51 @@ are considered."
 
 ;;; Revisions and References
 
+(defun mercit-identify (&rest args)
+  "Execute `git rev-parse ARGS', returning first line of output.
+If there is no output, return nil."
+  (apply #'mercit-git-string "identify" args))
+
+(defun mercit-identify-safe (&rest args)
+  "Execute `git rev-parse ARGS', returning first line of output.
+If there is no output, return nil.  Like `mercit-rev-parse' but
+ignore `mercit-git-debug'."
+  (message "mercit-identify-safe %s" args)
+  (apply #'mercit-git-str "identify" args))
+
 (defun mercit-rev-parse (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil."
-  (apply #'mercit-git-string "rev-parse" args))
+  (apply #'mercit-git-string "identify" args))
 
 (defun mercit-rev-parse-safe (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil.  Like `mercit-rev-parse' but
 ignore `mercit-git-debug'."
-  (apply #'mercit-git-str "rev-parse" args))
+  (apply #'mercit-git-str "identify" args))
 
 (defun mercit-rev-parse-true (&rest args)
   "Execute `git rev-parse ARGS', returning t if it prints \"true\".
 If it prints \"false\", then return nil.  For any other output
 signal an error."
-  (mercit-git-true "rev-parse" args))
+  (mercit-git-true "identify" args))
 
 (defun mercit-rev-parse-false (&rest args)
   "Execute `git rev-parse ARGS', returning t if it prints \"false\".
 If it prints \"true\", then return nil.  For any other output
 signal an error."
-  (mercit-git-false "rev-parse" args))
+  (mercit-git-false "identify" args))
 
 (defun mercit-rev-parse-p (&rest args)
   "Execute `git rev-parse ARGS', returning t if it prints \"true\".
 Return t if the first (and usually only) output line is the
 string \"true\", otherwise return nil."
-  (equal (mercit-git-str "rev-parse" args) "true"))
+  (equal (mercit-git-str "identify" args) "True"))  ;; TODO: use …-bool
 
 (defun mercit-rev-verify (rev)
-  (mercit-git-string-p "rev-parse" "--verify" rev))
+  ;; TODO: Rethink whether --rev shall be added here or be expecated
+  ;; as part of REV.
+  (mercit-git-string-p "identify" "--id" "--rev" rev))
 
 (defun mercit-commit-p (rev)
   "Return full hash for REV if it names an existing commit."
@@ -1316,16 +1334,16 @@ string \"true\", otherwise return nil."
 
 (defalias 'mercit-rev-hash #'mercit-commit-p)
 
-(defun mercit--rev-dereference (rev)
+(defun mercit--rev-dereference (rev)  ;; TODO
   "Return a rev that forces Git to interpret REV as a commit.
 If REV is nil or has the form \":/TEXT\", return REV itself."
   (cond ((not rev) nil)
         ((string-match-p "^:/" rev) rev)
-        (t (concat rev "^{commit}"))))
+        (t (concat rev "^0"))))  ;;was "^{commit}"
 
 (defun mercit-rev-equal (a b)
   "Return t if there are no differences between the commits A and B."
-  (mercit-git-success "diff" "--quiet" a b))
+  (equal "0\n" (mercit-git-str "diff" "--stat" "--from" a "--to" b)))
 
 (defun mercit-rev-eq (a b)
   "Return t if A and B refer to the same commit."
@@ -1334,25 +1352,25 @@ If REV is nil or has the form \":/TEXT\", return REV itself."
     (and a b (equal a b))))
 
 (defun mercit-rev-ancestor-p (a b)
-  "Return non-nil if commit A is an ancestor of commit B."
+  "Return non-nil if commit A is an ancestor of commit B."  ;; TODO
   (mercit-git-success "merge-base" "--is-ancestor" a b))
 
 (defun mercit-rev-head-p (rev)
-  (or (equal rev "HEAD")
+  (or (equal rev "HEAD")  ;; TODO
       (and rev
            (not (string-search ".." rev))
            (equal (mercit-rev-parse rev)
                   (mercit-rev-parse "HEAD")))))
 
-(defun mercit-rev-author-p (rev)
+(defun mercit-rev-author-p (rev)  ;; TODO
   "Return t if the user is the author of REV.
 More precisely return t if `user.name' is equal to the author
 name of REV and/or `user.email' is equal to the author email
 of REV."
-  (or (equal (mercit-get "user.name")  (mercit-rev-format "%an" rev))
-      (equal (mercit-get "user.email") (mercit-rev-format "%ae" rev))))
+  (or (equal (mercit-get "user.name")  (mercit-rev-format "{author}" rev))
+      (equal (mercit-get "user.email") (mercit-rev-format "{author}" rev))))
 
-(defun mercit-rev-name (rev &optional pattern not-anchored)
+(defun mercit-rev-name (rev &optional pattern not-anchored)  ;; TODO
   "Return a symbolic name for REV using `git-name-rev'.
 
 PATTERN can be used to limit the result to a matching ref.
@@ -1390,17 +1408,17 @@ Git."
                                  (concat "--exclude=*/" pattern)))
                       rev)))
 
-(defun mercit-rev-branch (rev)
+(defun mercit-rev-branch (rev)  ;; TODO
   (and-let* ((name (mercit-rev-name rev "refs/heads/*")))
     (and (not (string-match-p "[~^]" name)) name)))
 
-(defun mercit-get-shortname (rev)
+(defun mercit-get-shortname (rev)  ;; TODO
   (let* ((fn (apply-partially #'mercit-rev-name rev))
          (name (or (funcall fn "refs/tags/*")
                    (funcall fn "refs/heads/*")
                    (funcall fn "refs/remotes/*"))))
     (cond ((not name)
-           (mercit-rev-parse "--short" rev))
+           (mercit-rev-parse "--if" rev))
           ((string-match "^\\(?:tags\\|remotes\\)/\\(.+\\)" name)
            (if (mercit-ref-ambiguous-p (match-string 1 name))
                name
@@ -1413,38 +1431,39 @@ Git."
       (and lax (or (mercit-name-local-branch rev t)
                    (mercit-name-remote-branch rev t)))))
 
-(defun mercit-name-local-branch (rev &optional lax)
+(defun mercit-name-local-branch (rev &optional lax)  ;; TODO
   (and-let* ((name (mercit-rev-name rev "refs/heads/*")))
     (and (or lax (not (string-match-p "[~^]" name))) name)))
 
-(defun mercit-name-remote-branch (rev &optional lax)
+(defun mercit-name-remote-branch (rev &optional lax)  ;; TODO
   (and-let* ((name (mercit-rev-name rev "refs/remotes/*")))
     (and (or lax (not (string-match-p "[~^]" name)))
          (substring name 8))))
 
-(defun mercit-name-tag (rev &optional lax)
+(defun mercit-name-tag (rev &optional lax)  ;; TODO
   (when-let* ((name (mercit-rev-name rev "refs/tags/*"))) ;debbugs#31840
     (when (string-suffix-p "^0" name)
       (setq name (substring name 0 -2)))
     (and (or lax (not (string-match-p "[~^]" name)))
          (substring name 5))))
 
-(defun mercit-ref-abbrev (refname)
+(defun mercit-ref-abbrev (refname)  ;; TODO
   "Return an unambiguous abbreviation of REFNAME."
-  (mercit-rev-parse "--verify" "--abbrev-ref" refname))
+  ;; (mercit-rev-parse "--verify" "--abbrev-ref" refname))
+  (mercit-identify refname))
 
-(defun mercit-ref-fullname (refname)
+(defun mercit-ref-fullname (refname)  ;; TODO
   "Return fully qualified refname for REFNAME.
 If REFNAME is ambiguous, return nil."
   (mercit-rev-parse "--verify" "--symbolic-full-name" refname))
 
-(defun mercit-ref-ambiguous-p (refname)
+(defun mercit-ref-ambiguous-p (refname)  ;; TODO
   (save-match-data
     (if (string-match "\\`\\([^^~]+\\)\\(.*\\)" refname)
         (not (mercit-ref-fullname (match-string 1 refname)))
       (error "%S has an unrecognized format" refname))))
 
-(defun mercit-ref-maybe-qualify (refname &optional prefix)
+(defun mercit-ref-maybe-qualify (refname &optional prefix)  ;; TODO
   "If REFNAME is ambiguous, try to disambiguate it by prepend PREFIX to it.
 Return an unambiguous refname, either REFNAME or that prefixed
 with PREFIX, nil otherwise.  If REFNAME has an offset suffix
@@ -1456,7 +1475,7 @@ nil, then use \"heads/\".  "
     refname))
 
 (defun mercit-ref-exists-p (ref)
-  (mercit-git-success "show-ref" "--verify" ref))
+  (mercit-git-success "identify" "--rev" ref))
 
 (defun mercit-ref-equal (a b)
   "Return t if the refnames A and B are `equal'.
@@ -1480,7 +1499,7 @@ to, or to some other symbolic-ref that points to the same ref."
              (not symbolic-b)
              (mercit-ref-equal a b)))))
 
-(defun mercit-headish ()
+(defun mercit-headish ()    ;; TODO
   "Return the `HEAD' or if that doesn't exist the hash of the empty tree."
   (if (mercit-no-commit-p)
       (mercit-git-string "mktree")
@@ -1533,7 +1552,7 @@ to, or to some other symbolic-ref that points to the same ref."
                            'mercit-revision-mode)
            mercit-buffer-revision)))
 
-(defun mercit-branch-or-commit-at-point ()
+(defun mercit-branch-or-commit-at-point ()   ;; TODO
   (or (mercit-section-case
         (branch (mercit-ref-maybe-qualify (oref it value)))
         (commit (or (mercit--painted-branch-at-point)
@@ -1580,7 +1599,7 @@ to, or to some other symbolic-ref that points to the same ref."
 (defun mercit-get-current-branch ()
   "Return the refname of the currently checked out branch.
 Return nil if no branch is currently checked out."
-  (mercit-git-string "symbolic-ref" "--short" "HEAD"))
+  (mercit-git-string "identify" "--branch"))
 
 (defvar mercit-get-previous-branch-timeout 0.5
   "Maximum time to spend in `mercit-get-previous-branch'.
@@ -1597,13 +1616,13 @@ The amount of time spent searching is limited by
         (i 1) prev)
     (while (if (> (- (float-time) t0) mercit-get-previous-branch-timeout)
                (setq prev nil) ;; Timed out.
-             (and (setq prev (mercit-rev-verify (format "@{-%i}" i)))
+             (and (setq prev (mercit-rev-verify (format "--rev=-%i" i)))
                   (or (not (setq prev (mercit-rev-branch prev)))
                       (equal prev current))))
       (cl-incf i))
     prev))
 
-(defun mercit-set-upstream-branch (branch upstream)
+(defun mercit-set-upstream-branch (branch upstream)  ;; TODO
   "Set UPSTREAM as the upstream of BRANCH.
 If UPSTREAM is nil, then unset BRANCH's upstream.
 Otherwise UPSTREAM has to be an existing branch."
@@ -1611,7 +1630,7 @@ Otherwise UPSTREAM has to be an existing branch."
       (mercit-call-git "branch" "--set-upstream-to" upstream branch)
     (mercit-call-git "branch" "--unset-upstream" branch)))
 
-(defun mercit-get-upstream-ref (&optional branch)
+(defun mercit-get-upstream-ref (&optional branch)  ;; TODO
   "Return the upstream branch of BRANCH as a fully qualified ref.
 It BRANCH is nil, then return the upstream of the current branch,
 if any, nil otherwise.  If the upstream is not configured, the
@@ -1621,7 +1640,7 @@ remote-tracking branch ref."
   (and-let* ((branch (or branch (mercit-get-current-branch))))
     (mercit-ref-fullname (concat branch "@{upstream}"))))
 
-(defun mercit-get-upstream-branch (&optional branch)
+(defun mercit-get-upstream-branch (&optional branch)  ;; TODO
   "Return the name of the upstream branch of BRANCH.
 It BRANCH is nil, then return the upstream of the current branch
 if any, nil otherwise.  If the upstream is not configured, the
@@ -1630,15 +1649,16 @@ then return nil.  I.e. return the name of an existing local or
 remote-tracking branch.  The returned string is colorized
 according to the branch type."
   (mercit--with-refresh-cache
-      (list default-directory 'mercit-get-upstream-branch branch)
-    (and-let* ((branch (or branch (mercit-get-current-branch)))
-               (upstream (mercit-ref-abbrev (concat branch "@{upstream}"))))
-      (mercit--propertize-face
-       upstream (if (equal (mercit-get "branch" branch "remote") ".")
-                    'mercit-branch-local
-                  'mercit-branch-remote)))))
+   (list default-directory 'mercit-get-upstream-branch branch)
+   (or branch (mercit-get-current-branch))))  ;; mercurial: same as lokal
+    ;; (and-let* ((branch (or branch (mercit-get-current-branch)))
+    ;;            (upstream (mercit-ref-abbrev (concat branch "@{upstream}"))))
+    ;;   (mercit--propertize-face
+    ;;    upstream (if (equal (mercit-get "branch" branch "remote") ".")
+    ;;                 'mercit-branch-local
+    ;;               'mercit-branch-remote)))))
 
-(defun mercit-get-indirect-upstream-branch (branch &optional force)
+(defun mercit-get-indirect-upstream-branch (branch &optional force)  ;; TODO
   (let ((remote (mercit-get "branch" branch "remote")))
     (and remote (not (equal remote "."))
          ;; The user has opted in...
@@ -1657,7 +1677,7 @@ according to the branch type."
                 (mercit-rev-ancestor-p upstream branch)
                 upstream)))))
 
-(defun mercit-get-upstream-remote (&optional branch allow-unnamed)
+(defun mercit-get-upstream-remote (&optional branch allow-unnamed)  ;; TODO
   (and-let* ((branch (or branch (mercit-get-current-branch)))
              (remote (mercit-get "branch" branch "remote")))
     (and (not (equal remote "."))
@@ -1667,7 +1687,7 @@ according to the branch type."
                      (string-match-p "\\(\\`.\\{0,2\\}/\\|[:@]\\)" remote))
                 (mercit--propertize-face remote 'bold))))))
 
-(defun mercit-get-unnamed-upstream (&optional branch)
+(defun mercit-get-unnamed-upstream (&optional branch)  ;; TODO
   (and-let* ((branch (or branch (mercit-get-current-branch)))
              (remote (mercit-get "branch" branch "remote"))
              (merge  (mercit-get "branch" branch "merge")))
@@ -1675,11 +1695,11 @@ according to the branch type."
          (list (mercit--propertize-face remote 'bold)
                (mercit--propertize-face merge 'mercit-branch-remote)))))
 
-(defun mercit--unnamed-upstream-p (remote merge)
+(defun mercit--unnamed-upstream-p (remote merge)  ;; TODO
   (and remote (string-match-p "\\(\\`\\.\\{0,2\\}/\\|[:@]\\)" remote)
        merge  (string-prefix-p "refs/" merge)))
 
-(defun mercit--valid-upstream-p (remote merge)
+(defun mercit--valid-upstream-p (remote merge)  ;; TODO
   (and (or (equal remote ".")
            (member remote (mercit-list-remotes)))
        (string-prefix-p "refs/" merge)))
@@ -1692,14 +1712,14 @@ according to the branch type."
                            (mercit-primary-remote))))
         (mercit--propertize-face remote 'mercit-branch-remote))))
 
-(defun mercit-get-push-remote (&optional branch)
+(defun mercit-get-push-remote (&optional branch)  ;; TODO
   (and-let* ((remote
               (or (and (or branch (setq branch (mercit-get-current-branch)))
                        (mercit-get "branch" branch "pushRemote"))
                   (mercit-get "remote.pushDefault"))))
     (mercit--propertize-face remote 'mercit-branch-remote)))
 
-(defun mercit-get-push-branch (&optional branch verify)
+(defun mercit-get-push-branch (&optional branch verify)  ;; TODO
   (mercit--with-refresh-cache
       (list default-directory 'mercit-get-push-branch branch verify)
     (and-let* ((branch (or branch (setq branch (mercit-get-current-branch))))
@@ -1709,13 +1729,13 @@ according to the branch type."
                (mercit-rev-verify target))
            (mercit--propertize-face target 'mercit-branch-remote)))))
 
-(defun mercit-get-@{push}-branch (&optional branch)
+(defun mercit-get-@{push}-branch (&optional branch)  ;; TODO
   (let ((ref (mercit-rev-parse "--symbolic-full-name"
                               (concat branch "@{push}"))))
     (when (and ref (string-prefix-p "refs/remotes/" ref))
       (substring ref 13))))
 
-(defun mercit-get-remote (&optional branch)
+(defun mercit-get-remote (&optional branch)  ;; TODO
   (when (or branch (setq branch (mercit-get-current-branch)))
     (let ((remote (mercit-get "branch" branch "remote")))
       (unless (equal remote ".")
@@ -1729,7 +1749,7 @@ according to the branch type."
       (car (mercit-list-remotes))))
 
 (defvar mercit-primary-remote-names
-  '("upstream" "origin"))
+  '("default" "upstream"))
 
 (defun mercit-primary-remote ()
   "Return the primary remote.
@@ -1751,10 +1771,10 @@ the current repository is considered its primary remote."
                 (member name remotes))
               (delete-dups
                (delq nil
-                     (cons (mercit-get "mercit.primaryRemote")
+                     (cons (mercit-get "mercit.primaryRemote")  ;; TODO
                            mercit-primary-remote-names))))))
 
-(defun mercit-branch-merged-p (branch &optional target)
+(defun mercit-branch-merged-p (branch &optional target)  ;; TODO
   "Return non-nil if BRANCH is merged into its upstream and TARGET.
 
 TARGET defaults to the current branch.  If `HEAD' is detached and
@@ -1775,7 +1795,7 @@ as into its upstream."
          (and-let* ((target (or target (mercit-get-current-branch))))
            (mercit-git-success "merge-base" "--is-ancestor" branch target)))))
 
-(defun mercit-get-tracked (refname)
+(defun mercit-get-tracked (refname)  ;; TODO
   "Return the remote branch tracked by the remote-tracking branch REFNAME.
 The returned value has the form (REMOTE . REF), where REMOTE is
 the name of a remote and REF is the ref local to the remote."
@@ -1793,9 +1813,9 @@ the name of a remote and REF is the ref local to the remote."
                                             ref)
                               (cons rmt (string-replace
                                          "*" (match-string 1 ref) src))))))
-                (mercit-git-lines "config" "--local" "--list")))))
+                (mercit-git-lines "config" "paths"))))) ;; was  "--local"  "--list"
 
-(defun mercit-split-branch-name (branch)
+(defun mercit-split-branch-name (branch)  ;; TODO
   (cond ((member branch (mercit-list-local-branch-names))
          (cons "." branch))
         ((string-match "/" branch)
@@ -1808,7 +1828,7 @@ the name of a remote and REF is the ref local to the remote."
                        (mercit-list-remotes))
              (error "Invalid branch name %s" branch)))))
 
-(defun mercit-get-current-tag (&optional rev with-distance)
+(defun mercit-get-current-tag (&optional rev with-distance)  ;; TODO
   "Return the closest tag reachable from REV.
 
 If optional REV is nil, then default to `HEAD'.
@@ -1828,7 +1848,7 @@ uncommitted changes, nil otherwise."
             ,@(and (match-string 3 str) (list t)))
         (match-string 1 str)))))
 
-(defun mercit-get-next-tag (&optional rev with-distance)
+(defun mercit-get-next-tag (&optional rev with-distance)  ;; TODO
   "Return the closest tag from which REV is reachable.
 
 If optional REV is nil, then default to `HEAD'.
@@ -1845,7 +1865,7 @@ where COMMITS is the number of commits in TAG but not in REV."
               (list str (car (mercit-rev-diff-count str rev)))
             str))))))
 
-(defun mercit-list-refs (&optional namespaces format sortby)
+(defun mercit-list-refs (&optional namespaces format sortby)  ;; TODO
   "Return list of references.
 
 When NAMESPACES is non-nil, list refs from these namespaces
@@ -1873,38 +1893,39 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
       refs)))
 
 (defun mercit-list-branches ()
-  (mercit-list-refs (list "refs/heads" "refs/remotes")))
+  ;; local and remote branches
+  (mercit-git-lines "branches" "-T" "{branch}\n"))
 
 (defun mercit-list-local-branches ()
-  (mercit-list-refs "refs/heads"))
+  (mercit-git-lines "branches" "-T" "{branch}\n"))
 
-(defun mercit-list-remote-branches (&optional remote)
+(defun mercit-list-remote-branches (&optional remote)  ;; TODO
   (mercit-list-refs (concat "refs/remotes/" remote)))
 
-(defun mercit-list-related-branches (relation &optional commit &rest args)
+(defun mercit-list-related-branches (relation &optional commit &rest args)  ;; TODO
   (--remove (string-match-p "\\(\\`(HEAD\\|HEAD -> \\)" it)
             (--map (substring it 2)
                    (mercit-git-lines "branch" args relation commit))))
 
-(defun mercit-list-containing-branches (&optional commit &rest args)
+(defun mercit-list-containing-branches (&optional commit &rest args)  ;; TODO
   (mercit-list-related-branches "--contains" commit args))
 
-(defun mercit-list-publishing-branches (&optional commit)
+(defun mercit-list-publishing-branches (&optional commit)  ;; TODO
   (--filter (mercit-rev-ancestor-p (or commit "HEAD") it)
             mercit-published-branches))
 
-(defun mercit-list-merged-branches (&optional commit &rest args)
+(defun mercit-list-merged-branches (&optional commit &rest args)  ;; TODO
   (mercit-list-related-branches "--merged" commit args))
 
-(defun mercit-list-unmerged-branches (&optional commit &rest args)
+(defun mercit-list-unmerged-branches (&optional commit &rest args)  ;; TODO
   (mercit-list-related-branches "--no-merged" commit args))
 
-(defun mercit-list-unmerged-to-upstream-branches ()
+(defun mercit-list-unmerged-to-upstream-branches ()  ;; TODO
   (--filter (and-let* ((upstream (mercit-get-upstream-branch it)))
               (member it (mercit-list-unmerged-branches upstream)))
             (mercit-list-local-branch-names)))
 
-(defun mercit-list-branches-pointing-at (commit)
+(defun mercit-list-branches-pointing-at (commit)  ;; TODO
   (let ((re (format "\\`%s refs/\\(heads\\|remotes\\)/\\(.*\\)\\'"
                     (mercit-rev-verify commit))))
     (--keep (and (string-match re it)
@@ -1913,7 +1934,7 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
                         name)))
             (mercit-git-lines "show-ref"))))
 
-(defun mercit-list-refnames (&optional namespaces include-special)
+(defun mercit-list-refnames (&optional namespaces include-special)  ;; TODO
   (nconc (mercit-list-refs namespaces "%(refname:short)")
          (and include-special
               (mercit-list-special-refnames))))
@@ -1929,12 +1950,13 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
                mercit-special-refnames)))
 
 (defun mercit-list-branch-names ()
-  (mercit-list-refnames (list "refs/heads" "refs/remotes")))
+  ;; local an remote branches
+  (mercit-git-lines "branches" "-T" "{branch}\n"))
 
 (defun mercit-list-local-branch-names ()
-  (mercit-list-refnames "refs/heads"))
+  (mercit-git-lines "branches" "-T" "{branch}\n"))
 
-(defun mercit-list-remote-branch-names (&optional remote relative)
+(defun mercit-list-remote-branch-names (&optional remote relative) ;; TODO
   (if (and remote relative)
       (let ((regexp (format "^refs/remotes/%s/\\(.+\\)" remote)))
         (--mapcat (when (string-match regexp it)
@@ -1942,7 +1964,7 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
                   (mercit-list-remote-branches remote)))
     (mercit-list-refnames (concat "refs/remotes/" remote))))
 
-(defun mercit-format-refs (format &rest args)
+(defun mercit-format-refs (format &rest args)  ;; TODO
   (let ((lines (mercit-git-lines
                 "for-each-ref" (concat "--format=" format)
                 (or args (list "refs/heads" "refs/remotes" "refs/tags")))))
@@ -1954,36 +1976,36 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
   (mercit-git-lines "remote"))
 
 (defun mercit-list-tags ()
-  (mercit-git-lines "tag"))
+  (mercit-git-lines "tags" "--quiet"))
 
 (defun mercit-list-stashes (&optional format)
-  (mercit-git-lines "stash" "list" (concat "--format=" (or format "%gd"))))
+  (mercit-git-lines "shelve" "--list" "--template" (or format "%gd")))  ;; TODO
 
-(defun mercit-list-active-notes-refs ()
+(defun mercit-list-active-notes-refs ()  ;; TODO
   "Return notes refs according to `core.notesRef' and `notes.displayRef'."
   (mercit-git-lines "for-each-ref" "--format=%(refname)"
                    (or (mercit-get "core.notesRef") "refs/notes/commits")
                    (mercit-get-all "notes.displayRef")))
 
-(defun mercit-list-notes-refnames ()
+(defun mercit-list-notes-refnames ()  ;; TODO
   (--map (substring it 6) (mercit-list-refnames "refs/notes")))
 
-(defun mercit-remote-list-tags (remote)
+(defun mercit-remote-list-tags (remote)  ;; TODO
   (--keep (and (not (string-suffix-p "^{}" it))
                (substring it 51))
           (mercit-git-lines "ls-remote" "--tags" remote)))
 
-(defun mercit-remote-list-branches (remote)
+(defun mercit-remote-list-branches (remote)  ;; TODO
   (--keep (and (not (string-suffix-p "^{}" it))
                (substring it 52))
           (mercit-git-lines "ls-remote" "--heads" remote)))
 
-(defun mercit-remote-list-refs (remote)
+(defun mercit-remote-list-refs (remote)  ;; TODO
   (--keep (and (not (string-suffix-p "^{}" it))
                (substring it 41))
           (mercit-git-lines "ls-remote" remote)))
 
-(defun mercit-remote-head (remote)
+(defun mercit-remote-head (remote)  ;; TODO
   (and-let* ((line (cl-find-if
                     (lambda (line)
                       (string-match
@@ -1991,21 +2013,21 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
                     (mercit-git-lines "ls-remote" "--symref" remote "HEAD"))))
     (match-string 1 line)))
 
-(defun mercit-list-modified-modules ()
+(defun mercit-list-modified-modules ()  ;; TODO
   (--keep (and (string-match "\\`\\+\\([^ ]+\\) \\(.+\\) (.+)\\'" it)
                (match-string 2 it))
           (mercit-git-lines "submodule" "status")))
 
-(defun mercit-list-module-paths ()
+(defun mercit-list-module-paths ()  ;; TODO
   (mercit-with-toplevel
     (--mapcat (and (string-match "^160000 [0-9a-z]\\{40,\\} 0\t\\(.+\\)$" it)
                    (list (match-string 1 it)))
               (mercit-git-items "ls-files" "-z" "--stage"))))
 
-(defun mercit-list-module-names ()
+(defun mercit-list-module-names ()  ;; TODO
   (mapcar #'mercit-get-submodule-name (mercit-list-module-paths)))
 
-(defun mercit-get-submodule-name (path)
+(defun mercit-get-submodule-name (path)  ;; TODO
   "Return the name of the submodule at PATH.
 PATH has to be relative to the super-repository."
   (if (mercit-git-version>= "2.38.0")
@@ -2023,7 +2045,7 @@ PATH has to be relative to the super-repository."
        10 -5)
     (mercit-git-string "submodule--helper" "name" path)))
 
-(defun mercit-list-worktrees ()
+(defun mercit-list-worktrees ()  ;; TODO
   (let ((remote (file-remote-p default-directory))
         worktrees worktree)
     (dolist (line (let ((mercit-git-global-arguments
@@ -2059,10 +2081,10 @@ PATH has to be relative to the super-repository."
             ((string-equal line "detached"))))
     (nreverse worktrees)))
 
-(defun mercit-symbolic-ref-p (name)
+(defun mercit-symbolic-ref-p (name)  ;; TODO
   (mercit-git-success "symbolic-ref" "--quiet" name))
 
-(defun mercit-ref-p (rev)
+(defun mercit-ref-p (rev)  ;; TODO
   (or (car (member rev (mercit-list-refs "refs/")))
       (car (member rev (mercit-list-refnames "refs/")))))
 
@@ -2090,7 +2112,7 @@ PATH has to be relative to the super-repository."
   (car (member string (mercit-list-remotes))))
 
 (defvar mercit-main-branch-names
-  '("main" "master" "trunk" "development")
+  '("defaul" "main" "trunk" "development")
   "Branch names reserved for use by the primary branch.
 Use function `mercit-main-branch' to get the name actually used in
 the current repository.")
@@ -2112,10 +2134,10 @@ exists in the current repository is considered its main branch."
                 (member name branches))
               (delete-dups
                (delq nil
-                     (cons (mercit-get "init.defaultBranch")
+                     (cons (mercit-get "init.defaultBranch")  ;; TODO?
                            mercit-main-branch-names))))))
 
-(defun mercit-rev-diff-count (a b)
+(defun mercit-rev-diff-count (a b)  ;; TODO
   "Return the commits in A but not B and vice versa.
 Return a list of two integers: (A>B B>A)."
   (mapcar #'string-to-number
@@ -2124,7 +2146,7 @@ Return a list of two integers: (A>B B>A)."
                                           (concat a "..." b))
                         "\t")))
 
-(defun mercit-abbrev-length ()
+(defun mercit-abbrev-length ()  ;; TODO
   (let ((abbrev (mercit-get "core.abbrev")))
     (if (and abbrev (not (equal abbrev "auto")))
         (string-to-number abbrev)
@@ -2132,10 +2154,10 @@ Return a list of two integers: (A>B B>A)."
       ;; abbreviation.  Actually HEAD's abbreviation might be an
       ;; outlier, so use the shorter of the abbreviations for two
       ;; commits.  See #3034.
-      (if-let ((head (mercit-rev-parse "--short" "HEAD"))
+      (if-let ((head (mercit-rev-parse "--id" "--rev=."))
                (head-len (length head)))
           (min head-len
-               (--if-let (mercit-rev-parse "--short" "HEAD~")
+               (--if-let (mercit-rev-parse "--id" "--rev=-1")
                    (length it)
                  head-len))
         ;; We're on an unborn branch, but perhaps the repository has
@@ -2146,13 +2168,13 @@ Return a list of two integers: (A>B B>A)."
           ;; A commit does not exist.  Fall back to the default of 7.
           7)))))
 
-(defun mercit-abbrev-arg (&optional arg)
+(defun mercit-abbrev-arg (&optional arg)  ;; TODO
   (format "--%s=%d" (or arg "abbrev") (mercit-abbrev-length)))
 
-(defun mercit-rev-abbrev (rev)
+(defun mercit-rev-abbrev (rev)  ;; TODO
   (mercit-rev-parse (mercit-abbrev-arg "short") rev))
 
-(defun mercit-commit-children (commit &optional args)
+(defun mercit-commit-children (commit &optional args)  ;; TODO
   (mapcar #'car
           (--filter (member commit (cdr it))
                     (--map (split-string it " ")
@@ -2161,11 +2183,11 @@ Return a list of two integers: (A>B B>A)."
                             (or args (list "--branches" "--tags" "--remotes"))
                             "--not" commit)))))
 
-(defun mercit-commit-parents (commit)
+(defun mercit-commit-parents (commit)  ;; TODO
   (and-let* ((str (mercit-git-string "rev-list" "-1" "--parents" commit)))
     (cdr (split-string str))))
 
-(defun mercit-patch-id (rev)
+(defun mercit-patch-id (rev)  ;; TODO
   (mercit--with-connection-local-variables
    (mercit--with-temp-process-buffer
      (mercit-process-file
@@ -2177,14 +2199,14 @@ Return a list of two integers: (A>B B>A)."
 (defun mercit-rev-format (format &optional rev args)
   ;; Prefer `git log --no-walk' to `git show --no-patch' because it
   ;; performs better in some scenarios.
-  (let ((str (mercit-git-string "log" "--no-walk"
-                               (concat "--format=" format) args
+  (let ((str (mercit-git-string "log" "--limit=1"
+                               "--template" format args
                                (if rev (mercit--rev-dereference rev) "HEAD")
                                "--")))
     (and (not (string-equal str ""))
          str)))
 
-(defun mercit-rev-insert-format (format &optional rev args)
+(defun mercit-rev-insert-format (format &optional rev args)  ;; TODO
   ;; Prefer `git log --no-walk' to `git show --no-patch' because it
   ;; performs better in some scenarios.
   (mercit-git-insert "log" "--no-walk"
@@ -2192,12 +2214,12 @@ Return a list of two integers: (A>B B>A)."
                     (if rev (mercit--rev-dereference rev) "HEAD")
                     "--"))
 
-(defun mercit-format-rev-summary (rev)
-  (when-let* ((str (mercit-rev-format "%h %s" rev))) ;debbugs#31840
+(defun mercit-format-rev-summary (rev)  ;; TODO
+  (when-let* ((str (mercit-rev-format "{node|short} {desc|firstline}" rev)))
     (mercit--put-face 0 (string-match " " str) 'mercit-hash str)
     str))
 
-(defvar mercit-ref-namespaces
+(defvar mercit-ref-namespaces   ;; TODO
   '(("\\`HEAD\\'"                  . mercit-head)
     ("\\`refs/tags/\\(.+\\)"       . mercit-tag)
     ("\\`refs/heads/\\(.+\\)"      . mercit-branch-local)
@@ -2224,7 +2246,7 @@ In log and revision buffers the first regexp submatch becomes the
 In refs buffers the displayed text is controlled by other means
 and this option only controls what face is used.")
 
-(defun mercit-format-ref-labels (string)
+(defun mercit-format-ref-labels (string)  ;; TODO
   (save-match-data
     (let ((regexp "\\(, \\|tag: \\|HEAD -> \\)")
           names)
@@ -2317,10 +2339,10 @@ and this option only controls what face is used.")
                                    ,@other))
                    " ")))))
 
-(defun mercit-object-type (object)
+(defun mercit-object-type (object)  ;; TODO
   (mercit-git-string "cat-file" "-t" object))
 
-(defmacro mercit-with-blob (commit file &rest body)
+(defmacro mercit-with-blob (commit file &rest body)  ;; TODO
   (declare (indent 2)
            (debug (form form body)))
   `(mercit--with-temp-process-buffer
@@ -2334,7 +2356,7 @@ and this option only controls what face is used.")
 
 (defvar mercit-tramp-process-environment nil)
 
-(defmacro mercit-with-temp-index (tree arg &rest body)
+(defmacro mercit-with-temp-index (tree arg &rest body)  ;; TODO
   (declare (indent 2) (debug (form form body)))
   (let ((file (cl-gensym "file")))
     `(let ((mercit--refresh-cache nil)
@@ -2356,22 +2378,22 @@ and this option only controls what face is used.")
          (ignore-errors
            (delete-file (concat (file-remote-p default-directory) ,file)))))))
 
-(defun mercit-commit-tree (message &optional tree &rest parents)
+(defun mercit-commit-tree (message &optional tree &rest parents)  ;; TODO
   (mercit-git-string "commit-tree" "--no-gpg-sign" "-m" message
                     (--mapcat (list "-p" it) (delq nil parents))
                     (or tree
                         (mercit-git-string "write-tree")
                         (error "Cannot write tree"))))
 
-(defun mercit-commit-worktree (message &optional arg &rest other-parents)
+(defun mercit-commit-worktree (message &optional arg &rest other-parents)  ;; TODO
   (mercit-with-temp-index "HEAD" arg
     (and (mercit-update-files (mercit-unstaged-files))
          (apply #'mercit-commit-tree message nil "HEAD" other-parents))))
 
-(defun mercit-update-files (files)
+(defun mercit-update-files (files)  ;; TODO
   (mercit-git-success "update-index" "--add" "--remove" "--" files))
 
-(defun mercit-update-ref (ref message rev &optional stashish)
+(defun mercit-update-ref (ref message rev &optional stashish)  ;; TODO
   (let ((mercit--refresh-cache nil))
     (or (if (mercit-git-version>= "2.6.0")
             (zerop (mercit-call-git "update-ref" "--create-reflog"
@@ -2392,12 +2414,12 @@ and this option only controls what face is used.")
                              (or (mercit-rev-verify ref) "")))
         (error "Cannot update %s with %s" ref rev))))
 
-(defconst mercit-range-re
+(defconst mercit-range-re  ;; TODO
   (concat "\\`\\([^ \t]*[^.]\\)?"       ; revA
           "\\(\\.\\.\\.?\\)"            ; range marker
           "\\([^.][^ \t]*\\)?\\'"))     ; revB
 
-(defun mercit-split-range (range)
+(defun mercit-split-range (range)  ;; TODO
   (and (string-match mercit-range-re range)
        (let ((beg (or (match-string 1 range) "HEAD"))
              (end (or (match-string 3 range) "HEAD")))
@@ -2429,7 +2451,7 @@ and this option only controls what face is used.")
     mercit-refname-pullreq))
 
 (put 'git-revision 'thing-at-point #'mercit-thingatpt--git-revision)
-(defun mercit-thingatpt--git-revision ()
+(defun mercit-thingatpt--git-revision ()  ;; TODO
   (and-let* ((bounds
               (let ((c "\s\n\t~^:?*[\\"))
                 (cl-letf (((get 'git-revision 'beginning-op)
@@ -2488,12 +2510,12 @@ and this option only controls what face is used.")
    prompt
    (or (--when-let (mercit-region-values '(commit branch) t)
          (deactivate-mark)
-         (concat (car (last it)) ".." (car it)))
+         (concat (car (last it)) ".." (car it)))  ;; TODO
        (mercit-branch-or-commit-at-point)
        secondary-default
        (mercit-get-current-branch))))
 
-(defun mercit-read-range (prompt &optional default)
+(defun mercit-read-range (prompt &optional default)  ;; TODO
   (let ((minibuffer-default-add-function (mercit--minibuf-default-add-commit))
         (crm-separator "\\.\\.\\.?"))
     (mercit-completing-read-multiple*
@@ -2501,7 +2523,7 @@ and this option only controls what face is used.")
      (mercit-list-refnames)
      nil nil nil 'mercit-revision-history default nil t)))
 
-(defun mercit-read-remote-branch
+(defun mercit-read-remote-branch  ;; TODO
     (prompt &optional remote default local-branch require-match)
   (let ((choice (mercit-completing-read
                  prompt
@@ -2516,7 +2538,7 @@ and this option only controls what face is used.")
         choice
       (user-error "`%s' doesn't have the form REMOTE/BRANCH" choice))))
 
-(defun mercit-read-refspec (prompt remote)
+(defun mercit-read-refspec (prompt remote)  ;; TODO
   (mercit-completing-read prompt
                          (prog2 (message "Determining available refs...")
                              (mercit-remote-list-refs remote)
@@ -2541,7 +2563,7 @@ and this option only controls what face is used.")
                                (or (mercit-local-branch-at-point) commit))
         (user-error "Nothing selected"))))
 
-(defun mercit-read-local-branch-or-ref (prompt &optional secondary-default)
+(defun mercit-read-local-branch-or-ref (prompt &optional secondary-default)  ;; TODO
   (mercit-completing-read prompt (nconc (mercit-list-local-branch-names)
                                        (mercit-list-refs "refs/"))
                          nil t nil 'mercit-revision-history
@@ -2562,7 +2584,7 @@ and this option only controls what face is used.")
                            nil (not no-require-match)
                            nil 'mercit-revision-history default)))
 
-(defun mercit-read-other-branch-or-commit
+(defun mercit-read-other-branch-or-commit  ;; TODO
     (prompt &optional exclude secondary-default)
   (let* ((minibuffer-default-add-function (mercit--minibuf-default-add-commit))
          (current (mercit-get-current-branch))
@@ -2623,7 +2645,7 @@ out.  Only existing branches can be selected."
                (l (car (member (mercit-local-branch-at-point) branches))))
            (if mercit-prefer-remote-upstream (or r l) (or l r)))
          (and-let* ((main (mercit-main-branch)))
-           (let ((r (car (member (concat "origin/" main) branches)))
+           (let ((r (car (member (concat "origin/" main) branches)))  ;; TODO
                  (l (car (member main branches))))
              (if mercit-prefer-remote-upstream (or r l) (or l r))))
          (car (member (mercit-get-previous-branch) branches))))))
@@ -2638,7 +2660,7 @@ out.  Only existing branches can be selected."
                       (concat " " (mercit--propertize-face
                                    branch 'mercit-branch-local))))
                " starting at")
-       (nconc (list "HEAD")
+       (nconc (list "HEAD")  ;; TODO
               (mercit-list-refnames)
               (directory-files (mercit-git-dir) nil "_HEAD\\'"))
        nil nil nil 'mercit-revision-history
@@ -2661,18 +2683,19 @@ out.  Only existing branches can be selected."
 (defun mercit-read-stash (prompt)
   (let* ((atpoint (mercit-stash-at-point))
          (default (and atpoint
-                       (concat atpoint (mercit-rev-format " %s" atpoint))))
+                       (concat atpoint (mercit-rev-format "  {desc|firstline}"
+                                                          atpoint))))
          (choices (mapcar (lambda (c)
-                            (pcase-let ((`(,rev ,msg) (split-string c "\0")))
+                            (pcase-let ((`(,rev ,msg) (split-string c "\\0")))
                               (concat (propertize rev 'face 'mercit-hash)
                                       " " msg)))
-                          (mercit-list-stashes "%gd%x00%s")))
+                          (mercit-list-stashes "%gd%x00%s")))  ;; TODO
          (choice  (mercit-completing-read prompt choices
                                          nil t nil nil
                                          default
                                          (car choices))))
     (and choice
-         (string-match "^\\([^ ]+\\) \\(.+\\)" choice)
+         (string-match "^\\([^ ]+\\) \\(.+\\)" choice)  ;; TODO
          (substring-no-properties (match-string 1 choice)))))
 
 (defun mercit-read-remote (prompt &optional default use-only)
@@ -2688,7 +2711,7 @@ out.  Only existing branches can be selected."
 (defun mercit-read-remote-or-url (prompt &optional default)
   (mercit-completing-read prompt
                          (nconc (mercit-list-remotes)
-                                (list "https://" "git://" "git@"))
+                                (list "https://" "ssh://"))
                          nil nil nil nil
                          (or default
                              (mercit-remote-at-point)

@@ -163,7 +163,7 @@
          (choices  (oref obj choices))
          (globalp  (oref obj global))
          (value    nil)
-         (global   (mercit-git-string "config" "--global" variable))
+         (global   (mercit-git-string "config" variable)) ;; was "--global"
          (defaultp (oref obj default))
          (default  (if (functionp defaultp) (funcall defaultp obj) defaultp))
          (fallback (oref obj fallback))
@@ -171,7 +171,7 @@
                         (and-let* ((val (mercit-get fallback)))
                           (concat fallback ":" val)))))
     (if (not globalp)
-        (setq value (mercit-git-string "config" "--local"  variable))
+        (setq value (mercit-git-string "config" variable)) ;; was "--local"
       (setq value global)
       (setq global nil))
     (when (functionp choices)

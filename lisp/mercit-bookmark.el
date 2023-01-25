@@ -59,7 +59,7 @@
           (mercit-rev-abbrev mercit-buffer-revision)
           (if mercit-buffer-diff-files
               (mapconcat #'identity mercit-buffer-diff-files " ")
-            (mercit-rev-format "%s" mercit-buffer-revision))))
+            (mercit-rev-format "{desc|firstline}" mercit-buffer-revision))))
 
 ;;;; Stash
 
@@ -73,7 +73,7 @@
           (mercit-rev-abbrev mercit-buffer-revision)
           (if mercit-buffer-diff-files
               (mapconcat #'identity mercit-buffer-diff-files " ")
-            (mercit-rev-format "%s" mercit-buffer-revision))))
+            (mercit-rev-format "{desc|firstline}" mercit-buffer-revision))))
 
 ;;; Log
 ;;;; Log

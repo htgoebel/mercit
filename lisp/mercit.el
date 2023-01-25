@@ -422,7 +422,7 @@ used as initial input, but can be deleted to run another command.
 
 With a prefix argument COMMAND is run in the top-level directory
 of the current working tree, otherwise in `default-directory'."
-  (interactive (list (mercit-read-shell-command nil "git ")))
+  (interactive (list (mercit-read-shell-command nil "hg ")))
   (mercit--shell-command command))
 
 ;;;###autoload
@@ -434,7 +434,7 @@ used as initial input, but can be deleted to run another command.
 
 COMMAND is run in the top-level directory of the current
 working tree."
-  (interactive (list (mercit-read-shell-command t "git ")))
+  (interactive (list (mercit-read-shell-command t "hg ")))
   (mercit--shell-command command (mercit-toplevel)))
 
 ;;;###autoload
@@ -575,7 +575,7 @@ and Emacs to it."
     (when toplib
       (let* ((topdir (file-name-directory toplib))
              (gitdir (expand-file-name
-                      ".git" (file-name-directory
+                      ".hg" (file-name-directory
                               (directory-file-name topdir))))
              (static (locate-library "mercit-version.el" nil (list topdir)))
              (static (and static (mercit--straight-chase-links static))))
@@ -592,7 +592,7 @@ and Emacs to it."
                   (ignore-errors (delete-file static)))
                 (setq mercit-version
                       (let ((default-directory topdir))
-                        (mercit-git-string "describe"
+                        (mercit-git-string "describe"  ;; FIXME: hg command
                                           "--tags" "--dirty" "--always")))))
             (progn
               (push 'static debug)
@@ -626,7 +626,7 @@ and Emacs to it."
                           (expand-file-name "../lisp/mercit.el" gitdir)))
                 (setq mercit-version
                       (let ((default-directory topdir))
-                        (mercit-git-string "rev-parse" "HEAD"))))))))
+                        (mercit-git-string "identify"))))))))
     (if (stringp mercit-version)
         (when print-dest
           (princ (format "Mercit %s%s, Git %s, Emacs %s, %s"

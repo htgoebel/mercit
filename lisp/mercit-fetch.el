@@ -1,24 +1,22 @@
 ;;; mercit-fetch.el --- Download objects and refs  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -32,7 +30,7 @@
 (make-obsolete-variable
  'mercit-fetch-modules-jobs
  "invoke `mercit-fetch-modules' with a prefix argument instead."
- "Magit 3.0.0")
+ "Mercit 3.0.0")
 
 ;;; Commands
 

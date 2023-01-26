@@ -1,24 +1,22 @@
 ;;; mercit-core.el --- Core functionality  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -55,11 +53,11 @@
   :group 'tools)
 
 (defgroup mercit-essentials nil
-  "Options that every Magit user should briefly think about.
+  "Options that every Mercit user should briefly think about.
 
 Each of these options falls into one or more of these categories:
 
-* Options that affect Magit's behavior in fundamental ways.
+* Options that affect Mercit's behavior in fundamental ways.
 * Options that affect safety.
 * Options that affect performance.
 * Options that are of a personal nature."
@@ -67,7 +65,7 @@ Each of these options falls into one or more of these categories:
   :group 'mercit)
 
 (defgroup mercit-miscellaneous nil
-  "Miscellaneous Magit options."
+  "Miscellaneous Mercit options."
   :group 'mercit)
 
 (defgroup mercit-commands nil
@@ -75,22 +73,22 @@ Each of these options falls into one or more of these categories:
   :group 'mercit)
 
 (defgroup mercit-modes nil
-  "Modes used or provided by Magit."
+  "Modes used or provided by Mercit."
   :group 'mercit)
 
 (defgroup mercit-buffers nil
-  "Options concerning Magit buffers."
+  "Options concerning Mercit buffers."
   :link '(info-link "(mercit)Modes and Buffers")
   :group 'mercit)
 
 (defgroup mercit-refresh nil
-  "Options controlling how Magit buffers are refreshed."
-  :link '(info-link "(mercit)Automatic Refreshing of Magit Buffers")
+  "Options controlling how Mercit buffers are refreshed."
+  :link '(info-link "(mercit)Automatic Refreshing of Mercit Buffers")
   :group 'mercit
   :group 'mercit-buffers)
 
 (defgroup mercit-faces nil
-  "Faces used by Magit."
+  "Faces used by Mercit."
   :group 'mercit
   :group 'faces)
 
@@ -98,7 +96,7 @@ Each of these options falls into one or more of these categories:
 (custom-add-to-group 'mercit-faces 'diff-refine-removed 'custom-face)
 
 (defgroup mercit-extensions nil
-  "Extensions to Magit."
+  "Extensions to Mercit."
   :group 'mercit)
 
 (custom-add-to-group 'mercit-modes   'git-commit        'custom-group)
@@ -110,7 +108,7 @@ Each of these options falls into one or more of these categories:
 (custom-add-to-group 'mercit-process 'with-editor       'custom-group)
 
 (defgroup mercit-related nil
-  "Options that are relevant to Magit but that are defined elsewhere."
+  "Options that are relevant to Mercit but that are defined elsewhere."
   :link '(custom-group-link vc)
   :link '(custom-group-link smerge)
   :link '(custom-group-link ediff)

@@ -1,29 +1,27 @@
-;;; mercit-margin.el --- Margins in Magit buffers  -*- lexical-binding:t -*-
+;;; mercit-margin.el --- Margins in Mercit buffers  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
 ;; This library implements support for showing additional information
-;; in the margins of Magit buffers.  Currently this is only used for
+;; in the margins of Mercit buffers.  Currently this is only used for
 ;; commits, for which the committer date or age, and optionally the
 ;; author name are shown.
 
@@ -36,7 +34,7 @@
 ;;; Options
 
 (defgroup mercit-margin nil
-  "Information Magit displays in the margin.
+  "Information Mercit displays in the margin.
 
 You can change the STYLE and AUTHOR-WIDTH of all `mercit-*-margin'
 options to the same values by customizing `mercit-log-margin'
@@ -69,10 +67,10 @@ does not carry to other options."
     :if-derived mercit-refs-mode)])
 
 (defun mercit-toggle-margin ()
-  "Show or hide the Magit margin."
+  "Show or hide the Mercit margin."
   (interactive)
   (unless (mercit-margin-option)
-    (user-error "Magit margin isn't supported in this buffer"))
+    (user-error "Mercit margin isn't supported in this buffer"))
   (setcar mercit-buffer-margin (not (mercit-buffer-margin-p)))
   (mercit-set-buffer-margin))
 
@@ -80,10 +78,10 @@ does not carry to other options."
   "See https://github.com/mercit/mercit/pull/4605.")
 
 (defun mercit-cycle-margin-style ()
-  "Cycle style used for the Magit margin."
+  "Cycle style used for the Mercit margin."
   (interactive)
   (unless (mercit-margin-option)
-    (user-error "Magit margin isn't supported in this buffer"))
+    (user-error "Mercit margin isn't supported in this buffer"))
   ;; This is only suitable for commit margins (there are not others).
   (setf (cadr mercit-buffer-margin)
         (pcase (cadr mercit-buffer-margin)
@@ -96,10 +94,10 @@ does not carry to other options."
   (mercit-set-buffer-margin nil t))
 
 (defun mercit-toggle-margin-details ()
-  "Show or hide details in the Magit margin."
+  "Show or hide details in the Mercit margin."
   (interactive)
   (unless (mercit-margin-option)
-    (user-error "Magit margin isn't supported in this buffer"))
+    (user-error "Mercit margin isn't supported in this buffer"))
   (setf (nth 3 mercit-buffer-margin)
         (not (nth 3 mercit-buffer-margin)))
   (mercit-set-buffer-margin nil t))
@@ -217,7 +215,7 @@ abbreviation.  And SECONDS is the number of seconds in one UNIT.
 
 This is defined as a variable to make it possible to use time
 units for a language other than English.  It is not defined
-as an option, because most other parts of Magit are always in
+as an option, because most other parts of Mercit are always in
 English.")
 
 (defun mercit--age (date &optional abbreviate)

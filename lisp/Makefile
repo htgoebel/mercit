@@ -12,7 +12,7 @@ all: lisp
 git-commit.elc:
 mercit-section.elc:
 mercit-base.elc:            mercit-section.elc
-ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
+ifeq "$(BUILD_MERCIT_LIBGIT)" "true"
 mercit-libgit.elc:
 mercit-git.elc:             mercit-base.elc mercit-libgit.elc
 else
@@ -120,7 +120,7 @@ clean:
 ## Templates #########################################################
 
 define VERSIONLIB_TMPL
-;;; $(PKG)-version.el --- the Magit version you are using
+;;; $(PKG)-version.el --- the Mercit version you are using
 
 (setq $(PKG)-version "$(VERSION)")
 

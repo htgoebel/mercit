@@ -51,7 +51,7 @@ help:
 	$(info )
 	$(info make test             - run tests)
 	$(info make test-interactive - run tests interactively)
-	$(info make emacs-Q          - run emacs -Q plus Magit)
+	$(info make emacs-Q          - run emacs -Q plus Mercit)
 	$(info make check-declare    - check function declarations)
 	$(info )
 	$(info Release Management)
@@ -209,7 +209,7 @@ define set_package_requires_nongnu
   (with-editor ,with-editor-version))))
   (re-search-forward "^;; Package-Version: ")
   (delete-region (point) (line-end-position))
-  (insert "$(MAGIT_SECTION_VERSION)"))
+  (insert "$(MERCIT_SECTION_VERSION)"))
 
 (with-temp-file "lisp/mercit-libgit.el"
   (insert-file-contents "lisp/mercit-libgit.el")
@@ -221,7 +221,7 @@ define set_package_requires_nongnu
   (mercit ,mercit-version))))
   (re-search-forward "^;; Package-Version: ")
   (delete-region (point) (line-end-position))
-  (insert "$(MAGIT_LIBGIT_VERSION)"))
+  (insert "$(MERCIT_LIBGIT_VERSION)"))
 
 (with-temp-file "lisp/mercit-section.el"
   (insert-file-contents "lisp/mercit-section.el")
@@ -232,7 +232,7 @@ define set_package_requires_nongnu
   (dash ,dash-version))))
   (re-search-forward "^;; Package-Version: ")
   (delete-region (point) (line-end-position))
-  (insert "$(MAGIT_SECTION_VERSION)"))
+  (insert "$(MERCIT_SECTION_VERSION)"))
 endef
 export set_package_requires_nongnu
 
@@ -254,7 +254,7 @@ define set_package_requires_melpa
 
 (with-temp-file "lisp/mercit-pkg.el"
   (insert (format
-"(define-package \"mercit\" \"$(MAGIT_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit\" \"$(MERCIT_VERSION)$(DEV_SUFFIX)\"
   \"A Git porcelain inside Emacs.\"
   '((emacs %S)
     (dash %S)
@@ -273,7 +273,7 @@ define set_package_requires_melpa
 
 (with-temp-file "lisp/mercit-libgit-pkg.el"
   (insert (format
-"(define-package \"mercit-libgit\" \"$(MAGIT_LIBGIT_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit-libgit\" \"$(MERCIT_LIBGIT_VERSION)$(DEV_SUFFIX)\"
   \".\"
   '((emacs %S)
     (libgit %S)
@@ -286,7 +286,7 @@ define set_package_requires_melpa
 
 (with-temp-file "lisp/mercit-section-pkg.el"
   (insert (format
-"(define-package \"mercit-section\" \"$(MAGIT_SECTION_VERSION)$(DEV_SUFFIX)\"
+"(define-package \"mercit-section\" \"$(MERCIT_SECTION_VERSION)$(DEV_SUFFIX)\"
   \"Sections for read-only buffers\"
   '((emacs %S)
     (dash %S))
@@ -302,9 +302,9 @@ define set_package_versions
 (dash-version "$(DASH_VERSION)")
 (git-commit-version "$(GIT_COMMIT_VERSION)")
 (libgit-version "$(LIBGIT_VERSION)")
-(mercit-version "$(MAGIT_VERSION)")
-(mercit-libgit-version "$(MAGIT_LIBGIT_VERSION)")
-(mercit-section-version "$(MAGIT_SECTION_VERSION)")
+(mercit-version "$(MERCIT_VERSION)")
+(mercit-libgit-version "$(MERCIT_LIBGIT_VERSION)")
+(mercit-section-version "$(MERCIT_SECTION_VERSION)")
 (transient-version "$(TRANSIENT_VERSION)")
 (with-editor-version "$(WITH_EDITOR_VERSION)")
 endef
@@ -315,9 +315,9 @@ define set_package_snapshots
 (dash-version "$(DASH_MELPA_SNAPSHOT)")
 (git-commit-version "$(GIT_COMMIT_MELPA_SNAPSHOT)")
 (libgit-version "$(LIBGIT_MELPA_SNAPSHOT)")
-(mercit-version "$(MAGIT_MELPA_SNAPSHOT)")
-(mercit-libgit-version "$(MAGIT_LIBGIT_MELPA_SNAPSHOT)")
-(mercit-section-version "$(MAGIT_SECTION_MELPA_SNAPSHOT)")
+(mercit-version "$(MERCIT_MELPA_SNAPSHOT)")
+(mercit-libgit-version "$(MERCIT_LIBGIT_MELPA_SNAPSHOT)")
+(mercit-section-version "$(MERCIT_SECTION_MELPA_SNAPSHOT)")
 (transient-version "$(TRANSIENT_MELPA_SNAPSHOT)")
 (with-editor-version "$(WITH_EDITOR_MELPA_SNAPSHOT)")
 endef

@@ -1,24 +1,22 @@
 ;;; mercit-log.el --- Inspect Git history  -*- lexical-binding:t; coding:utf-8 -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -65,7 +63,7 @@
   :group 'mercit-modes)
 
 (defcustom mercit-log-mode-hook nil
-  "Hook run after entering Magit-Log mode."
+  "Hook run after entering Mercit-Log mode."
   :group 'mercit-log
   :type 'hook)
 
@@ -410,7 +408,7 @@ commits before and half after."
   ;;   1. From "Commit Formatting".
   ;;   2. From "Common Diff Options".
   ;;   3. From unnamed first group.
-  ;;   4. Implemented by Magit.
+  ;;   4. Implemented by Mercit.
   ["Commit limiting"
    (mercit-log:-n)
    (mercit:--author)
@@ -1018,7 +1016,7 @@ of the current repository first; creating it if necessary."
     map)
   "Keymap for `mercit-log-mode'.")
 
-(define-derived-mode mercit-log-mode mercit-mode "Magit Log"
+(define-derived-mode mercit-log-mode mercit-mode "Mercit Log"
   "Mode for looking at Git log.
 
 This mode is documented in info node `(mercit)Log Buffer'.
@@ -1609,7 +1607,7 @@ The shortstat style is experimental and rather slow."
 (put 'mercit-log-select-pick :advertised-binding [?\C-c ?\C-c])
 (put 'mercit-log-select-quit :advertised-binding [?\C-c ?\C-k])
 
-(define-derived-mode mercit-log-select-mode mercit-log-mode "Magit Select"
+(define-derived-mode mercit-log-select-mode mercit-log-mode "Mercit Select"
   "Mode for selecting a commit from history.
 
 This mode is documented in info node `(mercit)Select from Log'.
@@ -1709,7 +1707,7 @@ Call `mercit-log-select-quit-function' if set."
     map)
   "Keymap for `mercit-cherry-mode'.")
 
-(define-derived-mode mercit-cherry-mode mercit-mode "Magit Cherry"
+(define-derived-mode mercit-cherry-mode mercit-mode "Mercit Cherry"
   "Mode for looking at commits not merged upstream.
 
 \\<mercit-mode-map>\

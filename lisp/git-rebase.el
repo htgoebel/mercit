@@ -1,24 +1,22 @@
 ;;; git-rebase.el --- Edit Git rebase files  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Phil Jackson <phil@shellarchive.co.uk>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -26,7 +24,7 @@
 ;; rewritten during an interactive rebase.
 
 ;; When the user initiates an interactive rebase, e.g. using "r e" in
-;; a Magit buffer or on the command line using "git rebase -i REV",
+;; a Mercit buffer or on the command line using "git rebase -i REV",
 ;; Git invokes the `$GIT_SEQUENCE_EDITOR' (or if that is undefined
 ;; `$GIT_EDITOR' or even `$EDITOR') letting the user rearrange, drop,
 ;; reword, edit, and squash commits.

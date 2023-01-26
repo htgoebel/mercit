@@ -38,7 +38,7 @@ GITSTATS      ?= gitstats
 GITSTATS_DIR  ?= $(TOP)docs/stats
 GITSTATS_ARGS ?= -c style=https://mercit.vc/assets/stats.css -c max_authors=999
 
-BUILD_MAGIT_LIBGIT ?= false
+BUILD_MERCIT_LIBGIT ?= false
 
 ## Files #############################################################
 
@@ -55,7 +55,7 @@ EPUBFILES = $(addsuffix .epub,$(filter-out git-commit,$(PACKAGES)))
 ELS  = git-commit.el
 ELS += mercit-section.el
 ELS += mercit-base.el
-ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
+ifeq "$(BUILD_MERCIT_LIBGIT)" "true"
 ELS += mercit-libgit.el
 endif
 ELS += mercit-git.el
@@ -117,9 +117,9 @@ COMPAT_VERSION        = 29.1.1.0
 DASH_VERSION          = 2.19.1
 GIT_COMMIT_VERSION    = $(VERSION)
 LIBGIT_VERSION        = 0
-MAGIT_VERSION         = $(VERSION)
-MAGIT_LIBGIT_VERSION  = $(VERSION)
-MAGIT_SECTION_VERSION = $(VERSION)
+MERCIT_VERSION         = $(VERSION)
+MERCIT_LIBGIT_VERSION  = $(VERSION)
+MERCIT_SECTION_VERSION = $(VERSION)
 TRANSIENT_VERSION     = 0.3.6
 WITH_EDITOR_VERSION   = 3.0.5
 
@@ -127,9 +127,9 @@ COMPAT_SNAPSHOT              = 29.1.1.0
 DASH_MELPA_SNAPSHOT          = 20210826
 GIT_COMMIT_MELPA_SNAPSHOT    = $(TIMESTAMP)
 LIBGIT_MELPA_SNAPSHOT        = 0
-MAGIT_MELPA_SNAPSHOT         = $(TIMESTAMP)
-MAGIT_LIBGIT_MELPA_SNAPSHOT  = $(TIMESTAMP)
-MAGIT_SECTION_MELPA_SNAPSHOT = $(TIMESTAMP)
+MERCIT_MELPA_SNAPSHOT         = $(TIMESTAMP)
+MERCIT_LIBGIT_MELPA_SNAPSHOT  = $(TIMESTAMP)
+MERCIT_SECTION_MELPA_SNAPSHOT = $(TIMESTAMP)
 TRANSIENT_MELPA_SNAPSHOT     = 20210920
 WITH_EDITOR_MELPA_SNAPSHOT   = 20211001
 
@@ -193,7 +193,7 @@ ifeq "$(WITH_EDITOR_DIR)" ""
   WITH_EDITOR_DIR = $(TOP)../with-editor/lisp
 endif
 
-MAGIT_SECTION_DIR ?= $(shell \
+MERCIT_SECTION_DIR ?= $(shell \
   find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/mercit-section-[.0-9]*' 2> /dev/null | \
   sort | tail -n 1)
 
@@ -215,8 +215,8 @@ ifdef CYGPATH
   LOAD_PATH += -L $(shell cygpath --mixed $(LIBGIT_DIR))
   LOAD_PATH += -L $(shell cygpath --mixed $(TRANSIENT_DIR))
   LOAD_PATH += -L $(shell cygpath --mixed $(WITH_EDITOR_DIR))
-  ifneq "$(MAGIT_SECTION_DIR)" ""
-    LOAD_PATH += -L $(shell cygpath --mixed $(MAGIT_SECTION_DIR))
+  ifneq "$(MERCIT_SECTION_DIR)" ""
+    LOAD_PATH += -L $(shell cygpath --mixed $(MERCIT_SECTION_DIR))
   endif
 else
   LOAD_PATH += -L $(COMPAT_DIR)
@@ -224,8 +224,8 @@ else
   LOAD_PATH += -L $(LIBGIT_DIR)
   LOAD_PATH += -L $(TRANSIENT_DIR)
   LOAD_PATH += -L $(WITH_EDITOR_DIR)
-  ifneq "$(MAGIT_SECTION_DIR)" ""
-    LOAD_PATH += -L $(MAGIT_SECTION_DIR)
+  ifneq "$(MERCIT_SECTION_DIR)" ""
+    LOAD_PATH += -L $(MERCIT_SECTION_DIR)
   endif
 endif
 

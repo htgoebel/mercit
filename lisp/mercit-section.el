@@ -1,9 +1,7 @@
 ;;; mercit-section.el --- Sections for read-only buffers  -*- lexical-binding:t; coding:utf-8 -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; Homepage: https://github.com/mercit/mercit
 ;; Keywords: tools
@@ -13,28 +11,28 @@
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify
+;; Mercit is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
 ;; by the Free Software Foundation, either version 3 of the License,
 ;; or (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful,
+;; Mercit is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; You should have received a copy of the AUTHORS.md file, which
 ;; lists all contributors.  If not, see https://mercit.vc/authors.
 
 ;;; Commentary:
 
-;; This package implements the main user interface of Magit — the
+;; This package implements the main user interface of Mercit — the
 ;; collapsible sections that make up its buffers.  This package used
-;; to be distributed as part of Magit but now it can also be used by
-;; other packages that have nothing to do with Magit or Git.
+;; to be distributed as part of Mercit but now it can also be used by
+;; other packages that have nothing to do with Mercit or Git.
 
 ;;; Code:
 
@@ -187,18 +185,18 @@ Otherwise the value has to have one of these two forms:
                                 (const :tag "No (kinda ugly)" nil)))))
 
 (define-obsolete-variable-alias 'mercit-keep-region-overlay
-  'mercit-section-keep-region-overlay "Magit-Section 3.4.0")
+  'mercit-section-keep-region-overlay "Mercit-Section 3.4.0")
 (defcustom mercit-section-keep-region-overlay nil
   "Whether to keep the region overlay when there is a valid selection.
 
-By default Magit removes the regular region overlay if, and only
+By default Mercit removes the regular region overlay if, and only
 if, that region constitutes a valid selection as understood by
-Magit commands.  Otherwise it does not remove that overlay, and
+Mercit commands.  Otherwise it does not remove that overlay, and
 the region looks like it would in other buffers.
 
 There are two types of such valid selections: hunk-internal
 regions and regions that select two or more sibling sections.
-In such cases Magit removes the region overlay and instead
+In such cases Mercit removes the region overlay and instead
 highlights a slightly larger range.  All text (for hunk-internal
 regions) or the headings of all sections (for sibling selections)
 that are inside that range (not just inside the region) are acted
@@ -206,7 +204,7 @@ on by commands such as the staging command.  This buffer range
 begins at the beginning of the line on which the region begins
 and ends at the end of the line on which the region ends.
 
-Because Magit acts on this larger range and not the region, it is
+Because Mercit acts on this larger range and not the region, it is
 actually quite important to visualize that larger range.  If we
 don't do that, then one might think that these commands act on
 the region instead.  If you want to *also* visualize the region,
@@ -226,7 +224,7 @@ In fact we *already* provide a way to avoid all of these
 conflicts: *not* changing the value of this option.
 
 It should be clear by now that we consider it a mistake to set
-this to display the region when the Magit selection is also
+this to display the region when the Mercit selection is also
 visualized, but since it has been requested a few times and
 because it doesn't cost much to offer this option we do so.
 However that might change.  If the existence of this option
@@ -236,12 +234,12 @@ starts complicating other things, then it will be removed."
   :type 'boolean)
 
 (defcustom mercit-section-disable-line-numbers t
-  "In Magit buffers, whether to disable modes that display line numbers.
+  "In Mercit buffers, whether to disable modes that display line numbers.
 
 Some users who turn on `global-display-line-numbers-mode' (or
 `global-nlinum-mode' or `global-linum-mode') expect line numbers
-to be displayed everywhere except in Magit buffers.  Other users
-do not expect Magit buffers to be treated differently.  At least
+to be displayed everywhere except in Mercit buffers.  Other users
+do not expect Mercit buffers to be treated differently.  At least
 in theory users in the first group should not use the global mode,
 but that ship has sailed, thus this option."
   :package-version '(mercit-section . "3.0.0")
@@ -270,7 +268,7 @@ no effect.  This also has no effect for Emacs >= 28, where
 ;;; Faces
 
 (defgroup mercit-section-faces nil
-  "Faces used by Magit-Section."
+  "Faces used by Mercit-Section."
   :group 'mercit-section
   :group 'faces)
 
@@ -391,10 +389,10 @@ if any.")
     map)
   "Parent keymap for all keymaps of modes derived from `mercit-section-mode'.")
 
-(define-derived-mode mercit-section-mode special-mode "Magit-Sections"
-  "Parent major mode from which major modes with Magit-like sections inherit.
+(define-derived-mode mercit-section-mode special-mode "Mercit-Sections"
+  "Parent major mode from which major modes with Mercit-like sections inherit.
 
-Magit-Section is documented in info node `(mercit-section)'."
+Mercit-Section is documented in info node `(mercit-section)'."
   :group 'mercit-section
   (buffer-disable-undo)
   (setq truncate-lines t)
@@ -551,7 +549,7 @@ The return value has the form (TYPE...)."
 (defvar mercit-menu--desc-values nil "For internal use only.")
 
 (defun mercit-section-context-menu (menu click)
-  "Populate MENU with Magit-Section commands at CLICK."
+  "Populate MENU with Mercit-Section commands at CLICK."
   (when-let ((section (save-excursion
                         (unless (region-active-p)
                           (mouse-set-point click))
@@ -1246,7 +1244,7 @@ at point, then return nil.
 See `mercit-section-match' for the forms CONDITION can take."
   (declare (obsolete
             "instead use `mercit-section-match' or `mercit-section-value-if'."
-            "Magit 2.90.0")
+            "Mercit 2.90.0")
            (indent 1)
            (debug (sexp body)))
   `(--when-let (mercit-current-section)
@@ -1311,7 +1309,7 @@ own keymap, which is specified using the `keymap' class slot.
 The value of that slot should be a variable whose value is a
 keymap.
 
-For historic reasons Magit and Forge in most cases use symbols
+For historic reasons Mercit and Forge in most cases use symbols
 as CLASS that don't actually identify a class and that lack the
 appropriate package prefix.  This works due to some undocumented
 kludges, which are not available to other packages.

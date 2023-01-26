@@ -1,24 +1,22 @@
 ;;; mercit-git.el --- Git functionality  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -99,7 +97,7 @@ Use the function by the same name instead of this variable.")
 
 ;; For now this is shared between `mercit-process' and `mercit-git'.
 (defgroup mercit-process nil
-  "Git and other external processes used by Magit."
+  "Git and other external processes used by Mercit."
   :group 'mercit)
 
 (defvar mercit-git-environment
@@ -157,14 +155,14 @@ successfully.")
       (and (eq system-type 'darwin)
            (executable-find "git"))
       "git")
-  "The Git executable used by Magit on the local host.
+  "The Git executable used by Mercit on the local host.
 On remote machines `mercit-remote-git-executable' is used instead."
   :package-version '(mercit . "3.2.0")
   :group 'mercit-process
   :type 'string)
 
 (defcustom mercit-remote-git-executable "git"
-  "The Git executable used by Magit on remote machines.
+  "The Git executable used by Mercit on remote machines.
 On the local host `mercit-git-executable' is used instead.
 Consider customizing `tramp-remote-path' instead of this
 option."
@@ -191,7 +189,7 @@ Be careful what you add here, especially if you are using Tramp
 to connect to servers with ancient Git versions.  Never remove
 anything that is part of the default value, unless you really
 know what you are doing.  And think very hard before adding
-something; it will be used every time Magit runs Git for any
+something; it will be used every time Mercit runs Git for any
 purpose."
   :package-version '(mercit . "2.9.0")
   :group 'mercit-commands
@@ -256,7 +254,7 @@ framework ultimately determines how the collection is displayed."
 (defvar mercit-git-debug nil
   "Whether to enable additional reporting of git errors.
 
-Magit basically calls git for one of these two reasons: for
+Mercit basically calls git for one of these two reasons: for
 side-effects or to do something with its standard output.
 
 When git is run for side-effects then its output, including error
@@ -272,7 +270,7 @@ This is only intended for debugging purposes.  Do not enable this
 permanently, that would negatively affect performance.  Also note
 that just because git exits with a non-zero exit status and prints
 an error message that usually doesn't mean that it is an error as
-far as Magit is concerned, which is another reason we usually hide
+far as Mercit is concerned, which is another reason we usually hide
 these error messages.  Whether some error message is relevant in
 the context of some unexpected behavior has to be judged on a case
 by case basis.
@@ -357,7 +355,7 @@ is remote."
 (defun mercit-process-git-arguments (args)
   "Prepare ARGS for a function that invokes Git.
 
-Magit has many specialized functions for running Git; they all
+Mercit has many specialized functions for running Git; they all
 pass arguments through this function before handing them to Git,
 to do the following.
 
@@ -629,11 +627,11 @@ format."
                  'mercit
                  (format "%S\n\nRunning \"%s --version\" failed with output:\n\n%s"
                          (if host
-                             (format "Magit cannot find Git on host %S.\n
+                             (format "Mercit cannot find Git on host %S.\n
 Check the value of `mercit-remote-git-executable' using
 `mercit-debug-git-executable' and consult the info node
 `(tramp)Remote programs'." host)
-                           "Magit cannot find Git.\n
+                           "Mercit cannot find Git.\n
 Check the values of `mercit-git-executable' and `exec-path'
 using `mercit-debug-git-executable'.")
                          (mercit-git-executable)
@@ -652,7 +650,7 @@ using `mercit-debug-git-executable'.")
   "Assert that the used Git version is greater than or equal to MINIMAL.
 If optional MINIMAL is nil, compare with `mercit--minimal-git'
 instead.  Optional WHO if non-nil specifies what functionality
-needs at least MINIMAL, otherwise it defaults to \"Magit\"."
+needs at least MINIMAL, otherwise it defaults to \"Mercit\"."
   (when (mercit-git-version< (or minimal mercit--minimal-git))
     (let* ((host (file-remote-p default-directory))
            (msg (format-spec
@@ -669,7 +667,7 @@ the info node `(tramp)Remote programs'.\n")
 
 If you have multiple Git versions installed, then check the
 values of `mercit-remote-git-executable' and `exec-path'.\n"))
-                 `((?w . ,(or who "Magit"))
+                 `((?w . ,(or who "Mercit"))
                    (?m . ,(or minimal mercit--minimal-git))
                    (?v . ,(mercit-git-version))
                    (?h . ,host)))))

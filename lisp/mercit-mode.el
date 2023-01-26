@@ -1,30 +1,28 @@
-;;; mercit-mode.el --- Create and refresh Magit buffers  -*- lexical-binding:t -*-
+;;; mercit-mode.el --- Create and refresh Mercit buffers  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
 ;; This library implements the abstract major-mode `mercit-mode' from
-;; which almost all other Magit major-modes derive.  The code in here
-;; is mostly concerned with creating and refreshing Magit buffers.
+;; which almost all other Mercit major-modes derive.  The code in here
+;; is mostly concerned with creating and refreshing Mercit buffers.
 
 ;;; Code:
 
@@ -39,7 +37,7 @@
 
 (defcustom mercit-mode-hook
   '(mercit-load-config-extensions)
-  "Hook run when entering a mode derived from Magit mode."
+  "Hook run when entering a mode derived from Mercit mode."
   :package-version '(mercit . "3.0.0")
   :group 'mercit-modes
   :type 'hook
@@ -98,9 +96,9 @@ inside your function."
              mercit-run-post-unstage-hook))
 
 (defcustom mercit-display-buffer-function #'mercit-display-buffer-traditional
-  "The function used to display a Magit buffer.
+  "The function used to display a Mercit buffer.
 
-All Magit buffers (buffers whose major-modes derive from
+All Mercit buffers (buffers whose major-modes derive from
 `mercit-mode') are displayed using `mercit-display-buffer',
 which in turn uses the function specified here."
   :package-version '(mercit . "2.3.0")
@@ -131,14 +129,14 @@ which in turn uses the function specified here."
 
 (defcustom mercit-generate-buffer-name-function
   #'mercit-generate-buffer-name-default-function
-  "The function used to generate the name for a Magit buffer."
+  "The function used to generate the name for a Mercit buffer."
   :package-version '(mercit . "2.3.0")
   :group 'mercit-buffers
   :type '(radio (function-item mercit-generate-buffer-name-default-function)
                 (function :tag "Function")))
 
 (defcustom mercit-buffer-name-format "%x%M%v: %t%x"
-  "The format string used to name Magit buffers.
+  "The format string used to name Mercit buffers.
 
 The following %-sequences are supported:
 
@@ -180,13 +178,13 @@ support additional %-sequences."
   :type 'string)
 
 (defcustom mercit-uniquify-buffer-names t
-  "Whether to uniquify the names of Magit buffers."
+  "Whether to uniquify the names of Mercit buffers."
   :package-version '(mercit . "2.3.0")
   :group 'mercit-buffers
   :type 'boolean)
 
 (defcustom mercit-bury-buffer-function #'mercit-mode-quit-window
-  "The function used to bury or kill the current Magit buffer."
+  "The function used to bury or kill the current Mercit buffer."
   :package-version '(mercit . "3.2.0")
   :group 'mercit-buffers
   :type '(radio (function-item quit-window)
@@ -287,7 +285,7 @@ then fall back to regular region highlighting."
 
 When this is non-nil, then the status buffer is automatically
 refreshed after running git for side-effects, in addition to the
-current Magit buffer, which is always refreshed automatically.
+current Mercit buffer, which is always refreshed automatically.
 
 Only set this to nil after exhausting all other options to
 improve performance."
@@ -297,7 +295,7 @@ improve performance."
   :type 'boolean)
 
 (defcustom mercit-refresh-verbose nil
-  "Whether to revert Magit buffers verbosely."
+  "Whether to revert Mercit buffers verbosely."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-refresh
   :type 'boolean)
@@ -306,8 +304,8 @@ improve performance."
   "Whether to save file-visiting buffers when appropriate.
 
 If non-nil, then all modified file-visiting buffers belonging
-to the current repository may be saved before running Magit
-commands and before creating or refreshing Magit buffers.
+to the current repository may be saved before running Mercit
+commands and before creating or refreshing Mercit buffers.
 If `dontask', then this is done without user intervention, for
 any other non-nil value the user has to confirm each save.
 
@@ -440,7 +438,7 @@ which visits the thing at point using `browse-url'."
 
 ;;;###autoload
 (defun mercit-info ()
-  "Visit the Magit manual."
+  "Visit the Mercit manual."
   (interactive)
   (info "mercit"))
 
@@ -450,7 +448,7 @@ which visits the thing at point using `browse-url'."
     'bug-reference-push-button))
 
 (easy-menu-define mercit-mode-menu mercit-mode-map
-  "Magit menu"
+  "Mercit menu"
   ;; Similar to `mercit-dispatch' but exclude:
   ;; - commands that are available from context menus:
   ;;   apply, reverse, discard, stage, unstage,
@@ -459,7 +457,7 @@ which visits the thing at point using `browse-url'."
   ;; - commands that are available from submenus:
   ;;   git-command, ediff-dwim
   ;; - and: refresh-all, status-jump, status-quick.
-  '("Magit"
+  '("Mercit"
     "---" "Inspect"
     ["     Bisect..."             mercit-bisect t]
     ["     Cherries..."           mercit-cherry t]
@@ -511,16 +509,16 @@ which visits the thing at point using `browse-url'."
 ;;; Mode
 
 (defun mercit-load-config-extensions ()
-  "Load Magit extensions that are defined at the Git config layer."
+  "Load Mercit extensions that are defined at the Git config layer."
   (dolist (ext (mercit-get-all "mercit.extension"))
     (let ((sym (intern (format "mercit-%s-mode" ext))))
       (when (fboundp sym)
         (funcall sym 1)))))
 
-(define-derived-mode mercit-mode mercit-section-mode "Magit"
-  "Parent major mode from which Magit major modes inherit.
+(define-derived-mode mercit-mode mercit-section-mode "Mercit"
+  "Parent major mode from which Mercit major modes inherit.
 
-Magit is documented in info node `(mercit)'."
+Mercit is documented in info node `(mercit)'."
   :group 'mercit
   (hack-dir-local-variables-non-file-buffer)
   (face-remap-add-relative 'header-line 'mercit-header-line)
@@ -563,15 +561,15 @@ Magit is documented in info node `(mercit)'."
 
 (defvar-local mercit-refresh-args nil
   "Obsolete.  Possibly the arguments used to refresh the current buffer.
-Some third-party packages might still use this, but Magit does not.")
+Some third-party packages might still use this, but Mercit does not.")
 (put 'mercit-refresh-args 'permanent-local t)
-(make-obsolete-variable 'mercit-refresh-args nil "Magit 3.0.0")
+(make-obsolete-variable 'mercit-refresh-args nil "Mercit 3.0.0")
 
 (defvar mercit-buffer-lock-functions nil
   "Obsolete buffer-locking support for third-party modes.
 Implement the generic function `mercit-buffer-value' for
 your mode instead of adding an entry to this variable.")
-(make-obsolete-variable 'mercit-buffer-lock-functions nil "Magit 3.0.0")
+(make-obsolete-variable 'mercit-buffer-lock-functions nil "Mercit 3.0.0")
 
 (cl-defgeneric mercit-buffer-value ()
   (and-let* ((fn (cdr (assq major-mode mercit-buffer-lock-functions))))
@@ -621,7 +619,7 @@ your mode instead of adding an entry to this variable.")
 
 (defun mercit-mode-setup (mode &rest args)
   "Setup up a MODE buffer using ARGS to generate its content."
-  (declare (obsolete mercit-setup-buffer "Magit 3.0.0"))
+  (declare (obsolete mercit-setup-buffer "Mercit 3.0.0"))
   (with-no-warnings
     (mercit-mode-setup-internal mode args)))
 
@@ -629,7 +627,7 @@ your mode instead of adding an entry to this variable.")
   "Setup up a MODE buffer using ARGS to generate its content.
 When optional LOCKED is non-nil, then create a buffer that is
 locked to its value, which is derived from MODE and ARGS."
-  (declare (obsolete mercit-setup-buffer "Magit 3.0.0"))
+  (declare (obsolete mercit-setup-buffer "Mercit 3.0.0"))
   (let* ((value   (and locked
                        (with-temp-buffer
                          (with-no-warnings
@@ -805,7 +803,7 @@ the mode of the current buffer derives from `mercit-log-mode' or
 If a new window was created to display the buffer, then remember
 that fact.  That information is used by `mercit-mode-quit-window',
 to determine whether the window should be deleted when its last
-Magit buffer is buried."
+Mercit buffer is buried."
   (let ((window (get-buffer-window (current-buffer))))
     (when (and (window-live-p window)
                (not (window-prev-buffers window)))
@@ -869,7 +867,7 @@ If a frame, then only consider buffers on that frame."
         ((guard (framep frame)) (seq-some #'w (window-list frame)))))))
 
 (defun mercit-mode-get-buffer (mode &optional create frame value)
-  (declare (obsolete mercit-get-mode-buffer "Magit 3.0.0"))
+  (declare (obsolete mercit-get-mode-buffer "Mercit 3.0.0"))
   (when create
     (error "`mercit-mode-get-buffer's CREATE argument is obsolete"))
   (let ((topdir (mercit--toplevel-safe)))
@@ -937,7 +935,7 @@ display another value.  The name of a locked buffer contains its
 value, which allows telling it apart from other locked buffers
 and the unlocked buffer.
 
-Not all Magit buffers can be locked to their values, for example
+Not all Mercit buffers can be locked to their values, for example
 it wouldn't make sense to lock a status buffer.
 
 There can only be a single unlocked buffer using a certain
@@ -969,11 +967,11 @@ latter is displayed in its place."
 (defun mercit-mode-bury-buffer (&optional kill-buffer)
   "Bury the current buffer.
 With a prefix argument, kill the buffer instead.
-With two prefix arguments, also kill all Magit buffers associated
+With two prefix arguments, also kill all Mercit buffers associated
 with this repository.
 This is done using `mercit-bury-buffer-function'."
   (interactive "P")
-  ;; Kill all associated Magit buffers when a double prefix arg is given.
+  ;; Kill all associated Mercit buffers when a double prefix arg is given.
   (when (>= (prefix-numeric-value kill-buffer) 16)
     (let ((current (current-buffer)))
       (dolist (buf (mercit-mode-get-buffers))
@@ -985,8 +983,8 @@ This is done using `mercit-bury-buffer-function'."
   "Quit the selected window and bury its buffer.
 
 This behaves similar to `quit-window', but when the window
-was originally created to display a Magit buffer and the
-current buffer is the last remaining Magit buffer that was
+was originally created to display a Mercit buffer and the
+current buffer is the last remaining Mercit buffer that was
 ever displayed in the selected window, then delete that
 window."
   (if (or (one-window-p)
@@ -1045,7 +1043,7 @@ Run hooks `mercit-pre-refresh-hook' and `mercit-post-refresh-hook'."
 (defun mercit-refresh-all ()
   "Refresh all buffers belonging to the current repository.
 
-Refresh all Magit buffers belonging to the current repository,
+Refresh all Mercit buffers belonging to the current repository,
 and revert buffers that visit files located inside the current
 repository.
 
@@ -1059,7 +1057,7 @@ Run hooks `mercit-pre-refresh-hook' and `mercit-post-refresh-hook'."
 (defvar-local mercit-refresh-start-time nil)
 
 (defun mercit-refresh-buffer (&rest _ignore)
-  "Refresh the current Magit buffer."
+  "Refresh the current Mercit buffer."
   (setq mercit-refresh-start-time (current-time))
   (let ((refresh (intern (format "%s-refresh-buffer"
                                  (substring (symbol-name major-mode) 0 -5))))
@@ -1134,9 +1132,9 @@ If the status buffer does not exist or the file being visited in
 the current buffer isn't inside the working tree of a repository,
 then do nothing.
 
-Note that refreshing a Magit buffer is done by re-creating its
+Note that refreshing a Mercit buffer is done by re-creating its
 contents from scratch, which can be slow in large repositories.
-If you are not satisfied with Magit's performance, then you
+If you are not satisfied with Mercit's performance, then you
 should obviously not add this function to that hook."
   (when (and (not mercit--disable-save-buffers)
              (mercit-inside-worktree-p t))
@@ -1399,7 +1397,7 @@ Unless specified, REPOSITORY is the current buffer's repository."
 
 Remove the repository's entry from `mercit-repository-local-cache',
 remove the host's entry from `mercit--host-git-version-cache', set
-`mercit-section-visibility-cache' to nil for all Magit buffers of
+`mercit-section-visibility-cache' to nil for all Mercit buffers of
 the repository and set `mercit--libgit-available-p' to `unknown'.
 
 With a prefix argument or if optional ALL is non-nil, discard the
@@ -1491,7 +1489,7 @@ mentioned caches completely."
 (declare-function bookmark-prop-set "bookmark" (bookmark-name-or-record prop val))
 
 (defun mercit--make-bookmark ()
-  "Create a bookmark for the current Magit buffer.
+  "Create a bookmark for the current Mercit buffer.
 Input values are the major-mode's `mercit-bookmark-name' method,
 and the buffer-local values of the variables referenced in its
 `mercit-bookmark-variables' property."
@@ -1548,7 +1546,7 @@ with the variables' values as arguments, which were recorded by
       (funcall bmkp-jump-display-function (current-buffer)))
     nil))
 
-(put 'mercit--handle-bookmark 'bookmark-handler-type "Magit")
+(put 'mercit--handle-bookmark 'bookmark-handler-type "Mercit")
 
 (cl-defgeneric mercit-bookmark-name ()
   "Return name for bookmark to current buffer."
@@ -1566,7 +1564,7 @@ with the variables' values as arguments, which were recorded by
 ;;; Utilities
 
 (defun mercit-toggle-verbose-refresh ()
-  "Toggle whether Magit refreshes buffers verbosely.
+  "Toggle whether Mercit refreshes buffers verbosely.
 Enabling this helps figuring out which sections are bottlenecks.
 The additional output can be found in the *Messages* buffer."
   (interactive)

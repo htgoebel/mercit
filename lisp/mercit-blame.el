@@ -1,24 +1,22 @@
-;;; mercit-blame.el --- Blame support for Magit  -*- lexical-binding:t -*-
+;;; mercit-blame.el --- Blame support for Mercit  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -32,7 +30,7 @@
 ;;; Options
 
 (defgroup mercit-blame nil
-  "Blame support for Magit."
+  "Blame support for Mercit."
   :link '(info-link "(mercit)Blaming")
   :group 'mercit-modes)
 
@@ -145,14 +143,14 @@ styles defined in `mercit-blame-styles'."
   :type 'boolean)
 
 (defcustom mercit-blame-disable-modes '(fci-mode yascroll-bar-mode)
-  "List of modes not compatible with Magit-Blame mode.
-This modes are turned off when Magit-Blame mode is turned on,
+  "List of modes not compatible with Mercit-Blame mode.
+This modes are turned off when Mercit-Blame mode is turned on,
 and then turned on again when turning off the latter."
   :group 'mercit-blame
   :type '(repeat (symbol :tag "Mode")))
 
 (defcustom mercit-blame-mode-lighter " Blame"
-  "The mode-line lighter of the Magit-Blame mode."
+  "The mode-line lighter of the Mercit-Blame mode."
   :group 'mercit-blame
   :type '(choice (const :tag "No lighter" "") string))
 
@@ -386,13 +384,13 @@ in `mercit-blame-read-only-mode-map' instead.")
 ;;;; Read-Only Mode
 
 (define-minor-mode mercit-blame-read-only-mode
-  "Provide keybindings for Magit-Blame mode.
+  "Provide keybindings for Mercit-Blame mode.
 
-This minor-mode provides the key bindings for Magit-Blame mode,
+This minor-mode provides the key bindings for Mercit-Blame mode,
 but only when Read-Only mode is also enabled because these key
 bindings would otherwise conflict badly with regular bindings.
 
-When both Magit-Blame mode and Read-Only mode are enabled, then
+When both Mercit-Blame mode and Read-Only mode are enabled, then
 this mode gets automatically enabled too and when one of these
 modes is toggled, then this mode also gets toggled automatically.
 
@@ -851,7 +849,7 @@ not turn on `read-only-mode'."
     (forward-line (1- orig-line))))
 
 (transient-define-suffix mercit-blame-quit ()
-  "Turn off Magit-Blame mode.
+  "Turn off Mercit-Blame mode.
 If the buffer was created during a recursive blame,
 then also kill the buffer."
   :if-non-nil 'mercit-blame-mode

@@ -1,12 +1,7 @@
 ;;; git-commit.el --- Edit Git commit messages  -*- lexical-binding:t; coding:utf-8 -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;;     Sebastian Wiesner <lunaryorn@gmail.com>
-;;     Florian Ragwitz <rafl@debian.org>
-;;     Marius Vollmer <marius.vollmer@gmail.com>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; Homepage: https://github.com/mercit/mercit
 ;; Keywords: git tools vc
@@ -20,18 +15,18 @@
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify
+;; Mercit is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
 ;; by the Free Software Foundation, either version 3 of the License,
 ;; or (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful,
+;; Mercit is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; You should have received a copy of the AUTHORS.md file, which
 ;; lists all contributors.  If not, see https://mercit.vc/authors.
@@ -127,7 +122,7 @@
 (require 'transient)
 (require 'with-editor)
 
-;; For historic reasons Magit isn't a hard dependency.
+;; For historic reasons Mercit isn't a hard dependency.
 (unless (and (require 'mercit-base nil t)
              (require 'mercit-git nil t))
   (declare-function mercit-completing-read "mercit-base"
@@ -308,7 +303,7 @@ already using it, then you probably shouldn't start doing so."
                  number))
 
 (make-obsolete-variable 'git-commit-fill-column 'fill-column
-                        "Magit 2.11.0" 'set)
+                        "Mercit 2.11.0" 'set)
 
 (defcustom git-commit-known-pseudo-headers
   '("Signed-off-by" "Acked-by" "Modified-by" "Cc"
@@ -323,7 +318,7 @@ already using it, then you probably shouldn't start doing so."
   "Whether to use a local message ring instead of the global one.
 This can be set globally, in which case every repository gets its
 own commit message ring, or locally for a single repository.  If
-Magit isn't available, then setting this to a non-nil value has
+Mercit isn't available, then setting this to a non-nil value has
 no effect."
   :group 'git-commit
   :safe 'booleanp
@@ -386,7 +381,7 @@ In this context a \"keyword\" is text surrounded by brackets."
       '((t :inherit mercit-branch-remote))
     '((t :inherit font-lock-variable-name-face)))
   "Face used for names of remote branches in commit message comments.
-This is only used if Magit is available."
+This is only used if Mercit is available."
   :group 'git-commit-faces)
 
 (defface git-commit-comment-detached

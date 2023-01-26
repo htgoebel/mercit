@@ -1,24 +1,22 @@
 ;;; mercit-apply.el --- Apply Git diffs  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -57,11 +55,11 @@
 ;;; Options
 
 (defcustom mercit-delete-by-moving-to-trash t
-  "Whether Magit uses the system's trash can.
+  "Whether Mercit uses the system's trash can.
 
 You should absolutely not disable this and also remove `discard'
 from `mercit-no-confirm'.  You shouldn't do that even if you have
-all of the Magit-Wip modes enabled, because those modes do not
+all of the Mercit-Wip modes enabled, because those modes do not
 track any files that are not tracked in the proper branch."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-essentials

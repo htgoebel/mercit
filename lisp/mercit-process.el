@@ -1,24 +1,22 @@
 ;;; mercit-process.el --- Process functionality  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -43,7 +41,7 @@
   "Connection type used for the Git process.
 
 If nil, use pipes: this is usually more efficient, and works on Cygwin.
-If t, use ptys: this enables Magit to prompt for passphrases when needed."
+If t, use ptys: this enables Mercit to prompt for passphrases when needed."
   :group 'mercit-process
   :type '(choice (const :tag "pipe" nil)
                  (const :tag "pty" t)))
@@ -93,7 +91,7 @@ When this is nil, no sections are ever removed."
   "Whether `mercit-process-file' logs to the *Messages* buffer.
 
 Only intended for temporary use when you try to figure out how
-Magit uses Git behind the scene.  Output that normally goes to
+Mercit uses Git behind the scene.  Output that normally goes to
 the mercit-process buffer continues to go there.  Not all output
 goes to either of these two buffers.
 
@@ -207,7 +205,7 @@ non-nil, then the password is read from the user instead."
 (defcustom mercit-process-prompt-functions nil
   "List of functions used to forward arbitrary questions to the user.
 
-Magit has dedicated support for forwarding username and password
+Mercit has dedicated support for forwarding username and password
 prompts and Yes-or-No questions asked by Git and its subprocesses
 to the user.  This can be customized using other options in the
 `mercit-process' customization group.
@@ -234,13 +232,13 @@ implement such functions."
   :type 'hook)
 
 (defcustom mercit-process-ensure-unix-line-ending t
-  "Whether Magit should ensure a unix coding system when talking to Git."
+  "Whether Mercit should ensure a unix coding system when talking to Git."
   :package-version '(mercit . "2.6.0")
   :group 'mercit-process
   :type 'boolean)
 
 (defcustom mercit-process-display-mode-line-error t
-  "Whether Magit should retain and highlight process errors in the mode line."
+  "Whether Mercit should retain and highlight process errors in the mode line."
   :package-version '(mercit . "2.12.0")
   :group 'mercit-process
   :type 'boolean)
@@ -275,7 +273,7 @@ Used when `mercit-process-display-mode-line-error' is non-nil."
     map)
   "Keymap for `mercit-process-mode'.")
 
-(define-derived-mode mercit-process-mode mercit-mode "Magit Process"
+(define-derived-mode mercit-process-mode mercit-mode "Mercit Process"
   "Mode for looking at Git process output."
   :group 'mercit-process
   (hack-dir-local-variables-non-file-buffer)
@@ -351,7 +349,7 @@ option `mercit-git-global-arguments' specifies constant arguments.
 The arguments ARGS specify arguments to Git, they are flattened
 before use.
 
-After Git returns, the current buffer (if it is a Magit buffer)
+After Git returns, the current buffer (if it is a Mercit buffer)
 as well as the current repository's status buffer are refreshed.
 
 Process output goes into a new section in the buffer returned by
@@ -480,8 +478,8 @@ ARGS is flattened and then used as arguments to Git.
 Display the command line arguments in the echo area.
 
 After Git returns some buffers are refreshed: the buffer that was
-current when this function was called (if it is a Magit buffer
-and still alive), as well as the respective Magit status buffer.
+current when this function was called (if it is a Mercit buffer
+and still alive), as well as the respective Mercit status buffer.
 
 See `mercit-start-process' for more information."
   (message "Running %s %s" (mercit-git-executable)
@@ -498,8 +496,8 @@ ARGS is flattened and then used as arguments to Git.
 Display the command line arguments in the echo area.
 
 After Git returns some buffers are refreshed: the buffer that was
-current when this function was called (if it is a Magit buffer
-and still alive), as well as the respective Magit status buffer.
+current when this function was called (if it is a Mercit buffer
+and still alive), as well as the respective Mercit status buffer.
 
 See `mercit-start-process' and `with-editor' for more information."
   (mercit--record-separated-gitdir)
@@ -513,8 +511,8 @@ ARGS is flattened and then used as arguments to Git.
 Display the command line arguments in the echo area.
 
 After Git returns some buffers are refreshed: the buffer that was
-current when this function was called (if it is a Magit buffer
-and still alive), as well as the respective Magit status buffer.
+current when this function was called (if it is a Mercit buffer
+and still alive), as well as the respective Mercit status buffer.
 If the sequence stops at a commit, make the section representing
 that commit the current section by moving `point' there.
 
@@ -538,8 +536,8 @@ The remaining arguments ARGS specify arguments to Git, they are
 flattened before use.
 
 After Git returns some buffers are refreshed: the buffer that was
-current when this function was called (if it is a Magit buffer
-and still alive), as well as the respective Magit status buffer.
+current when this function was called (if it is a Mercit buffer
+and still alive), as well as the respective Mercit status buffer.
 
 See `mercit-start-process' for more information."
   (run-hooks 'mercit-pre-start-git-hook)
@@ -563,8 +561,8 @@ the sentinel and filter.
 
 After the process returns, `mercit-process-sentinel' refreshes the
 buffer that was current when `mercit-start-process' was called (if
-it is a Magit buffer and still alive), as well as the respective
-Magit status buffer."
+it is a Mercit buffer and still alive), as well as the respective
+Mercit status buffer."
   (pcase-let*
       ((`(,process-buf . ,section)
         (mercit-process-setup program args))

@@ -1,24 +1,22 @@
 ;;; mercit-refs.el --- Listing references  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -36,7 +34,7 @@
   :group 'mercit-modes)
 
 (defcustom mercit-refs-mode-hook nil
-  "Hook run after entering Magit-Refs mode."
+  "Hook run after entering Mercit-Refs mode."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-refs
   :type 'hook)
@@ -53,7 +51,7 @@
   :type 'hook)
 
 (defcustom mercit-refs-show-commit-count nil
-  "Whether to show commit counts in Magit-Refs mode buffers.
+  "Whether to show commit counts in Mercit-Refs mode buffers.
 
 all    Show counts for branches and tags.
 branch Show counts for branches only.
@@ -211,8 +209,8 @@ type of the section at point is `commit' then \"RET\" is bound to
 `mercit-show-commit', and when the type is either `branch' or
 `tag' then it is bound to `mercit-visit-ref'.
 
-\"RET\" is one of Magit's most essential keys and at least by
-default it should behave consistently across all of Magit,
+\"RET\" is one of Mercit's most essential keys and at least by
+default it should behave consistently across all of Mercit,
 especially because users quickly learn that it does something
 very harmless; it shows more information about the thing at point
 in another buffer.
@@ -279,7 +277,7 @@ the outcome.
     map)
   "Keymap for `mercit-refs-mode'.")
 
-(define-derived-mode mercit-refs-mode mercit-mode "Magit Refs"
+(define-derived-mode mercit-refs-mode mercit-mode "Mercit Refs"
   "Mode which lists and compares references.
 
 This mode is documented in info node `(mercit)References Buffer'.

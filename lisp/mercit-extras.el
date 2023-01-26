@@ -1,28 +1,26 @@
-;;; mercit-extras.el --- Additional functionality for Magit  -*- lexical-binding:t -*-
+;;; mercit-extras.el --- Additional functionality for Mercit  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
-;; Additional functionality for Magit.
+;; Additional functionality for Mercit.
 
 ;;; Code:
 
@@ -40,7 +38,7 @@
 (defvar project-switch-commands)
 
 (defgroup mercit-extras nil
-  "Additional functionality for Magit."
+  "Additional functionality for Mercit."
   :group 'mercit-extensions)
 
 ;;; Git Tools
@@ -231,7 +229,7 @@ like pretty much every other keymap:
   "Whether to bind \"m\" to `mercit-project-status' in `project-prefix-map'.
 If so, then an entry is added to `project-switch-commands' as
 well.  If you want to use another key, then you must set this
-to nil before loading Magit to prevent \"m\" from being bound.")
+to nil before loading Mercit to prevent \"m\" from being bound.")
 
 (with-eval-after-load 'project
   ;; Only more recent versions of project.el have `project-prefix-map' and
@@ -243,7 +241,7 @@ to nil before loading Magit to prevent \"m\" from being bound.")
                     (eval (car (get 'project-switch-commands 'standard-value))
                           t)))
     (define-key project-prefix-map "m" #'mercit-project-status)
-    (add-to-list 'project-switch-commands '(mercit-project-status "Magit") t)))
+    (add-to-list 'project-switch-commands '(mercit-project-status "Mercit") t)))
 
 ;;;###autoload
 (defun mercit-dired-jump (&optional other-window)
@@ -312,9 +310,9 @@ Interactively, open the file at point."
 
 ;;;###autoload
 (defun mercit-previous-line (&optional arg try-vscroll)
-  "Like `previous-line' but with Magit-specific shift-selection.
+  "Like `previous-line' but with Mercit-specific shift-selection.
 
-Magit's selection mechanism is based on the region but selects an
+Mercit's selection mechanism is based on the region but selects an
 area that is larger than the region.  This causes `previous-line'
 when invoked while holding the shift key to move up one line and
 thereby select two lines.  When invoked inside a hunk body this
@@ -335,9 +333,9 @@ is a matter of preference."
 
 ;;;###autoload
 (defun mercit-next-line (&optional arg try-vscroll)
-  "Like `next-line' but with Magit-specific shift-selection.
+  "Like `next-line' but with Mercit-specific shift-selection.
 
-Magit's selection mechanism is based on the region but selects
+Mercit's selection mechanism is based on the region but selects
 an area that is larger than the region.  This causes `next-line'
 when invoked while holding the shift key to move down one line
 and thereby select two lines.  When invoked inside a hunk body
@@ -400,7 +398,7 @@ in HEAD as well as staged changes in the diff to check."
             (mercit-toplevel)))
     (let ((rev1 (if amending "HEAD^1" "HEAD"))
           (rev2 nil))
-      ;; Magit may have updated the files without notifying vc, but
+      ;; Mercit may have updated the files without notifying vc, but
       ;; `diff-add-log-current-defuns' relies on vc being up-to-date.
       (mapc #'vc-file-clearprops (mercit-staged-files))
       (change-log-insert-entries
@@ -420,7 +418,7 @@ in HEAD as well as staged changes in the diff to check."
 (defun mercit-add-change-log-entry (&optional whoami file-name other-window)
   "Find change log file and add date entry and item for current change.
 This differs from `add-change-log-entry' (which see) in that
-it acts on the current hunk in a Magit buffer instead of on
+it acts on the current hunk in a Mercit buffer instead of on
 a position in a file-visiting buffer."
   (interactive (list current-prefix-arg
                      (prompt-for-change-log-name)))
@@ -436,7 +434,7 @@ a position in a file-visiting buffer."
 (defun mercit-add-change-log-entry-other-window (&optional whoami file-name)
   "Find change log file in other window and add entry and item.
 This differs from `add-change-log-entry-other-window' (which see)
-in that it acts on the current hunk in a Magit buffer instead of
+in that it acts on the current hunk in a Mercit buffer instead of
 on a position in a file-visiting buffer."
   (interactive (and current-prefix-arg
                     (list current-prefix-arg
@@ -816,7 +814,7 @@ This command is mainly intended for use in `mercit-revision-mode'
 buffers, the only buffers where it is always unambiguous exactly
 which revision should be saved.
 
-Most other Magit buffers usually show more than one revision, in
+Most other Mercit buffers usually show more than one revision, in
 some way or another, so this command has to select one of them,
 and that choice might not always be the one you think would have
 been the best pick.
@@ -853,7 +851,7 @@ abbreviated revision to the `kill-ring' and the
 
 ;;;###autoload
 (defun mercit-display-repository-buffer (buffer)
-  "Display a Magit buffer belonging to the current Git repository.
+  "Display a Mercit buffer belonging to the current Git repository.
 The buffer is displayed using `mercit-display-buffer', which see."
   (interactive (list (mercit--read-repository-buffer
                       "Display mercit buffer: ")))
@@ -861,21 +859,21 @@ The buffer is displayed using `mercit-display-buffer', which see."
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer (buffer)
-  "Switch to a Magit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Git repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer: ")))
   (switch-to-buffer buffer))
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer-other-window (buffer)
-  "Switch to a Magit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Git repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer in another window: ")))
   (switch-to-buffer-other-window buffer))
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer-other-frame (buffer)
-  "Switch to a Magit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Git repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer in another frame: ")))
   (switch-to-buffer-other-frame buffer))

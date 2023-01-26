@@ -1,24 +1,22 @@
 ;;; mercit-autorevert.el --- Revert buffers when files in repository change  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
 
@@ -39,17 +37,17 @@
 (defcustom auto-revert-buffer-list-filter nil
   "Filter that determines which buffers `auto-revert-buffers' reverts.
 
-This option is provided by Magit, which also advises
-`auto-revert-buffers' to respect it.  Magit users who do not turn
+This option is provided by Mercit, which also advises
+`auto-revert-buffers' to respect it.  Mercit users who do not turn
 on the local mode `auto-revert-mode' themselves, are best served
 by setting the value to `mercit-auto-revert-repository-buffer-p'.
 
 However the default is nil, so as not to disturb users who do use
 the local mode directly.  If you experience delays when running
-Magit commands, then you should consider using one of the
-predicates provided by Magit - especially if you also use Tramp.
+Mercit commands, then you should consider using one of the
+predicates provided by Mercit - especially if you also use Tramp.
 
-Users who do turn on `auto-revert-mode' in buffers in which Magit
+Users who do turn on `auto-revert-mode' in buffers in which Mercit
 doesn't do that for them, should likely not use any filter.
 Users who turn on `global-auto-revert-mode', do not have to worry
 about this option, because it is disregarded if the global mode
@@ -76,10 +74,10 @@ is enabled."
            (mercit-auto-revert-mode))))
 
 (defcustom mercit-auto-revert-immediately t
-  "Whether Magit reverts buffers immediately.
+  "Whether Mercit reverts buffers immediately.
 
 If this is non-nil and either `global-auto-revert-mode' or
-`mercit-auto-revert-mode' is enabled, then Magit immediately
+`mercit-auto-revert-mode' is enabled, then Mercit immediately
 reverts buffers by explicitly calling `auto-revert-buffers'
 after running Git for side-effects.
 
@@ -162,13 +160,13 @@ and code surrounding the definition of this function."
   (add-hook 'after-init-hook #'mercit-auto-revert-mode--init-kludge t))
 
 (put 'mercit-auto-revert-mode 'function-documentation
-     "Toggle Magit Auto Revert mode.
-If called interactively, enable Magit Auto Revert mode if ARG is
+     "Toggle Mercit Auto Revert mode.
+If called interactively, enable Mercit Auto Revert mode if ARG is
 positive, and disable it if ARG is zero or negative.  If called
 from Lisp, also enable the mode if ARG is omitted or nil, and
 toggle it if ARG is `toggle'; disable the mode otherwise.
 
-Magit Auto Revert mode is a global minor mode that reverts
+Mercit Auto Revert mode is a global minor mode that reverts
 buffers associated with a file that is located inside a Git
 repository when the file changes on disk.  Use `auto-revert-mode'
 to revert a particular buffer.  Or use `global-auto-revert-mode'

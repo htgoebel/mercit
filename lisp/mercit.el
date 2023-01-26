@@ -1,18 +1,7 @@
 ;;; mercit.el --- A Git porcelain inside Emacs  -*- lexical-binding:t; coding:utf-8 -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Marius Vollmer <marius.vollmer@gmail.com>
-;;     Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
-;;     Kyle Meyer <kyle@kyleam.com>
-;; Former-Maintainers:
-;;     Nicolas Dudebout <nicolas.dudebout@gatech.edu>
-;;     Noam Postavsky <npostavs@users.sourceforge.net>
-;;     Peter J. Weisberg <pj@irregularexpressions.net>
-;;     Phil Jackson <phil@shellarchive.co.uk>
-;;     Rémi Vanicat <vanicat@debian.org>
-;;     Yann Hodique <yann.hodique@gmail.com>
 
 ;; Homepage: https://github.com/mercit/mercit
 ;; Keywords: git tools vc
@@ -29,33 +18,33 @@
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify
+;; Mercit is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published
 ;; by the Free Software Foundation, either version 3 of the License,
 ;; or (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful,
+;; Mercit is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; You should have received a copy of the AUTHORS.md file, which
 ;; lists all contributors.  If not, see https://mercit.vc/authors.
 
 ;;; Commentary:
 
-;; Magit is a text-based Git user interface that puts an unmatched focus
+;; Mercit is a text-based Git user interface that puts an unmatched focus
 ;; on streamlining workflows.  Commands are invoked using short mnemonic
 ;; key sequences that take the cursor’s position in the highly actionable
 ;; interface into account to provide context-sensitive behavior.
 
-;; With Magit you can do nearly everything that you can do when using Git
+;; With Mercit you can do nearly everything that you can do when using Git
 ;; on the command-line, but at greater speed and while taking advantage
 ;; of advanced features that previously seemed too daunting to use on a
-;; daily basis.  Many users will find that by using Magit they can become
+;; daily basis.  Many users will find that by using Mercit they can become
 ;; more effective Git user.
 
 ;;; Code:
@@ -92,7 +81,7 @@ must then use a prefix argument."
 
 (defface mercit-header-line
   '((t :inherit mercit-section-heading))
-  "Face for the `header-line' in some Magit modes.
+  "Face for the `header-line' in some Mercit modes.
 Note that some modes, such as `mercit-log-select-mode', have their
 own faces for the `header-line', or for parts of the
 `header-line'."
@@ -249,11 +238,11 @@ and/or `mercit-branch-remote-head'."
 
 ;;;###autoload
 (define-obsolete-variable-alias 'global-mercit-file-mode
-  'mercit-define-global-key-bindings "Magit 3.0.0")
+  'mercit-define-global-key-bindings "Mercit 3.0.0")
 
 ;;;###autoload
 (defcustom mercit-define-global-key-bindings t
-  "Whether to bind some Magit commands in the global keymap.
+  "Whether to bind some Mercit commands in the global keymap.
 
 If this variable is non-nil, then the following bindings may
 be added to the global keymap.  The default is t.
@@ -280,7 +269,7 @@ been added.
 
 To set this variable use either `setq' or the Custom interface.
 Do not use the function `customize-set-variable' because doing
-that would cause Magit to be loaded immediately when that form
+that would cause Mercit to be loaded immediately when that form
 is evaluated (this differs from `custom-set-variables', which
 doesn't load the libraries that define the customized variables).
 
@@ -290,7 +279,7 @@ the key bindings have already been added.
 We recommend that you bind \"C-c g\" instead of \"C-c M-g\" to
 `mercit-file-dispatch'.  The former is a much better binding
 but the \"C-c <letter>\" namespace is strictly reserved for
-users; preventing Magit from using it by default.
+users; preventing Mercit from using it by default.
 
 Also see info node `(mercit)Commands for Buffers Visiting Files'."
   :package-version '(mercit . "3.0.0")
@@ -319,7 +308,7 @@ Also see info node `(mercit)Commands for Buffers Visiting Files'."
 
 ;;;###autoload (autoload 'mercit-dispatch "mercit" nil t)
 (transient-define-prefix mercit-dispatch ()
-  "Invoke a Magit command from a list of available commands."
+  "Invoke a Mercit command from a list of available commands."
   :info-manual "(mercit)Top"
   ["Transient and dwim commands"
    ;; → bound in mercit-mode-map or mercit-section-mode-map
@@ -562,15 +551,15 @@ is run in the top-level directory of the current working tree."
 ;;; Version
 
 (defvar mercit-version #'undefined
-  "The version of Magit that you're using.
+  "The version of Mercit that you're using.
 Use the function by the same name instead of this variable.")
 
 ;;;###autoload
 (defun mercit-version (&optional print-dest)
-  "Return the version of Magit currently in use.
+  "Return the version of Mercit currently in use.
 If optional argument PRINT-DEST is non-nil, output
 stream (interactively, the echo area, or the current buffer with
-a prefix argument), also print the used versions of Magit, Git,
+a prefix argument), also print the used versions of Mercit, Git,
 and Emacs to it."
   (interactive (list (if current-prefix-arg (current-buffer) t)))
   (let ((mercit-git-global-arguments nil)
@@ -593,7 +582,7 @@ and Emacs to it."
         (or (progn
               (push 'repo debug)
               (when (and (file-exists-p gitdir)
-                         ;; It is a repo, but is it the Magit repo?
+                         ;; It is a repo, but is it the Mercit repo?
                          (file-exists-p
                           (expand-file-name "../lisp/mercit.el" gitdir)))
                 (push t debug)
@@ -631,7 +620,7 @@ and Emacs to it."
             ;; of e.g. a shallow clone.
             (progn
               (push 'hash debug)
-              ;; Same check as above to see if it's really the Magit repo.
+              ;; Same check as above to see if it's really the Mercit repo.
               (when (and (file-exists-p gitdir)
                          (file-exists-p
                           (expand-file-name "../lisp/mercit.el" gitdir)))
@@ -640,7 +629,7 @@ and Emacs to it."
                         (mercit-git-string "rev-parse" "HEAD"))))))))
     (if (stringp mercit-version)
         (when print-dest
-          (princ (format "Magit %s%s, Git %s, Emacs %s, %s"
+          (princ (format "Mercit %s%s, Git %s, Emacs %s, %s"
                          (or mercit-version "(unknown)")
                          (or (and (ignore-errors
                                     (mercit--version>= mercit-version "2008"))
@@ -664,7 +653,7 @@ and Emacs to it."
         (push mercit-version debug))
       (unless (equal (getenv "CI") "true")
         ;; The repository is a sparse clone.
-        (message "Cannot determine Magit's version %S" debug)))
+        (message "Cannot determine Mercit's version %S" debug)))
     mercit-version))
 
 ;;; Startup Asserts
@@ -673,7 +662,7 @@ and Emacs to it."
   (when-let ((val (getenv "GIT_DIR")))
     (setenv "GIT_DIR")
     (message
-     "Magit unset $GIT_DIR (was %S).  See %s" val
+     "Mercit unset $GIT_DIR (was %S).  See %s" val
      ;; Note: Pass URL as argument rather than embedding in the format
      ;; string to prevent the single quote from being rendered
      ;; according to `text-quoting-style'.
@@ -681,15 +670,15 @@ and Emacs to it."
   (when-let ((val (getenv "GIT_WORK_TREE")))
     (setenv "GIT_WORK_TREE")
     (message
-     "Magit unset $GIT_WORK_TREE (was %S).  See %s" val
+     "Mercit unset $GIT_WORK_TREE (was %S).  See %s" val
      ;; See comment above.
      "https://github.com/mercit/mercit/wiki/Don't-set-$GIT_DIR-and-alike"))
-  ;; Git isn't required while building Magit.
+  ;; Git isn't required while building Mercit.
   (unless (bound-and-true-p byte-compile-current-file)
     (mercit-git-version-assert))
   (when (version< emacs-version mercit--minimal-emacs)
     (display-warning 'mercit (format "\
-Magit requires Emacs >= %s, you are using %s.
+Mercit requires Emacs >= %s, you are using %s.
 
 If this comes as a surprise to you, because you do actually have
 a newer version installed, then that probably means that the

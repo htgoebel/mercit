@@ -1,24 +1,22 @@
-;;; mercit-submodule.el --- Submodule support for Magit  -*- lexical-binding:t -*-
+;;; mercit-submodule.el --- Submodule support for Mercit  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
 
@@ -54,7 +52,7 @@ is inserted.  If it is nil, then all sections listed in
   :type 'boolean)
 
 (defcustom mercit-submodule-list-mode-hook '(hl-line-mode)
-  "Hook run after entering Magit-Submodule-List mode."
+  "Hook run after entering Mercit-Submodule-List mode."
   :package-version '(mercit . "2.9.0")
   :group 'mercit-repolist
   :type 'hook
@@ -636,7 +634,7 @@ These sections can be expanded to show the respective commits."
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map mercit-repolist-mode-map)
     map)
-  "Local keymap for Magit-Submodule-List mode buffers.")
+  "Local keymap for Mercit-Submodule-List mode buffers.")
 
 (define-derived-mode mercit-submodule-list-mode tabulated-list-mode "Modules"
   "Major mode for browsing a list of Git submodules."

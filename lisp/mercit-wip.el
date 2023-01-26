@@ -1,24 +1,22 @@
 ;;; mercit-wip.el --- Commit snapshots to work-in-progress refs  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -46,31 +44,31 @@
   :group 'mercit-wip)
 
 (defcustom mercit-wip-mode-lighter " Wip"
-  "Lighter for Magit-Wip mode."
+  "Lighter for Mercit-Wip mode."
   :package-version '(mercit . "2.90.0")
   :group 'mercit-wip
   :type 'string)
 
 (defcustom mercit-wip-after-save-local-mode-lighter ""
-  "Lighter for Magit-Wip-After-Save-Local mode."
+  "Lighter for Mercit-Wip-After-Save-Local mode."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-after-apply-mode-lighter ""
-  "Lighter for Magit-Wip-After-Apply mode."
+  "Lighter for Mercit-Wip-After-Apply mode."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-before-change-mode-lighter ""
-  "Lighter for Magit-Wip-Before-Change mode."
+  "Lighter for Mercit-Wip-Before-Change mode."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-initial-backup-mode-lighter ""
-  "Lighter for Magit-Wip-Initial Backup mode."
+  "Lighter for Mercit-Wip-Initial Backup mode."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-wip-legacy
   :type 'string)
@@ -244,7 +242,7 @@ The user has to add this function to `before-save-hook'.
 Commit the current state of the visited file before saving the
 current buffer to that file.  This backs up the same version of
 the file as `backup-buffer' would, but stores the backup in the
-worktree wip ref, which is also used by the various Magit Wip
+worktree wip ref, which is also used by the various Mercit Wip
 modes, instead of in a backup file as `backup-buffer' would.
 
 This function ignores the variables that affect `backup-buffer'

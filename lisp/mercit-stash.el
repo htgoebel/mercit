@@ -1,24 +1,22 @@
-;;; mercit-stash.el --- Stash support for Magit  -*- lexical-binding:t -*-
+;;; mercit-stash.el --- Stash support for Mercit  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -213,7 +211,7 @@ while two prefix arguments are equivalent to `--all'."
 (transient-define-prefix mercit-stash-push (&optional transient args)
   "Create stash using \"git stash push\".
 
-This differs from Magit's other stashing commands, which don't
+This differs from Mercit's other stashing commands, which don't
 use \"git stash\" and are generally more flexible but don't allow
 specifying a list of files to be stashed."
   :man-page "git-stash"
@@ -432,7 +430,7 @@ instead of \"Stashes:\"."
   (interactive)
   (mercit-stashes-setup-buffer))
 
-(define-derived-mode mercit-stashes-mode mercit-reflog-mode "Magit Stashes"
+(define-derived-mode mercit-stashes-mode mercit-reflog-mode "Mercit Stashes"
   "Mode for looking at lists of stashes."
   :group 'mercit-log
   (hack-dir-local-variables-non-file-buffer))
@@ -492,7 +490,7 @@ If there is no stash buffer in the same frame, then do nothing."
                        (list (delete "--stat" args) files))))
   (mercit-stash-setup-buffer stash args files))
 
-(define-derived-mode mercit-stash-mode mercit-diff-mode "Magit Stash"
+(define-derived-mode mercit-stash-mode mercit-diff-mode "Mercit Stash"
   "Mode for looking at individual stashes."
   :group 'mercit-diff
   (hack-dir-local-variables-non-file-buffer)

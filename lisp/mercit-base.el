@@ -1,24 +1,22 @@
 ;;; mercit-base.el --- Early birds  -*- lexical-binding:t; coding:utf-8 -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; This file contains code taken from GNU Emacs, which is
 ;; Copyright (C) 1976-2023 Free Software Foundation, Inc.
@@ -66,7 +64,7 @@ will work just fine.  However, if you use Ido completion, then
 you do have to use `mercit-ido-completing-read', because Ido is
 less well behaved than the former, more modern alternatives.
 
-If you would like to use Ivy or Helm completion with Magit but
+If you would like to use Ivy or Helm completion with Mercit but
 not enable the respective modes globally, then customize this
 option to use `ivy-completing-read' or
 `helm--completing-read-default'.  If you choose to use
@@ -173,7 +171,7 @@ The value has the form ((COMMAND nil|PROMPT DEFAULT)...).
     (const safe-with-wip)))
 
 (defcustom mercit-no-confirm '(set-and-push)
-  "A list of symbols for actions Magit should not confirm, or t.
+  "A list of symbols for actions Mercit should not confirm, or t.
 
 Many potentially dangerous commands by default ask the user for
 confirmation.  Each of the below symbols stands for an action
@@ -363,17 +361,17 @@ for `mercit-no-confirm' (which see)."
                         ,@mercit--confirm-actions)))
 
 (defcustom mercit-no-message nil
-  "A list of messages Magit should not display.
+  "A list of messages Mercit should not display.
 
-Magit displays most echo area messages using `message', but a few
+Mercit displays most echo area messages using `message', but a few
 are displayed using `mercit-message' instead, which takes the same
 arguments as the former, FORMAT-STRING and ARGS.  `mercit-message'
 forgoes printing a message if any member of this list is a prefix
 of the respective FORMAT-STRING.
 
-If Magit prints a message which causes you grief, then please
+If Mercit prints a message which causes you grief, then please
 first investigate whether there is another option which can be
-used to suppress it.  If that is not the case, then ask the Magit
+used to suppress it.  If that is not the case, then ask the Mercit
 maintainers to start using `mercit-message' instead of `message'
 in that case.  We are not proactively replacing all uses of
 `message' with `mercit-message', just in case someone *might* find
@@ -420,7 +418,7 @@ and delay of your graphical environment or operating system."
   :type 'number)
 
 (defcustom mercit-view-git-manual-method 'info
-  "How links to Git documentation are followed from Magit's Info manuals.
+  "How links to Git documentation are followed from Mercit's Info manuals.
 
 `info'  Follow the link to the node in the `gitman' Info manual
         as usual.  Unfortunately that manual is not installed by
@@ -489,7 +487,7 @@ and delay of your graphical environment or operating system."
                                      hist def fallback)
   "Read a choice in the minibuffer, or use the default choice.
 
-This is the function that Magit commands use when they need the
+This is the function that Mercit commands use when they need the
 user to select a single thing to act on.  The arguments have the
 same meaning as for `completing-read', except for FALLBACK, which
 is unique to this function and is described below.
@@ -569,7 +567,7 @@ acts similarly to `completing-read', except for the following:
 
 (defun mercit-builtin-completing-read
     (prompt choices &optional predicate require-match initial-input hist def)
-  "Magit wrapper for standard `completing-read' function."
+  "Mercit wrapper for standard `completing-read' function."
   (unless (or (bound-and-true-p helm-mode)
               (bound-and-true-p ivy-mode)
               (bound-and-true-p vertico-mode)
@@ -601,7 +599,7 @@ nil, it defaults to `crm-local-completion-map'.
 
 Unlike `completing-read-multiple', the return value is not split
 into a list."
-  (declare (obsolete mercit-completing-read-multiple* "Magit 3.1.0"))
+  (declare (obsolete mercit-completing-read-multiple* "Mercit 3.1.0"))
   (let* ((crm-separator (or sep crm-separator))
          (crm-completion-table (mercit--completion-table choices))
          (choose-completion-string-functions
@@ -689,7 +687,7 @@ same name."
                             (or def (and require-match (car choices))))
     (display-warning 'mercit "ido-completing-read+ is not installed
 
-To use Ido completion with Magit you need to install the
+To use Ido completion with Mercit you need to install the
 third-party `ido-completing-read+' packages.  Falling
 back to built-in `completing-read' for now." :error)
     (mercit-builtin-completing-read prompt choices predicate require-match
@@ -841,7 +839,7 @@ DEFAULT may be a number or a numeric string."
 
 ;;;###autoload
 (defun mercit-emacs-Q-command ()
-  "Show a shell command that runs an uncustomized Emacs with only Magit loaded.
+  "Show a shell command that runs an uncustomized Emacs with only Mercit loaded.
 See info node `(mercit)Debugging Tools' for more information."
   (interactive)
   (let ((cmd (mapconcat
@@ -867,7 +865,7 @@ See info node `(mercit)Debugging Tools' for more information."
                        "with-editor"
                        ;; Obviously `mercit' itself is needed too.
                        "mercit"
-                       ;; While these are part of the Magit repository,
+                       ;; While these are part of the Mercit repository,
                        ;; they are distributed as separate packages.
                        "mercit-section"
                        "git-commit"
@@ -875,7 +873,7 @@ See info node `(mercit)Debugging Tools' for more information."
                 ;; Avoid Emacs bug#16406 by using full path.
                 "-l" ,(file-name-sans-extension (locate-library "mercit")))
               " ")))
-    (message "Uncustomized Magit command saved to kill-ring, %s"
+    (message "Uncustomized Mercit command saved to kill-ring, %s"
              "please run it in a terminal.")
     (kill-new cmd)))
 
@@ -1212,7 +1210,7 @@ See <https://github.com/raxod502/straight.el/issues/520>."
 Bind shell file name and switch for remote execution.
 `with-connection-local-variables' isn't available until Emacs 27.
 This kludge provides the minimal functionality required by
-Magit."
+Mercit."
     `(if (file-remote-p default-directory)
          (pcase-let ((`(,shell-file-name ,shell-command-switch)
                       (with-no-warnings ; about unknown tramp functions

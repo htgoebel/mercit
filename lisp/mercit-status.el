@@ -1,24 +1,22 @@
 ;;; mercit-status.el --- The grand overview  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -36,7 +34,7 @@
   :group 'mercit-modes)
 
 (defcustom mercit-status-mode-hook nil
-  "Hook run after entering Magit-Status mode."
+  "Hook run after entering Mercit-Status mode."
   :group 'mercit-status
   :type 'hook)
 
@@ -341,7 +339,7 @@ init file: (global-set-key (kbd \"C-x g\") \\='mercit-status-quick)."
   "Keymap for `mercit-status-mode'.")
 
 (transient-define-prefix mercit-status-jump ()
-  "In a Magit-Status buffer, jump to a section."
+  "In a Mercit-Status buffer, jump to a section."
   ["Jump to"
    [("z " "Stashes" mercit-jump-to-stashes
      :if (lambda () (memq 'mercit-insert-stashes mercit-status-sections-hook)))
@@ -375,7 +373,7 @@ init file: (global-set-key (kbd \"C-x g\") \\='mercit-status-quick)."
      :if (lambda () (memq 'mercit-insert-skip-worktree-files mercit-status-sections-hook)))]
    [("i" "Using Imenu" imenu)]])
 
-(define-derived-mode mercit-status-mode mercit-mode "Magit"
+(define-derived-mode mercit-status-mode mercit-mode "Mercit"
   "Mode for looking at Git status.
 
 This mode is documented in info node `(mercit)Status Buffer'.
@@ -714,7 +712,7 @@ remote in alphabetic order."
   "Maybe insert a list or tree of untracked files.
 
 Do so depending on the value of `status.showUntrackedFiles'.
-Note that even if the value is `all', Magit still initially
+Note that even if the value is `all', Mercit still initially
 only shows directories.  But the directory sections can then
 be expanded using \"TAB\".
 

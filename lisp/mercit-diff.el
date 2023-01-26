@@ -1,24 +1,22 @@
 ;;; mercit-diff.el --- Inspect Git diffs  -*- lexical-binding:t -*-
 
+;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
-
-;; Author: Jonas Bernoulli <jonas@bernoul.li>
-;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
-;; Magit is free software: you can redistribute it and/or modify it
+;; Mercit is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 ;;
-;; Magit is distributed in the hope that it will be useful, but WITHOUT
+;; Mercit is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 ;; or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 ;; License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License
-;; along with Magit.  If not, see <https://www.gnu.org/licenses/>.
+;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -99,7 +97,7 @@
   :group 'mercit-modes)
 
 (defcustom mercit-diff-mode-hook nil
-  "Hook run after entering Magit-Diff mode."
+  "Hook run after entering Mercit-Diff mode."
   :group 'mercit-diff
   :type 'hook)
 
@@ -210,7 +208,7 @@ the variable `mercit-diff--tab-width-cache'.  Set that to nil
 to invalidate the cache.
 
 nil       Never adjust tab width.  Use `tab-width's value from
-          the Magit buffer itself instead.
+          the Mercit buffer itself instead.
 
 t         If the corresponding file-visiting buffer exits, then
           use `tab-width's value from that buffer.  Doing this is
@@ -336,7 +334,7 @@ and `--compact-summary'.  See the git-diff(1) manpage."
 (defcustom mercit-revision-mode-hook
   '(bug-reference-mode
     goto-address-mode)
-  "Hook run after entering Magit-Revision mode."
+  "Hook run after entering Mercit-Revision mode."
   :group 'mercit-revision
   :type 'hook
   :options '(bug-reference-mode
@@ -1598,7 +1596,7 @@ Display the buffer in the selected window unless OTHER-WINDOW is
 non-nil.  If DIRECTORY is the top-level directory of the current
 repository, then visit the containing directory using Dired and
 in the Dired buffer put point on DIRECTORY.  Otherwise display
-the Magit-Status buffer for DIRECTORY."
+the Mercit-Status buffer for DIRECTORY."
   (if (equal (mercit-toplevel directory)
              (mercit-toplevel))
       (dired-jump other-window (concat directory "/."))
@@ -1879,7 +1877,7 @@ commit or stash at point, then prompt for a commit."
     map)
   "Keymap for `mercit-diff-mode'.")
 
-(define-derived-mode mercit-diff-mode mercit-mode "Magit Diff"
+(define-derived-mode mercit-diff-mode mercit-mode "Mercit Diff"
   "Mode for looking at a Git diff.
 
 This mode is documented in info node `(mercit)Diff Buffer'.
@@ -1961,7 +1959,7 @@ Staging and applying changes is documented in info node
   (mercit-diff-scope))
 
 (define-obsolete-variable-alias 'mercit-diff-section-base-map
-  'mercit-diff-section-map "Magit-Section 3.4.0")
+  'mercit-diff-section-map "Mercit-Section 3.4.0")
 (defvar mercit-diff-section-map
   (let ((map (make-sparse-keymap)))
     (mercit-menu-set map [mercit-cherry-apply]
@@ -2466,7 +2464,7 @@ section or a child thereof."
 
 ;;; Revision Mode
 
-(define-derived-mode mercit-revision-mode mercit-diff-mode "Magit Rev"
+(define-derived-mode mercit-revision-mode mercit-diff-mode "Mercit Rev"
   "Mode for looking at a Git commit.
 
 This mode is documented in info node `(mercit)Revision Buffer'.
@@ -2819,7 +2817,7 @@ or a ref which is not a branch, then it inserts nothing."
 
 ;;; Merge-Preview Mode
 
-(define-derived-mode mercit-merge-preview-mode mercit-diff-mode "Magit Merge"
+(define-derived-mode mercit-merge-preview-mode mercit-diff-mode "Mercit Merge"
   "Mode for previewing a merge."
   :group 'mercit-diff
   (hack-dir-local-variables-non-file-buffer))

@@ -42,7 +42,7 @@
            value is not a valid upstream (because it cannot be resolved
            as an existing revision), then treat it as the name of the
            new branch and continue by reading the upstream next."
-  :package-version '(mercit . "2.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (const :tag "read branch name first" nil)
                  (const :tag "read upstream first" t)
@@ -91,7 +91,7 @@ instead of
 Which you prefer is a matter of personal preference.  If you do
 prefer the former, then you should add branches such as \"master\",
 \"next\", and \"maint\" to the value of this options."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat string))
 
@@ -149,7 +149,7 @@ you should also account for other common names:
 If you use remote branches as UPSTREAM, then you might also want
 to set `mercit-branch-prefer-remote-upstream' to a non-nil value.
 However, I recommend that you use local branches as UPSTREAM."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat (cons (string :tag "Use upstream")
                        (choice :tag "for branches"
@@ -180,7 +180,7 @@ When `forge-only' and the `forge' package is available, then
 
 Another supported but obsolete value is `github-only'.  It is a
   misnomer because it now treated as an alias for `forge-only'."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice
           (const :tag "Don't preserve push-remote setup" nil)
@@ -193,13 +193,13 @@ Another supported but obsolete value is `github-only'.  It is a
 When set to nil, no variables are displayed by this transient
 command, instead the sub-transient `mercit-branch-configure'
 has to be used to view and change branch related variables."
-  :package-version '(mercit . "2.7.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
 (defcustom mercit-published-branches '("origin/master")
   "List of branches that are considered to be published."
-  :package-version '(mercit . "2.13.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat string))
 

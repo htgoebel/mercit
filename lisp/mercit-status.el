@@ -50,7 +50,7 @@
 This hook is run by `mercit-insert-status-headers', which in turn
 has to be a member of `mercit-status-sections-hook' to be used at
 all."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'hook
   :options '(mercit-insert-error-header
@@ -80,7 +80,7 @@ all."
     mercit-insert-unpulled-from-pushremote
     mercit-insert-unpulled-from-upstream)
   "Hook run to insert sections into a status buffer."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'hook)
 
@@ -105,7 +105,7 @@ use: (((unpulled . \"..@{upstream}\") (status)) 1).
 
 See option `mercit-section-initial-visibility-alist' for how to
 control the initial visibility of the jumped to section."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type '(choice (const :tag "as usual" nil)
                  (repeat (choice (number :tag "nth top-level section")
@@ -126,7 +126,7 @@ no effect.
 
 The command `mercit-status-here' tries to go to that position,
 regardless of the value of this option."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'boolean)
 
@@ -136,7 +136,7 @@ The functions which respect this option are
 `mercit-insert-head-branch-header',
 `mercit-insert-upstream-branch-header', and
 `mercit-insert-push-branch-header'."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'boolean)
 
@@ -162,7 +162,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :group 'mercit-margin
   :type mercit-log-margin--custom-type
@@ -188,7 +188,7 @@ Valid values are:
   but only if it is the current buffer.
 `never': Never use the set of arguments from the status
   buffer."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :group 'mercit-commands
   :type '(choice

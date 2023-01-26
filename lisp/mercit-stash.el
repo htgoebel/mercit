@@ -42,7 +42,7 @@
     mercit-insert-stash-index
     mercit-insert-stash-untracked)
   "Hook run to insert sections into stash diff buffers."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-stash
   :type 'hook)
 
@@ -70,7 +70,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-stash
   :group 'mercit-margin
   :type mercit-log-margin--custom-type

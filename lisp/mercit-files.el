@@ -336,7 +336,7 @@ to `mercit-dispatch'."
 
 Currently this only adds the following key bindings.
 \n\\{mercit-blob-mode-map}"
-  :package-version '(mercit . "2.3.0"))
+  :package-version '(mercit . "0.0.0"))
 
 (defun mercit-blob-next ()
   "Visit the next blob which modified the current file."

@@ -35,7 +35,7 @@
 
 (defcustom mercit-refs-mode-hook nil
   "Hook run after entering Mercit-Refs mode."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type 'hook)
 
@@ -46,7 +46,7 @@
     mercit-insert-remote-branches
     mercit-insert-tags)
   "Hook run to insert sections into a references buffer."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type 'hook)
 
@@ -59,7 +59,7 @@ nil    Never show counts.
 
 To change the value in an existing buffer use the command
 `mercit-refs-set-show-commit-count'."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :safe (lambda (val) (memq val '(all branch nil)))
   :type '(choice (const all    :tag "For branches and tags")
@@ -78,7 +78,7 @@ look too similar to `mercit-dimmed'.
 
 If this is non-nil, then spaces are placed on both sides of all
 commit counts."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type 'boolean)
 
@@ -94,7 +94,7 @@ shown), so this isn't enabled yet.")
 
 This is redundant because the name of the remote is already shown
 in the heading preceding the list of its branches."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type 'boolean)
 
@@ -120,7 +120,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :group 'mercit-margin
   :safe (lambda (val) (memq val '(all branch nil)))
@@ -134,7 +134,7 @@ AUTHOR-WIDTH has to be an integer.  When the name of the author
 
 This is disabled by default because it is slow if there are many
 tags."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :group 'mercit-margin
   :type 'boolean)
@@ -151,7 +151,7 @@ specifies the minimal width, the second the maximal width.  In that
 case the actual width is determined using the length of the names
 of the shown local branches.  (Remote branches and tags are not
 taken into account when calculating to optimal width.)"
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type '(choice (integer :tag "Constant wide")
                  (cons    :tag "Wide constrains"
@@ -171,7 +171,7 @@ isn't behind either, then a \"=\".
 This column may also display only \"*\" or \"@\" for the focused
 branch, in which case this option is ignored.  Use \"L v\" to
 change the verbosity of this column."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type 'integer)
 
@@ -193,7 +193,7 @@ match, or a function that takes the refname as only argument and
 returns a boolean.  A remote branch such as \"origin/master\" is
 displayed as just \"master\", however for this comparison the
 former is used."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :type '(alist :key-type   (choice  :tag "Key" regexp function)
                 :value-type (boolean :tag "Value"
@@ -261,7 +261,7 @@ the outcome.
 
   Instead of adding this symbol, consider pressing \"b b RET\",
   like you would do in other buffers."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refs
   :group 'mercit-commands
   :options '(focus-on-ref create-branch checkout-any checkout-branch)

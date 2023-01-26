@@ -69,7 +69,7 @@
 
 (defcustom mercit-log-remove-graph-args '("--follow" "--grep" "-G" "-S" "-L")
   "The log arguments that cause the `--graph' argument to be dropped."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type '(repeat (string :tag "Argument"))
   :options '("--follow" "--grep" "-G" "-S" "-L"))
@@ -79,7 +79,7 @@
 Author:    {author}
 Committer: {committer}"  ;; TODO was {desc}{notes}
   "Additional format string used with the `++header' argument."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type 'string)
 
@@ -108,7 +108,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :group 'mercit-margin
   :type mercit-log-margin--custom-type
@@ -122,7 +122,7 @@ This option only controls whether the committer date is displayed
 instead of the author date.  Whether some date is displayed in
 the margin and whether the margin is displayed at all is
 controlled by other options."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :group 'mercit-margin
   :type 'boolean)
@@ -130,19 +130,19 @@ controlled by other options."
 (defcustom mercit-log-show-refname-after-summary nil
   "Whether to show refnames after commit summaries.
 This is useful if you use really long branch names."
-  :package-version '(mercit . "2.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type 'boolean)
 
 (defcustom mercit-log-highlight-keywords t
   "Whether to highlight bracketed keywords in commit summaries."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type 'boolean)
 
 (defcustom mercit-log-header-line-function #'mercit-log-header-line-sentence
   "Function used to generate text shown in header line of log buffers."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type '(choice (function-item mercit-log-header-line-arguments)
                  (function-item mercit-log-header-line-sentence)
@@ -153,7 +153,7 @@ This is useful if you use really long branch names."
 This is used by the command `mercit-log-trace-definition'.
 You should prefer `mercit-which-function' over `which-function'
 because the latter may make use of Imenu's outdated cache."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type '(choice (function-item mercit-which-function)
                  (function-item which-function)
@@ -199,7 +199,7 @@ because the latter may make use of Imenu's outdated cache."
 
 (defcustom mercit-log-buffer-file-locked t
   "Whether `mercit-log-buffer-file-quick' uses a dedicated buffer."
-  :package-version '(mercit . "2.7.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :group 'mercit-log
   :type 'boolean)
@@ -211,7 +211,7 @@ because the latter may make use of Imenu's outdated cache."
 The message can be shown in the `echo-area' or the `header-line', or in
 `both' places.  If the value isn't one of these symbols, then it should
 be nil, in which case no usage information is shown."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type '(choice (const :tag "in echo-area" echo-area)
                  (const :tag "in header-line" header-line)
@@ -240,7 +240,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :group 'mercit-margin
   :type mercit-log-margin--custom-type
@@ -254,7 +254,7 @@ AUTHOR-WIDTH has to be an integer.  When the name of the author
   '(mercit-insert-cherry-headers
     mercit-insert-cherry-commits)
   "Hook run to insert sections into the cherry buffer."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type 'hook)
 
@@ -280,7 +280,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :group 'mercit-margin
   :type mercit-log-margin--custom-type
@@ -295,7 +295,7 @@ AUTHOR-WIDTH has to be an integer.  When the name of the author
 How many recent commits `mercit-insert-recent-commits' and
 `mercit-insert-unpulled-from-upstream-or-recent' (provided
 the upstream isn't ahead of the current branch) show."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'number)
 
@@ -303,7 +303,7 @@ the upstream isn't ahead of the current branch) show."
   "How many surrounding commits to show for `mercit-log-merged'.
 `mercit-log-merged' will shows approximately half of this number
 commits before and half after."
-  :package-version '(mercit . "3.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :type 'integer)
 

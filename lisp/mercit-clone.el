@@ -30,7 +30,7 @@
 
 (defcustom mercit-clone-set-remote-head nil
   "Whether cloning creates the symbolic-ref `<remote>/HEAD'."
-  :package-version '(mercit . "2.4.2")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -39,7 +39,7 @@
 
 If t, then set without asking.  If nil, then don't set.  If
 `ask', then ask."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (const :tag "set" t)
                  (const :tag "ask" ask)
@@ -50,7 +50,7 @@ If t, then set without asking.  If nil, then don't set.  If
 If nil (the default), then use the value of `default-directory'.
 If a directory, then use that.  If a function, then call that
 with the remote url as only argument and use the returned value."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (const     :tag "value of default-directory")
                  (directory :tag "constant directory")
@@ -61,7 +61,7 @@ with the remote url as only argument and use the returned value."
 If nil, then a prefix argument has to be used to show the transient
 popup instead of invoking the default suffix `mercit-clone-regular'
 directly."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -85,7 +85,7 @@ default user specified in the matched entry is used.
 If USER contains a dot, then it is treated as a Mercurial variable and
 the value of that is used as the username.  Otherwise it is used
 as the username itself."
-  :package-version '(mercit . "3.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat (list regexp
                        (string :tag "Hostname")
@@ -103,7 +103,7 @@ The value can be a string (representing a single static format)
 or an alist with elements (HOSTNAME . FORMAT) mapping hostnames
 to formats.  When an alist is used, the t key represents the
 default.  Also see `mercit-clone-name-alist'."
-  :package-version '(mercit . "3.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (string :tag "Format")
                  (alist :key-type (choice (string :tag "Host")

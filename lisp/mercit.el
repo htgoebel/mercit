@@ -73,7 +73,7 @@ If the specified primary key has signing capacity then it is used
 as the value of the `--gpg-sign' argument without prompting, even
 when other such keys exist.  To be able to select another key you
 must then use a prefix argument."
-  :package-version '(mercit . "3.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'string)
 
@@ -282,7 +282,7 @@ but the \"C-c <letter>\" namespace is strictly reserved for
 users; preventing Mercit from using it by default.
 
 Also see info node `(mercit)Commands for Buffers Visiting Files'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-essentials
   :type 'boolean)
 
@@ -391,7 +391,7 @@ Also see info node `(mercit)Commands for Buffers Visiting Files'."
   "Whether to show the working directory when reading a command.
 This affects `mercit-git-command', `mercit-git-command-topdir',
 `mercit-shell-command', and `mercit-shell-command-topdir'."
-  :package-version '(mercit . "2.11.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 

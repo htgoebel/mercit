@@ -45,7 +45,7 @@ repositories.  If it is 0, then only add DIRECTORY itself.
 This option controls which repositories are being listed by
 `mercit-list-repositories'.  It also affects `mercit-status'
 \(which see) in potentially surprising ways."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-essentials
   :type '(repeat (cons directory (integer :tag "Depth"))))
 
@@ -56,7 +56,7 @@ This option controls which repositories are being listed by
 
 (defcustom mercit-repolist-mode-hook '(hl-line-mode)
   "Hook run after entering Mercit-Repolist mode."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type 'hook
   :get #'mercit-hook-custom-get
@@ -99,7 +99,7 @@ character per column and without any padding between columns, in
 which case you should use an appropriat HEADER, set WIDTH to 1,
 and set `:pad-right' to 0.  \"+\" is substituted for numbers higher
 than 9."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type '(repeat (list :tag "Column"
                        (string   :tag "Header Label")
@@ -124,7 +124,7 @@ called with no arguments, with `default-directory' bound to the
 top level of a repository working tree, until one of them returns
 a non-nil value.  FLAG corresponding to that function is returned
 as the value of `mercit-repolist-column-flag'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type '(alist :key-type (function :tag "Predicate Function")
                 :value-type (string :tag "Flag")))
@@ -135,7 +135,7 @@ If nil, no additional sorting is performed.  Otherwise, this
 should be a cons cell (NAME . FLIP).  NAME is a string matching
 one of the column names in `mercit-repolist-columns'.  FLIP, if
 non-nil, means to invert the resulting sort."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type '(choice (const nil)
                  (cons (string :tag "Column name")

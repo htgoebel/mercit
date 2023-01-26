@@ -132,7 +132,7 @@ The value has the form ((COMMAND nil|PROMPT DEFAULT)...).
   without confirmation.  If it is `ask', then the user is given
   a chance to abort.  DEFAULT can also be nil, in which case the
   entry has no effect."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat
           (list (symbol :tag "Command") ; It might not be fboundp yet.
@@ -333,7 +333,7 @@ Global settings:
   `stage-all-changes', and `unstage-all-changes'.  If and only if
   this mode is enabled, then `safe-with-wip' has the same effect
   as adding all of these symbols individually."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-essentials
   :group 'mercit-commands
   :type `(choice (const :tag "Always require confirmation" nil)
@@ -353,7 +353,7 @@ confirm a potentially destructive action.  When this is t, then
 identifying actions, then `yes-or-no-p' is used for those,
 `y-or-no-p' for all others.  The list of actions is the same as
 for `mercit-no-confirm' (which see)."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type `(choice (const :tag "Always ask \"yes or no\" questions" t)
                  (const :tag "Always ask \"y or n\" questions" nil)
@@ -379,7 +379,7 @@ some of these messages useless.
 
 Messages which can currently be suppressed using this option are:
 * \"Turning on mercit-auto-revert-mode...\""
-  :package-version '(mercit . "2.8.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type '(repeat string))
 
@@ -395,7 +395,7 @@ as well, but not the following:
 
 - Whether collapsed sections are indicated using ellipsis is
   controlled by `mercit-section-visibility-indicator'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type 'string)
 
@@ -413,7 +413,7 @@ To prevent that, updating the revision buffer is delayed, and
 this option controls for how long.  For optimal experience you
 might have to adjust this delay and/or the keyboard repeat rate
 and delay of your graphical environment or operating system."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type 'number)
 
@@ -428,7 +428,7 @@ and delay of your graphical environment or operating system."
 `man'   View the respective man-page using the `man' package.
 
 `woman' View the respective man-page using the `woman' package."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type '(choice (const :tag "view info manual" info)
                  (const :tag "view manpage using `man'" man)

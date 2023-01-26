@@ -119,7 +119,7 @@ part of the default value:
    (margin-width     . 42)
    (margin-face      . mercit-blame-margin)
    (margin-body-face . (mercit-blame-dimmed)))"
-  :package-version '(mercit . "2.13.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-blame
   :type 'string)
 
@@ -127,7 +127,7 @@ part of the default value:
   "The blame visualization style used by `mercit-blame-echo'.
 A symbol that has to be used as the identifier for one of the
 styles defined in `mercit-blame-styles'."
-  :package-version '(mercit . "2.13.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-blame
   :type 'symbol)
 
@@ -138,7 +138,7 @@ styles defined in `mercit-blame-styles'."
 
 (defcustom mercit-blame-read-only t
   "Whether to initially make the blamed buffer read-only."
-  :package-version '(mercit . "2.13.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-blame
   :type 'boolean)
 
@@ -158,7 +158,7 @@ and then turned on again when turning off the latter."
   '(mercit-blame-maybe-update-revision-buffer
     mercit-blame-maybe-show-message)
   "Hook run after point entered another chunk."
-  :package-version '(mercit . "2.13.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-blame
   :type 'hook
   :get #'mercit-hook-custom-get

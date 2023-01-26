@@ -61,7 +61,7 @@ You should absolutely not disable this and also remove `discard'
 from `mercit-no-confirm'.  You shouldn't do that even if you have
 all of the Mercit-Wip modes enabled, because those modes do not
 track any files that are not tracked in the proper branch."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-essentials
   :type 'boolean)
 
@@ -77,7 +77,7 @@ If this option is non-nil (the default), then typing \"u\"
 \(`mercit-unstage') on a committed change, causes it to be
 reversed in the index but not the working tree.  For more
 information see command `mercit-reverse-in-index'."
-  :package-version '(mercit . "2.4.1")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -89,7 +89,7 @@ is reversed if the value of this option is non-nil.  But when it
 is nil, then the changes that can be reversed are reversed and
 for the other changes diff files are created that contain the
 rejected reversals."
-  :package-version '(mercit . "2.7.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -97,7 +97,7 @@ rejected reversals."
   "Hook run after staging changes.
 This hook is run by `mercit-refresh' if `this-command'
 is a member of `mercit-post-stage-hook-commands'."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'hook)
 
@@ -105,7 +105,7 @@ is a member of `mercit-post-stage-hook-commands'."
   "Hook run after unstaging changes.
 This hook is run by `mercit-refresh' if `this-command'
 is a member of `mercit-post-unstage-hook-commands'."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'hook)
 

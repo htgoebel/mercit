@@ -30,7 +30,7 @@
 
 (defcustom mercit-pull-or-fetch nil
   "Whether `mercit-pull' also offers some fetch suffixes."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 

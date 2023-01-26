@@ -36,7 +36,7 @@ shown in the current buffer in a patch file.  It may use the
 same arguments as used in the buffer or a subset thereof, or
 a constant list of arguments, depending on this option and
 the prefix argument."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type '(choice (const :tag "use buffer arguments" buffer)
                  (cons :tag "use buffer arguments except"

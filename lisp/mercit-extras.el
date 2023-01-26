@@ -515,7 +515,7 @@ use `mercit-rebase-edit-command' instead of this command."
 (defcustom mercit-reshelve-since-committer-only nil
   "Whether `mercit-reshelve-since' changes only the committer dates.
 Otherwise the author dates are also changed."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -643,7 +643,7 @@ The expansion of POINT-FORMAT is inserted at point, and the
 expansion of EOB-FORMAT is inserted at the end of the buffer (if
 the buffer ends with a comment, then it is inserted right before
 that)."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(list (choice (string :tag "Insert at point format")
                        (cons (string :tag "Insert at point format")
@@ -658,7 +658,7 @@ that)."
 
 (defcustom mercit-copy-revision-abbreviated nil
   "Whether to save abbreviated revision to `kill-ring' and `mercit-revision-stack'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type 'boolean)
 

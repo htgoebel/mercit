@@ -47,7 +47,7 @@ The hooks are run in the Ediff control buffer.  This is similar
 to `ediff-quit-hook' but takes the needs of Mercit into account.
 The `ediff-quit-hook' is ignored by Ediff sessions which were
 invoked using Mercit."
-  :package-version '(mercit . "2.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-ediff
   :type 'hook
   :get #'mercit-hook-custom-get
@@ -56,7 +56,7 @@ invoked using Mercit."
 
 (defcustom mercit-ediff-dwim-resolve-function #'mercit-ediff-resolve-rest
   "The function `mercit-ediff-dwim' uses to resolve conflicts."
-  :package-version '(mercit . "3.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-ediff
   :type '(choice (const mercit-ediff-resolve-rest)
                  (const mercit-ediff-resolve-all)
@@ -68,7 +68,7 @@ If non-nil, `mercit-ediff-show-staged' or
 `mercit-ediff-show-unstaged' are called based on what section the
 hunk is in.  Otherwise, `mercit-ediff-dwim' runs
 `mercit-ediff-stage' when point is on an uncommitted hunk."
-  :package-version '(mercit . "2.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-ediff
   :type 'boolean)
 
@@ -100,7 +100,7 @@ stash@{N}^1..stash@{N}.  Along with any unstaged changes, changes
 in the index commit, stash@{N}^2, will be shown in this
 comparison unless they conflicted with changes in the working
 tree at the time of stashing."
-  :package-version '(mercit . "2.6.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-ediff
   :type 'boolean)
 

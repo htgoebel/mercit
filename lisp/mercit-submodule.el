@@ -37,7 +37,7 @@
 That function isn't part of `mercit-status-sections-hook's default
 value, so you have to add it yourself for this hook to have any
 effect."
-  :package-version '(mercit . "2.11.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'hook)
 
@@ -47,13 +47,13 @@ effect."
 If this is non-nil, then only a single top-level section
 is inserted.  If it is nil, then all sections listed in
 `mercit-module-sections-hook' become top-level sections."
-  :package-version '(mercit . "2.11.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'boolean)
 
 (defcustom mercit-submodule-list-mode-hook '(hl-line-mode)
   "Hook run after entering Mercit-Submodule-List mode."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type 'hook
   :get 'mercit-hook-custom-get
@@ -106,7 +106,7 @@ character per column and without any padding between columns, in
 which case you should use an appropriat HEADER, set WIDTH to 1,
 and set `:pad-right' to 0.  \"+\" is substituted for numbers higher
 than 9."
-  :package-version '(mercit . "2.8.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type `(repeat (list :tag "Column"
                        (string   :tag "Header Label")
@@ -126,7 +126,7 @@ If nil, no additional sorting is performed.  Otherwise, this
 should be a cons cell (NAME . FLIP).  NAME is a string matching
 one of the column names in `mercit-submodule-list-columns'.  FLIP,
 if non-nil, means to invert the resulting sort."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-repolist
   :type '(choice (const nil)
                  (cons (string :tag "Column name")
@@ -144,7 +144,7 @@ do so even without a prefix argument.
 In both cases the action still has to be confirmed unless that is
 disabled using the option `mercit-no-confirm'.  Doing the latter
 and also setting this variable to t will lead to tears."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 

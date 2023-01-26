@@ -52,7 +52,7 @@ doesn't do that for them, should likely not use any filter.
 Users who turn on `global-auto-revert-mode', do not have to worry
 about this option, because it is disregarded if the global mode
 is enabled."
-  :package-version '(mercit . "2.4.2")
+  :package-version '(mercit . "0.0.0")
   :group 'auto-revert
   :group 'mercit-auto-revert
   :group 'mercit-related
@@ -63,7 +63,7 @@ is enabled."
 
 (defcustom mercit-auto-revert-tracked-only t
   "Whether `mercit-auto-revert-mode' only reverts tracked files."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-auto-revert
   :type 'boolean
   :set (lambda (var val)
@@ -89,7 +89,7 @@ immediately anyway.
 If `mercit-auto-revert-immediately' and `auto-revert-use-notify'
 are both nil, then reverts happen after `auto-revert-interval'
 seconds of user inactivity.  That is not desirable."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-auto-revert
   :type 'boolean)
 
@@ -113,7 +113,7 @@ seconds of user inactivity.  That is not desirable."
 ;;;###autoload
 (define-globalized-minor-mode mercit-auto-revert-mode auto-revert-mode
   mercit-turn-on-auto-revert-mode-if-desired
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :link '(info-link "(mercit)Automatic Reverting of File-Visiting Buffers")
   :group 'mercit-auto-revert
   :group 'mercit-essentials

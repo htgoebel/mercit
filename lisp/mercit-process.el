@@ -65,7 +65,7 @@ If non-nil, add environment variables to `process-environment' to
 prevent the git.exe distributed by Cygwin and MSYS2 from
 attempting to perform glob expansion when called from a native
 Windows build of Emacs.  See #2246."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(choice (const :tag "Yes" t)
                  (const :tag "No" nil)))
@@ -83,7 +83,7 @@ When adding a new section would go beyond the limit set here,
 then the older half of the sections are remove.  Sections that
 belong to processes that are still running are never removed.
 When this is nil, no sections are ever removed."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(choice (const :tag "Never remove old sections" nil) integer))
 
@@ -104,7 +104,7 @@ These are displayed in a tooltip for `mode-line-process' errors.
 
 If `mercit-process-error-tooltip-max-lines' is nil, the tooltip
 displays the text of `mercit-process-error-summary' instead."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(choice (const :tag "Use summary line" nil)
                  integer))
@@ -142,7 +142,7 @@ of the hook variable `mercit-credential-hook' for this to work.
 If an error occurs while starting the daemon, most likely because
 the necessary executable is missing, then the function removes
 itself from the hook, to avoid further futile attempts."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(choice (file  :tag "Socket")
                  (const :tag "Don't start a cache daemon" nil)))
@@ -156,7 +156,7 @@ itself from the hook, to avoid further futile attempts."
           "\\(?:/\\[fingerprint\\]\\)?"
           "[\])] ?[?:]? ?$")
   "Regexp matching Yes-or-No prompts of Mercurial and its subprocesses."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'regexp)
 
@@ -172,7 +172,7 @@ itself from the hook, to avoid further futile attempts."
     "^Enter PIN for .*: ?$")
   "List of regexps matching password prompts of Mercurial and its subprocesses.
 Also see `mercit-process-find-password-functions'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(repeat (regexp)))
 
@@ -190,7 +190,7 @@ If the functions are called, then they are called in the order
 given, with the host name as only argument, until one of them
 returns non-nil.  If they are not called or none of them returns
 non-nil, then the password is read from the user instead."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'hook
   :options '(mercit-process-password-auth-source))
@@ -198,7 +198,7 @@ non-nil, then the password is read from the user instead."
 (defcustom mercit-process-username-prompt-regexps
   '("^Username for '.*': ?$")
   "List of regexps matching username prompts of Mercurial and its subprocesses."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(repeat (regexp)))
 
@@ -227,19 +227,19 @@ While functions such as `mercit-process-yes-or-no-prompt' may not
 be sufficient to handle some prompt, it may still be of benefit
 to look at the implementations to gain some insights on how to
 implement such functions."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'hook)
 
 (defcustom mercit-process-ensure-unix-line-ending t
   "Whether Mercit should ensure a unix coding system when talking to Mercurial."
-  :package-version '(mercit . "2.6.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'boolean)
 
 (defcustom mercit-process-display-mode-line-error t
   "Whether Mercit should retain and highlight process errors in the mode line."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'boolean)
 

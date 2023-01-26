@@ -33,7 +33,7 @@
 
 (defcustom mercit-commit-ask-to-stage 'verbose
   "Whether to ask to stage everything when committing and nothing is staged."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (const :tag "Ask" t)
                  (const :tag "Ask showing diff" verbose)
@@ -42,19 +42,19 @@
 
 (defcustom mercit-commit-show-diff t
   "Whether the relevant diff is automatically shown when committing."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
 (defcustom mercit-commit-extend-override-date t
   "Whether using `mercit-commit-extend' changes the committer date."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
 (defcustom mercit-commit-reword-override-date t
   "Whether using `mercit-commit-reword' changes the committer date."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -65,7 +65,7 @@ choice, otherwise it has to be confirmed.  This option only
 affects `mercit-commit-squash' and `mercit-commit-fixup'.  The
 \"instant\" variants always require confirmation because making
 an error while using those is harder to recover from."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -79,7 +79,7 @@ the commit message in a buffer and then finishes by pressing
 \\<with-editor-mode-map>\\[with-editor-finish].
 
 Also see `git-commit-post-finish-hook'."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'hook)
 
@@ -107,7 +107,7 @@ is too tiny or the relevant settings too aggressive, then the
 diff buffer would end up being displayed in a new frame.
 
 Also see https://github.com/mercit/mercit/issues/4132."
-  :package-version '(mercit . "3.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 

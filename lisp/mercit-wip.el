@@ -45,31 +45,31 @@
 
 (defcustom mercit-wip-mode-lighter " Wip"
   "Lighter for Mercit-Wip mode."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :type 'string)
 
 (defcustom mercit-wip-after-save-local-mode-lighter ""
   "Lighter for Mercit-Wip-After-Save-Local mode."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-after-apply-mode-lighter ""
   "Lighter for Mercit-Wip-After-Apply mode."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-before-change-mode-lighter ""
   "Lighter for Mercit-Wip-Before-Change mode."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
 (defcustom mercit-wip-initial-backup-mode-lighter ""
   "Lighter for Mercit-Wip-Initial Backup mode."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip-legacy
   :type 'string)
 
@@ -85,7 +85,7 @@ If nil and the current branch has new commits, then the wip ref
 is reset to the tip of the branch before creating a new wip
 commit.  With this setting wip commits are eventually garbage
 collected.  This is currently the default."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :type 'boolean)
 
@@ -95,7 +95,7 @@ The wip refs are named \"<namespace/>index/<branchref>\"
 and \"<namespace/>wtree/<branchref>\".  When snapshots
 are created while the `HEAD' is detached then \"HEAD\"
 is used as `branch-ref'."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :type 'string)
 
@@ -113,7 +113,7 @@ For historic reasons this mode is implemented on top of four
 other `mercit-wip-*' modes, which can also be used individually,
 if you want finer control over when the wip refs are updated;
 but that is discouraged."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :lighter mercit-wip-mode-lighter
   :global t
   (let ((arg (if mercit-wip-mode 1 -1)))
@@ -131,7 +131,7 @@ the current branch.
 
 This mode should be enabled globally by turning on the globalized
 variant `mercit-wip-after-save-mode'."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :lighter mercit-wip-after-save-local-mode-lighter
   (if mercit-wip-after-save-local-mode
       (if (and buffer-file-name (mercit-inside-worktree-p t))
@@ -149,7 +149,7 @@ variant `mercit-wip-after-save-mode'."
 ;;;###autoload
 (define-globalized-minor-mode mercit-wip-after-save-mode
   mercit-wip-after-save-local-mode mercit-wip-after-save-local-mode-turn-on
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip)
 
 (defun mercit-wip-commit-buffer-file (&optional msg)
@@ -180,7 +180,7 @@ affected files to the current wip refs.  For each branch there
 may be two wip refs; one contains snapshots of the files as found
 in the worktree and the other contains snapshots of the entries
 in the index."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :lighter mercit-wip-after-apply-mode-lighter
   :global t)
@@ -202,7 +202,7 @@ entries in the index.
 
 Only changes to files which could potentially be affected by the
 command which is about to be called are committed."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :lighter mercit-wip-before-change-mode-lighter
   :global t)
@@ -214,7 +214,7 @@ command which is about to be called are committed."
 
 (define-minor-mode mercit-wip-initial-backup-mode
   "Before saving a buffer for the first time, commit to a wip ref."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-wip
   :lighter mercit-wip-initial-backup-mode-lighter
   :global t

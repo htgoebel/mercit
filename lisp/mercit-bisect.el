@@ -30,7 +30,7 @@
 
 (defcustom mercit-bisect-show-graph t
   "Whether to use `--graph' in the log showing commits yet to be bisected."
-  :package-version '(mercit . "2.8.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-status
   :type 'boolean)
 

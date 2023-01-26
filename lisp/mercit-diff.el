@@ -105,7 +105,7 @@
   '(mercit-insert-diff
     mercit-insert-xref-buttons)
   "Hook run to insert sections into a `mercit-diff-mode' buffer."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'hook)
 
@@ -123,7 +123,7 @@ to be collapsed.  So you should not pick a very low value here.
 The hook function `mercit-diff-expansion-threshold' has to be a
 member of `mercit-section-set-visibility-hook' for this option
 to have any effect."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'float)
 
@@ -131,7 +131,7 @@ to have any effect."
   "Whether to highlight bodies of selected hunk sections.
 This only has an effect if `mercit-diff-highlight' is a
 member of `mercit-section-highlight-hook', which see."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 
@@ -159,7 +159,7 @@ itself, using `mercit-diff-highlight-hunk-region-using-face'.
 In terminal frames it's not possible to draw lines as the overlay
 and underline variants normally do, so there they fall back to
 calling the face function instead."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :set-after '(mercit-diff-show-lines-boundaries)
   :group 'mercit-diff
   :type 'hook
@@ -173,7 +173,7 @@ calling the face function instead."
 When this is set to nil, then that function only adjusts the
 foreground color but added and removed lines outside the region
 keep their distinct foreground colors."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 
@@ -191,7 +191,7 @@ t      Show fine differences for the current diff hunk only.
 
 (defcustom mercit-diff-refine-ignore-whitespace smerge-refine-ignore-whitespace
   "Whether to ignore whitespace changes in word-granularity differences."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :set-after '(smerge-refine-ignore-whitespace)
   :group 'mercit-diff
   :safe 'booleanp
@@ -220,7 +220,7 @@ t         If the corresponding file-visiting buffer exits, then
 
 NUMBER    Like `always', but don't visit files larger than NUMBER
           bytes."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type '(choice (const   :tag "Never" nil)
                  (const   :tag "If file-visiting buffer exists" t)
@@ -256,7 +256,7 @@ whitespace errors are highlighted."
 t         Highlight only in added lines.
 `both'    Highlight in added and removed lines.
 `all'     Highlight in added, removed and context lines."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :safe (lambda (val) (memq val '(t both all)))
   :type '(choice (const :tag "in added lines" t)
@@ -291,13 +291,13 @@ that many spaces.  Otherwise, highlight neither."
 (defcustom mercit-diff-hide-trailing-cr-characters
   (and (memq system-type '(ms-dos windows-nt)) t)
   "Whether to hide ^M characters at the end of a line in diffs."
-  :package-version '(mercit . "2.6.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 
 (defcustom mercit-diff-highlight-keywords t
   "Whether to highlight bracketed keywords in commit messages."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 
@@ -308,7 +308,7 @@ A list of zero or more arguments or a function that takes no
 argument and returns such a list.  These arguments are allowed
 here: `--stat-width', `--stat-name-width', `--stat-graph-width'
 and `--compact-summary'.  See the git-diff(1) manpage."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type '(radio (function-item mercit-diff-use-window-width-as-stat-width)
                 function
@@ -319,7 +319,7 @@ and `--compact-summary'.  See the git-diff(1) manpage."
 
 (defcustom mercit-diff-buffer-file-locked t
   "Whether `mercit-diff-buffer-file' uses a dedicated buffer."
-  :package-version '(mercit . "2.7.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :group 'mercit-diff
   :type 'boolean)
@@ -348,7 +348,7 @@ and `--compact-summary'.  See the git-diff(1) manpage."
     mercit-insert-revision-diff
     mercit-insert-xref-buttons)
   "Hook run to insert sections into a `mercit-revision-mode' buffer."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type 'hook)
 
@@ -365,7 +365,7 @@ inserter `mercit-insert-revision-headers'.  Some of the headers
 are created by calling `git show --format=FORMAT' where FORMAT
 is the format specified here.  Other headers are hard coded or
 subject to option `mercit-revision-insert-related-refs'."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type 'string)
 
@@ -376,7 +376,7 @@ subject to option `mercit-revision-insert-related-refs'."
 `t'     Show related local branches.
 `all'   Show related local and remote branches.
 `mixed' Show all containing branches and local merged branches."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type '(choice (const :tag "don't" nil)
                  (const :tag "local only" t)
@@ -399,7 +399,7 @@ performance and reliability:
 
 If nil, then no hashes are turned into sections, but you can
 still visit the commit at point using \"RET\"."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type '(choice (const :tag "Use sections, quickest" quickest)
                  (const :tag "Use sections, quicker" quicker)
@@ -422,7 +422,7 @@ author's image.  The top half of the image is inserted right
 after the matched text, the bottom half on the next line in the
 same column.  The cdr specifies where to insert the committer's
 image, accordingly.  Either the car or the cdr may be nil."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type '(choice (const :tag "Don't show gravatars" nil)
                  (const :tag "Show gravatars" t)
@@ -447,7 +447,7 @@ and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=7847.
 
 Starting with Emacs 26.1 this kludge should not be required for
 any build."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type 'boolean)
 
@@ -464,7 +464,7 @@ The body of the message is left alone because (a) most people who
 write excessively long summary lines usually don't add a body and
 (b) even people who have the decency to wrap their lines may have
 a good reason to include a long line in the body sometimes."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type '(choice (const   :tag "Don't fill" nil)
                  (integer :tag "Fill if longer than")))
@@ -483,7 +483,7 @@ for commits before the rename event.
 When this option is nil, the revision buffer ignores the log's
 filter if the log arguments include --follow.  If non-nil, the
 log's file filter is always honored."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-revision
   :type 'boolean)
 
@@ -499,7 +499,7 @@ from the last revision which still had that line.
 Currently this is only supported for committed changes, for
 staged and unstaged changes `mercit-diff-visit-file' always
 visits the file in the working tree."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 
@@ -519,7 +519,7 @@ Previously this function used to visit the worktree file not
 only for added lines but also for such removed lines.
 
 If you prefer the old behaviors, then set this to t."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-diff
   :type 'boolean)
 

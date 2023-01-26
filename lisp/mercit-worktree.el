@@ -33,7 +33,7 @@
 This is called with one argument, the prompt, and can be used
 to e.g. use a base directory other than `default-directory'.
 Used by `mercit-worktree-checkout' and `mercit-worktree-branch'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'function)
 

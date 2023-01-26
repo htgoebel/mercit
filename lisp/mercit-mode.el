@@ -38,7 +38,7 @@
 (defcustom mercit-mode-hook
   '(mercit-load-config-extensions)
   "Hook run when entering a mode derived from Mercit mode."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-modes
   :type 'hook
   :options '(mercit-load-config-extensions
@@ -54,7 +54,7 @@ generating or updating its content.  `mercit-mode-hook' and other,
 more specific, `mercit-mode-*-hook's on the other hand are run
 right before displaying the buffer.  Usually one of these hooks
 should be used instead of this one."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-modes
   :type 'hook
   :options '(mercit-maybe-save-repository-buffers
@@ -69,7 +69,7 @@ for functions that are not tied to a particular buffer.
 To run a function with a particular buffer current, use
 `mercit-refresh-buffer-hook' and use `derived-mode-p'
 inside your function."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'hook
   :options '(mercit-maybe-save-repository-buffers))
@@ -87,7 +87,7 @@ for functions that are not tied to a particular buffer.
 To run a function with a particular buffer current, use
 `mercit-refresh-buffer-hook' and use `derived-mode-p'
 inside your function."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'hook
   :options '(mercit-auto-revert-buffers
@@ -101,7 +101,7 @@ inside your function."
 All Mercit buffers (buffers whose major-modes derive from
 `mercit-mode') are displayed using `mercit-display-buffer',
 which in turn uses the function specified here."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type '(radio (function-item mercit-display-buffer-traditional)
                 (function-item mercit-display-buffer-same-window-except-diff-v1)
@@ -113,7 +113,7 @@ which in turn uses the function specified here."
 
 (defcustom mercit-pre-display-buffer-hook '(mercit-save-window-configuration)
   "Hook run by `mercit-display-buffer' before displaying the buffer."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type 'hook
   :get #'mercit-hook-custom-get
@@ -121,7 +121,7 @@ which in turn uses the function specified here."
 
 (defcustom mercit-post-display-buffer-hook '(mercit-maybe-set-dedicated)
   "Hook run by `mercit-display-buffer' after displaying the buffer."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type 'hook
   :get #'mercit-hook-custom-get
@@ -130,7 +130,7 @@ which in turn uses the function specified here."
 (defcustom mercit-generate-buffer-name-function
   #'mercit-generate-buffer-name-default-function
   "The function used to generate the name for a Mercit buffer."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type '(radio (function-item mercit-generate-buffer-name-default-function)
                 (function :tag "Function")))
@@ -173,19 +173,19 @@ This is used by `mercit-generate-buffer-name-default-function'.
 If another `mercit-generate-buffer-name-function' is used, then
 it may not respect this option, or on the contrary it may
 support additional %-sequences."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type 'string)
 
 (defcustom mercit-uniquify-buffer-names t
   "Whether to uniquify the names of Mercit buffers."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type 'boolean)
 
 (defcustom mercit-bury-buffer-function #'mercit-mode-quit-window
   "The function used to bury or kill the current Mercit buffer."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :type '(radio (function-item quit-window)
                 (function-item mercit-mode-quit-window)
@@ -213,7 +213,7 @@ Valid values are:
 
 For more information see info node `(mercit)Transient Arguments
 and Buffer Variables'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :group 'mercit-commands
   :group 'mercit-diff
@@ -246,7 +246,7 @@ Valid values are:
 
 For more information see info node `(mercit)Transient Arguments
 and Buffer Variables'."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-buffers
   :group 'mercit-commands
   :group 'mercit-diff
@@ -263,20 +263,20 @@ and Buffer Variables'."
 Each function is run with the current section as only argument
 until one of them returns non-nil.  If all functions return nil,
 then fall back to regular region highlighting."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'hook
   :options '(mercit-diff-update-hunk-region))
 
 (defcustom mercit-create-buffer-hook nil
   "Normal hook run after creating a new `mercit-mode' buffer."
-  :package-version '(mercit . "2.90.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'hook)
 
 (defcustom mercit-refresh-buffer-hook nil
   "Normal hook for `mercit-refresh-buffer' to run after refreshing."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'hook)
 
@@ -289,14 +289,14 @@ current Mercit buffer, which is always refreshed automatically.
 
 Only set this to nil after exhausting all other options to
 improve performance."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :group 'mercit-status
   :type 'boolean)
 
 (defcustom mercit-refresh-verbose nil
   "Whether to revert Mercit buffers verbosely."
-  :package-version '(mercit . "2.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-refresh
   :type 'boolean)
 

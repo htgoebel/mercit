@@ -111,7 +111,7 @@ Use the function by the same name instead of this variable.")
 If non-nil, the Git config value `i18n.logOutputEncoding' should
 be set via `mercit-git-global-arguments' to value consistent with
 this."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(choice (coding-system :tag "Coding system to decode Mercurial output")
                  (const :tag "Use system default" nil)))
@@ -157,7 +157,7 @@ successfully.")
       "hg")
   "The Mercurial executable used by Mercit on the local host.
 On remote machines `mercit-remote-git-executable' is used instead."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'string)
 
@@ -166,7 +166,7 @@ On remote machines `mercit-remote-git-executable' is used instead."
 On the local host `mercit-git-executable' is used instead.
 Consider customizing `tramp-remote-path' instead of this
 option."
-  :package-version '(mercit . "3.2.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type 'string)
 
@@ -192,7 +192,7 @@ anything that is part of the default value, unless you really
 know what you are doing.  And think very hard before adding
 something; it will be used every time Mercit runs Mercurial for any
 purpose."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :group 'mercit-process
   :type '(repeat string))
@@ -207,7 +207,7 @@ branch as default completion candidate, when they have the choice.
 This affects all commands that use `mercit-read-upstream-branch'
 or `mercit-read-starting-point', which includes most commands
 that change the upstream and many that create new branches."
-  :package-version '(mercit . "2.4.2")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
@@ -221,7 +221,7 @@ that change the upstream and many that create new branches."
 This controls the order of refs returned by `mercit-list-refs',
 which is called by functions like `mercit-list-branch-names' to
 generate the collection of refs."
-  :package-version '(mercit . "3.1.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(repeat string))
 
@@ -246,7 +246,7 @@ displayed.  It only controls the order of the collection passed
 to `mercit-completing-read' or, for commands that support reading
 multiple strings, `read-from-minibuffer'.  The completion
 framework ultimately determines how the collection is displayed."
-  :package-version '(mercit . "2.11.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-miscellaneous
   :type '(choice string (repeat string)))
 
@@ -1170,7 +1170,7 @@ or if no rename is detected."
              #'> :key (pcase-lambda (`(,cyg . ,_win)) (length cyg))))
   "Alist of (CYGWIN . WIN32) directory names.
 Sorted from longest to shortest CYGWIN name."
-  :package-version '(mercit . "2.3.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-process
   :type '(alist :key-type string :value-type directory))
 

@@ -33,7 +33,7 @@
   "Maximal number of entries initially shown in reflog buffers.
 The limit in the current buffer can be changed using \"+\"
 and \"-\"."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'number)
 
@@ -59,7 +59,7 @@ AUTHOR controls whether the name of the author is also shown by
   default.
 AUTHOR-WIDTH has to be an integer.  When the name of the author
   is shown, then this specifies how much space is used to do so."
-  :package-version '(mercit . "2.9.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-log
   :group 'mercit-margin
   :type mercit-log-margin--custom-type

@@ -36,7 +36,7 @@ if the variable isn't set already.  If nil, then don't ever set.
 If the value is a string, then set without asking, provided that
 the name of the added remote is equal to that string and the
 variable isn't already set."
-  :package-version '(mercit . "2.4.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type '(choice (const  :tag "ask if unset" ask-if-unset)
                  (const  :tag "always ask" ask)
@@ -48,13 +48,13 @@ variable isn't already set."
 When set to nil, no variables are displayed by this transient
 command, instead the sub-transient `mercit-remote-configure'
 has to be used to view and change remote related variables."
-  :package-version '(mercit . "2.12.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 
 (defcustom mercit-prefer-push-default nil
   "Whether to prefer `remote.pushDefault' over per-branch variables."
-  :package-version '(mercit . "3.0.0")
+  :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)
 

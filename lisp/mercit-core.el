@@ -47,7 +47,7 @@
 
 (defgroup mercit nil
   "Controlling Mercurial from Emacs."
-  :link '(url-link "https://mercit.vc")
+  :link '(url-link "https://github.com/htgoebel/mercit")
   :link '(info-link "(mercit)FAQ")
   :link '(info-link "(mercit)")
   :group 'tools)

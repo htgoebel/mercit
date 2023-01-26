@@ -3,7 +3,7 @@
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
 
-;; Homepage: https://github.com/mercit/mercit
+;; Homepage: https://github.com/htgoebel/mercit
 ;; Keywords: git tools vc
 
 ;; Package-Version: 3.3.0.50-git
@@ -29,7 +29,8 @@
 ;; along with Mercit.  If not, see <https://www.gnu.org/licenses/>.
 
 ;; You should have received a copy of the AUTHORS.md file, which
-;; lists all contributors.  If not, see https://mercit.vc/authors.
+;; lists all contributors.  If not, see
+;; https://github.com/htgoebel/mercit/docs/AUTHORS.md.
 
 ;;; Commentary:
 

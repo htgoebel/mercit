@@ -1016,7 +1016,7 @@ This function should be named `version>=' and be part of Emacs."
 (defun mercit-file-accessible-directory-p (filename)
   "Like `file-accessible-directory-p' but work around an Apple bug.
 See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=21573#17
-and https://github.com/mercit/mercit/issues/2295."
+and https://github.com/magit/magit/issues/2295."
   (and (file-directory-p filename)
        (file-accessible-directory-p filename)))
 

@@ -75,7 +75,7 @@ does not carry to other options."
   (mercit-set-buffer-margin))
 
 (defvar mercit-margin-default-time-format nil
-  "See https://github.com/mercit/mercit/pull/4605.")
+  "See https://github.com/magit/magit/pull/4605.")
 
 (defun mercit-cycle-margin-style ()
   "Cycle style used for the Mercit margin."

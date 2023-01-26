@@ -150,7 +150,7 @@ This function should not be removed from the value of this option.
 region by placing delimiting horizontal lines before and after it.
 The underline variant was implemented because Eli said that is
 how we should do it.  However the overlay variant actually works
-better.  Also see https://github.com/mercit/mercit/issues/2758.
+better.  Also see https://github.com/magit/magit/issues/2758.
 
 Instead of, or in addition to, using delimiting horizontal lines,
 to emphasize the boundaries, you may wish to emphasize the text
@@ -442,7 +442,7 @@ interchanged.  Enabling this option works around this issue by
 interchanging the halves once more, which cancels out the effect
 of the bug.
 
-See https://github.com/mercit/mercit/issues/2265
+See https://github.com/magit/magit/issues/2265
 and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=7847.
 
 Starting with Emacs 26.1 this kludge should not be required for

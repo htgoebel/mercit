@@ -78,7 +78,7 @@ that for.
 
 * If you add additional arguments and/or actions to Mercit's popups,
   then you have to port that to modify the new \"transients\" instead.
-  See https://github.com/mercit/mercit/wiki/\
+  See https://github.com/magit/magit/wiki/\
 Converting-popup-modifications-to-transient-modifications
 
 To find installed packages that still use `mercit-popup' you can

@@ -106,7 +106,7 @@ because that again causes issues for other users: if the frame
 is too tiny or the relevant settings too aggressive, then the
 diff buffer would end up being displayed in a new frame.
 
-Also see https://github.com/mercit/mercit/issues/4132."
+Also see https://github.com/magit/magit/issues/4132."
   :package-version '(mercit . "0.0.0")
   :group 'mercit-commands
   :type 'boolean)

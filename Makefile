@@ -245,8 +245,8 @@ define set_package_requires_melpa
   '((emacs %S)
     (transient %S)
     (with-editor %S))
-  :homepage \"https://mercit.vc\"
-  :keywords '(\"git\" \"tools\" \"vc\"))
+  :homepage \"https://github.com/htgoebel/mercit\"
+  :keywords '(\"mercurial\" \"hg\" \"tools\" \"vc\"))
 "   emacs-version
     dash-version
     transient-version
@@ -262,8 +262,8 @@ define set_package_requires_melpa
     (mercit-section %S)
     (transient %S)
     (with-editor %S))
-  :homepage \"https://mercit.vc\"
-  :keywords '(\"git\" \"tools\" \"vc\"))
+  :homepage \"https://github.com/htgoebel/mercit\"
+  :keywords '(\"mercurial\" \"hg\" \"tools\" \"vc\"))
 "   emacs-version
     dash-version
     git-commit-version
@@ -278,8 +278,8 @@ define set_package_requires_melpa
   '((emacs %S)
     (libgit %S)
     (mercit %S))
-  :homepage \"https://mercit.vc\"
-  :keywords '(\"git\" \"tools\" \"vc\"))
+  :homepage \"https://github.com/htgoebel/mercit\"
+  :keywords '(\"mercurial\" \"hg\" \"tools\" \"vc\"))
 "   emacs-version
     libgit-version
     mercit-version)))
@@ -290,7 +290,7 @@ define set_package_requires_melpa
   \"Sections for read-only buffers\"
   '((emacs %S)
     (dash %S))
-  :homepage \"https://mercit.vc\"
+  :homepage \"https://github.com/htgoebel/mercit\"
   :keywords '(\"tools\"))
 "   emacs-version
     dash-version)))

@@ -176,7 +176,7 @@ command provides an interface that exposes the underlying terms."
 (defun mercit-bisect-skip ()
   "While bisecting, skip the current commit.
 Use this if for some reason the current commit is not a good one
-to test.  This command lets Git choose a different one."
+to test.  This command lets Mercurial choose a different one."
   (interactive)
   (mercit-git-bisect "skip"))
 

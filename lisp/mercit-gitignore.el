@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; This library implements gitignore commands.
+;; This library implements hgignore commands.
 
 ;;; Code:
 
@@ -30,7 +30,7 @@
 
 ;;;###autoload (autoload 'mercit-gitignore "mercit-gitignore" nil t)
 (transient-define-prefix mercit-gitignore ()
-  "Instruct Git to ignore a file or pattern."
+  "Instruct Mercurial to ignore a file or pattern."
   :man-page "gitignore"
   ["Gitignore"
    ("t" "shared at toplevel (.gitignore)"
@@ -55,7 +55,7 @@
 
 ;;;###autoload
 (defun mercit-gitignore-in-topdir (rule)
-  "Add the Git ignore RULE to the top-level \".gitignore\" file.
+  "Add the Mercurial ignore RULE to the top-level \".gitignore\" file.
 Since this file is tracked, it is shared with other clones of the
 repository.  Also stage the file."
   (interactive (list (mercit-gitignore-read-pattern)))
@@ -65,7 +65,7 @@ repository.  Also stage the file."
 
 ;;;###autoload
 (defun mercit-gitignore-in-subdir (rule directory)
-  "Add the Git ignore RULE to a \".gitignore\" file in DIRECTORY.
+  "Add the Mercurial ignore RULE to a \".gitignore\" file in DIRECTORY.
 Prompt the user for a directory and add the rule to the
 \".gitignore\" file in that directory.  Since such files are
 tracked, they are shared with other clones of the repository.
@@ -79,7 +79,7 @@ Also stage the file."
 
 ;;;###autoload
 (defun mercit-gitignore-in-gitdir (rule)
-  "Add the Git ignore RULE to \"$GIT_DIR/info/exclude\".
+  "Add the Mercurial ignore RULE to \"$GIT_DIR/info/exclude\".
 Rules in that file only affects this clone of the repository."
   (interactive (list (mercit-gitignore-read-pattern)))
   (mercit--gitignore rule (mercit-git-dir "info/exclude"))
@@ -87,7 +87,7 @@ Rules in that file only affects this clone of the repository."
 
 ;;;###autoload
 (defun mercit-gitignore-on-system (rule)
-  "Add the Git ignore RULE to the file specified by `core.excludesFile'.
+  "Add the Mercurial ignore RULE to the file specified by `core.excludesFile'.
 Rules that are defined in that file affect all local repositories."
   (interactive (list (mercit-gitignore-read-pattern)))
   (mercit--gitignore rule

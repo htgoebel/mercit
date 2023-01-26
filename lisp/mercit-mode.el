@@ -509,7 +509,7 @@ which visits the thing at point using `browse-url'."
 ;;; Mode
 
 (defun mercit-load-config-extensions ()
-  "Load Mercit extensions that are defined at the Git config layer."
+  "Load Mercit extensions that are defined at the Mercurial config layer."
   (dolist (ext (mercit-get-all "mercit.extension"))
     (let ((sym (intern (format "mercit-%s-mode" ext))))
       (when (fboundp sym)

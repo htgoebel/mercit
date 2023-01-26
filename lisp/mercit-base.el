@@ -197,7 +197,7 @@ Applying changes:
 
 Files:
 
-  `delete' When a file that isn't yet tracked by Git is deleted
+  `delete' When a file that isn't yet tracked by Mercurial is deleted
   then it is completely lost, not just the last changes.  Very
   dangerous.
 
@@ -216,7 +216,7 @@ Files:
 
 Sequences:
 
-  `reset-bisect' Aborting (known to Git as \"resetting\") a
+  `reset-bisect' Aborting (known to Mercurial as \"resetting\") a
   bisect operation loses all information collected so far.
 
   `abort-rebase' Aborting a rebase throws away all already
@@ -233,7 +233,7 @@ References:
 
   `delete-unmerged-branch' Once a branch has been deleted it can
   only be restored using low-level recovery tools provided by
-  Git.  And even then the reflog is gone.  The user always has
+  Mercurial.  And even then the reflog is gone.  The user always has
   to confirm the deletion of a branch by accepting the default
   choice (or selecting another branch), but when a branch has
   not been merged yet, also make sure the user is aware of that.
@@ -252,10 +252,10 @@ References:
   other refs exist in the remotes namespace, and you can recreate
   the remote if necessary.
 
-  `drop-stashes' Dropping a stash is dangerous because Git stores
+  `drop-stashes' Dropping a stash is dangerous because Mercurial stores
   stashes in the reflog.  Once a stash is removed, there is no
   going back without using low-level recovery tools provided by
-  Git.  When a single stash is dropped, then the user always has
+  Mercurial.  When a single stash is dropped, then the user always has
   to confirm by accepting the default (or selecting another).
   This action only concerns the deletion of multiple stashes at
   once.
@@ -418,7 +418,7 @@ and delay of your graphical environment or operating system."
   :type 'number)
 
 (defcustom mercit-view-git-manual-method 'info
-  "How links to Git documentation are followed from Mercit's Info manuals.
+  "How links to Mercurial documentation are followed from Mercit's Info manuals.
 
 `info'  Follow the link to the node in the `gitman' Info manual
         as usual.  Unfortunately that manual is not installed by

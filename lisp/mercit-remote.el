@@ -1,4 +1,4 @@
-;;; mercit-remote.el --- Transfer Git commits  -*- lexical-binding:t -*-
+;;; mercit-remote.el --- Transfer Mercurial commits  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -44,7 +44,7 @@ variable isn't already set."
                  (const  :tag "don't set")))
 
 (defcustom mercit-remote-direct-configure t
-  "Whether the command `mercit-remote' shows Git variables.
+  "Whether the command `mercit-remote' shows Mercurial variables.
 When set to nil, no variables are displayed by this transient
 command, instead the sub-transient `mercit-remote-configure'
 has to be used to view and change remote related variables."
@@ -158,7 +158,7 @@ has to be used to view and change remote related variables."
 
 A refspec is stale if there no longer exists at least one branch
 on the remote that would be fetched due to that refspec.  A stale
-refspec is problematic because its existence causes Git to refuse
+refspec is problematic because its existence causes Mercurial to refuse
 to fetch according to the remaining non-stale refspecs.
 
 If only stale refspecs remain, then offer to either delete the

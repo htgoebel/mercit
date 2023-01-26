@@ -20,9 +20,9 @@
 
 ;;; Commentary:
 
-;; This library implements the tools used to run Git for side-effects.
+;; This library implements the tools used to run Mercurial for side-effects.
 
-;; Note that the functions used to run Git and then consume its
+;; Note that the functions used to run Mercurial and then consume its
 ;; output, are defined in `mercit-git.el'.  There's a bit of overlap
 ;; though.
 
@@ -38,7 +38,7 @@
 ;;; Options
 
 (defcustom mercit-process-connection-type (not (eq system-type 'cygwin))
-  "Connection type used for the Git process.
+  "Connection type used for the Mercurial process.
 
 If nil, use pipes: this is usually more efficient, and works on Cygwin.
 If t, use ptys: this enables Mercit to prompt for passphrases when needed."
@@ -57,7 +57,7 @@ If t, use ptys: this enables Mercit to prompt for passphrases when needed."
                              "-c" "alias.echo=!echo" "echo" "x{0}")
              (file-error
               (lwarn 'mercit-process :warning
-                     "Could not run Git: %S" e))))
+                     "Could not run Mercurial: %S" e))))
          (equal "x0\n" (buffer-string))))
   "Whether to use a workaround for Cygwin's globbing behavior.
 
@@ -91,7 +91,7 @@ When this is nil, no sections are ever removed."
   "Whether `mercit-process-file' logs to the *Messages* buffer.
 
 Only intended for temporary use when you try to figure out how
-Mercit uses Git behind the scene.  Output that normally goes to
+Mercit uses Mercurial behind the scene.  Output that normally goes to
 the mercit-process buffer continues to go there.  Not all output
 goes to either of these two buffers.
 
@@ -127,7 +127,7 @@ displays the text of `mercit-process-error-summary' instead."
                              "config" "--get-all" "credential.helper"))))
   "If non-nil, start a credential cache daemon using this socket.
 
-When using Git's cache credential helper in the normal way, Emacs
+When using Mercurial's cache credential helper in the normal way, Emacs
 sends a SIGHUP to the credential daemon after the git subprocess
 has exited, causing the daemon to also quit.  This can be avoided
 by starting the `git-credential-cache--daemon' process directly
@@ -155,7 +155,7 @@ itself from the hook, to avoid further futile attempts."
           ;; OpenSSH v8 prints this.  See #3969.
           "\\(?:/\\[fingerprint\\]\\)?"
           "[\])] ?[?:]? ?$")
-  "Regexp matching Yes-or-No prompts of Git and its subprocesses."
+  "Regexp matching Yes-or-No prompts of Mercurial and its subprocesses."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-process
   :type 'regexp)
@@ -170,7 +170,7 @@ itself from the hook, to avoid further futile attempts."
     "^Token: $" ; For git-credential-manager-core (#4318).
     "^Yubikey for .*: ?$"
     "^Enter PIN for .*: ?$")
-  "List of regexps matching password prompts of Git and its subprocesses.
+  "List of regexps matching password prompts of Mercurial and its subprocesses.
 Also see `mercit-process-find-password-functions'."
   :package-version '(mercit . "3.0.0")
   :group 'mercit-process
@@ -197,7 +197,7 @@ non-nil, then the password is read from the user instead."
 
 (defcustom mercit-process-username-prompt-regexps
   '("^Username for '.*': ?$")
-  "List of regexps matching username prompts of Git and its subprocesses."
+  "List of regexps matching username prompts of Mercurial and its subprocesses."
   :package-version '(mercit . "2.1.0")
   :group 'mercit-process
   :type '(repeat (regexp)))
@@ -206,7 +206,7 @@ non-nil, then the password is read from the user instead."
   "List of functions used to forward arbitrary questions to the user.
 
 Mercit has dedicated support for forwarding username and password
-prompts and Yes-or-No questions asked by Git and its subprocesses
+prompts and Yes-or-No questions asked by Mercurial and its subprocesses
 to the user.  This can be customized using other options in the
 `mercit-process' customization group.
 
@@ -232,7 +232,7 @@ implement such functions."
   :type 'hook)
 
 (defcustom mercit-process-ensure-unix-line-ending t
-  "Whether Mercit should ensure a unix coding system when talking to Git."
+  "Whether Mercit should ensure a unix coding system when talking to Mercurial."
   :package-version '(mercit . "2.6.0")
   :group 'mercit-process
   :type 'boolean)
@@ -255,7 +255,7 @@ implement such functions."
 
 (defface mercit-mode-line-process
   '((t :inherit mode-line-emphasis))
-  "Face for `mode-line-process' status when Git is running for side-effects."
+  "Face for `mode-line-process' status when Mercurial is running for side-effects."
   :group 'mercit-faces)
 
 (defface mercit-mode-line-process-error
@@ -274,7 +274,7 @@ Used when `mercit-process-display-mode-line-error' is non-nil."
   "Keymap for `mercit-process-mode'.")
 
 (define-derived-mode mercit-process-mode mercit-mode "Mercit Process"
-  "Mode for looking at Git process output."
+  "Mode for looking at Mercurial process output."
   :group 'mercit-process
   (hack-dir-local-variables-non-file-buffer)
   (setq mercit--imenu-item-types 'process))
@@ -329,27 +329,27 @@ optional NODISPLAY is non-nil also display it."
 (defvar mercit-process-raise-error nil)
 
 (defun mercit-git (&rest args)
-  "Call Git synchronously in a separate process, for side-effects.
+  "Call Mercurial synchronously in a separate process, for side-effects.
 
-Option `mercit-git-executable' specifies the Git executable.
-The arguments ARGS specify arguments to Git, they are flattened
+Option `mercit-git-executable' specifies the Mercurial executable.
+The arguments ARGS specify arguments to Mercurial, they are flattened
 before use.
 
 Process output goes into a new section in the buffer returned by
-`mercit-process-buffer'.  If Git exits with a non-zero status,
+`mercit-process-buffer'.  If Mercurial exits with a non-zero status,
 then raise an error."
   (let ((mercit-process-raise-error t))
     (mercit-call-git args)))
 
 (defun mercit-run-git (&rest args)
-  "Call Git synchronously in a separate process, and refresh.
+  "Call Mercurial synchronously in a separate process, and refresh.
 
-Function `mercit-git-executable' specifies the Git executable and
+Function `mercit-git-executable' specifies the Mercurial executable and
 option `mercit-git-global-arguments' specifies constant arguments.
-The arguments ARGS specify arguments to Git, they are flattened
+The arguments ARGS specify arguments to Mercurial, they are flattened
 before use.
 
-After Git returns, the current buffer (if it is a Mercit buffer)
+After Mercurial returns, the current buffer (if it is a Mercit buffer)
 as well as the current repository's status buffer are refreshed.
 
 Process output goes into a new section in the buffer returned by
@@ -364,11 +364,11 @@ Process output goes into a new section in the buffer returned by
 (defvar mercit-pre-call-git-hook nil)
 
 (defun mercit-call-git (&rest args)
-  "Call Git synchronously in a separate process.
+  "Call Mercurial synchronously in a separate process.
 
-Function `mercit-git-executable' specifies the Git executable and
+Function `mercit-git-executable' specifies the Mercurial executable and
 option `mercit-git-global-arguments' specifies constant arguments.
-The arguments ARGS specify arguments to Git, they are flattened
+The arguments ARGS specify arguments to Mercurial, they are flattened
 before use.
 
 Process output goes into a new section in the buffer returned by
@@ -391,7 +391,7 @@ Process output goes into a new section in the buffer returned by
      process-buf (current-buffer) default-directory section)))
 
 (defun mercit-process-git (destination &rest args)
-  "Call Git synchronously in a separate process, returning its exit code.
+  "Call Mercurial synchronously in a separate process, returning its exit code.
 DESTINATION specifies how to handle the output, like for
 `call-process', except that file handlers are supported.
 Enable Cygwin's \"noglob\" option during the call and
@@ -434,16 +434,16 @@ conversion."
 (defvar mercit-this-process nil)
 
 (defun mercit-run-git-with-input (&rest args)
-  "Call Git in a separate process.
-ARGS is flattened and then used as arguments to Git.
+  "Call Mercurial in a separate process.
+ARGS is flattened and then used as arguments to Mercurial.
 
 The current buffer's content is used as the process's standard
 input.  The buffer is assumed to be temporary and thus OK to
 modify.
 
-Function `mercit-git-executable' specifies the Git executable and
+Function `mercit-git-executable' specifies the Mercurial executable and
 option `mercit-git-global-arguments' specifies constant arguments.
-The remaining arguments ARGS specify arguments to Git, they are
+The remaining arguments ARGS specify arguments to Mercurial, they are
 flattened before use."
   (when (eq system-type 'windows-nt)
     ;; On w32, git expects UTF-8 encoded input, ignore any user
@@ -472,12 +472,12 @@ flattened before use."
 ;;; Asynchronous Processes
 
 (defun mercit-run-git-async (&rest args)
-  "Start Git, prepare for refresh, and return the process object.
-ARGS is flattened and then used as arguments to Git.
+  "Start Mercurial, prepare for refresh, and return the process object.
+ARGS is flattened and then used as arguments to Mercurial.
 
 Display the command line arguments in the echo area.
 
-After Git returns some buffers are refreshed: the buffer that was
+After Mercurial returns some buffers are refreshed: the buffer that was
 current when this function was called (if it is a Mercit buffer
 and still alive), as well as the respective Mercit status buffer.
 
@@ -489,13 +489,13 @@ See `mercit-start-process' for more information."
   (mercit-start-git nil args))
 
 (defun mercit-run-git-with-editor (&rest args)
-  "Export GIT_EDITOR and start Git.
+  "Export GIT_EDITOR and start Mercurial.
 Also prepare for refresh and return the process object.
-ARGS is flattened and then used as arguments to Git.
+ARGS is flattened and then used as arguments to Mercurial.
 
 Display the command line arguments in the echo area.
 
-After Git returns some buffers are refreshed: the buffer that was
+After Mercurial returns some buffers are refreshed: the buffer that was
 current when this function was called (if it is a Mercit buffer
 and still alive), as well as the respective Mercit status buffer.
 
@@ -504,13 +504,13 @@ See `mercit-start-process' and `with-editor' for more information."
   (mercit-with-editor (mercit-run-git-async args)))
 
 (defun mercit-run-git-sequencer (&rest args)
-  "Export GIT_EDITOR and start Git.
+  "Export GIT_EDITOR and start Mercurial.
 Also prepare for refresh and return the process object.
-ARGS is flattened and then used as arguments to Git.
+ARGS is flattened and then used as arguments to Mercurial.
 
 Display the command line arguments in the echo area.
 
-After Git returns some buffers are refreshed: the buffer that was
+After Mercurial returns some buffers are refreshed: the buffer that was
 current when this function was called (if it is a Mercit buffer
 and still alive), as well as the respective Mercit status buffer.
 If the sequence stops at a commit, make the section representing
@@ -524,18 +524,18 @@ See `mercit-start-process' and `with-editor' for more information."
 (defvar mercit-pre-start-git-hook nil)
 
 (defun mercit-start-git (input &rest args)
-  "Start Git, prepare for refresh, and return the process object.
+  "Start Mercurial, prepare for refresh, and return the process object.
 
 If INPUT is non-nil, it has to be a buffer or the name of an
 existing buffer.  The buffer content becomes the processes
 standard input.
 
-Function `mercit-git-executable' specifies the Git executable and
+Function `mercit-git-executable' specifies the Mercurial executable and
 option `mercit-git-global-arguments' specifies constant arguments.
-The remaining arguments ARGS specify arguments to Git, they are
+The remaining arguments ARGS specify arguments to Mercurial, they are
 flattened before use.
 
-After Git returns some buffers are refreshed: the buffer that was
+After Mercurial returns some buffers are refreshed: the buffer that was
 current when this function was called (if it is a Mercit buffer
 and still alive), as well as the respective Mercit status buffer.
 
@@ -901,7 +901,7 @@ Return the matched string suffixed with \": \", if needed."
       (cons fro to))))
 
 (defvar mercit-credential-hook nil
-  "Hook run before Git needs credentials.")
+  "Hook run before Mercurial needs credentials.")
 
 (defvar mercit-credential-cache-daemon-process nil)
 
@@ -1058,7 +1058,7 @@ If STR is supplied, it replaces the `mode-line-process' text."
         "^\\(?:error\\|fatal\\|git\\): \\(.*\\)$"
         "^\\(Cannot rebase:.*\\)$"))
 
-(define-error 'mercit-git-error "Git error")
+(define-error 'mercit-git-error "Mercurial error")
 
 (defun mercit-process-error-summary (process-buf section)
   "A one-line error summary from the given SECTION."
@@ -1076,7 +1076,7 @@ If STR is supplied, it replaces the `mode-line-process' text."
                               (or (match-string-no-properties 1)
                                   (and (not mercit-process-raise-error)
                                        'suppressed))))))))))
-      "Git failed"))
+      "Mercurial failed"))
 
 (defun mercit-process-error-tooltip (process-buf section)
   "Returns the text from SECTION of the PROCESS-BUF buffer.

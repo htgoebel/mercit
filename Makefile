@@ -241,7 +241,7 @@ define set_package_requires_melpa
 (with-temp-file "lisp/git-commit-pkg.el"
   (insert (format
 "(define-package \"git-commit\" \"$(GIT_COMMIT_VERSION)$(DEV_SUFFIX)\"
-  \"Edit Git commit messages.\"
+  \"Edit Mercurial commit messages.\"
   '((emacs %S)
     (transient %S)
     (with-editor %S))
@@ -255,7 +255,7 @@ define set_package_requires_melpa
 (with-temp-file "lisp/mercit-pkg.el"
   (insert (format
 "(define-package \"mercit\" \"$(MERCIT_VERSION)$(DEV_SUFFIX)\"
-  \"A Git porcelain inside Emacs.\"
+  \"A Mercurial porcelain inside Emacs.\"
   '((emacs %S)
     (dash %S)
     (git-commit %S)

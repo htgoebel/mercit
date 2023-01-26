@@ -32,7 +32,7 @@
 ;; This package implements the main user interface of Mercit — the
 ;; collapsible sections that make up its buffers.  This package used
 ;; to be distributed as part of Mercit but now it can also be used by
-;; other packages that have nothing to do with Mercit or Git.
+;; other packages that have nothing to do with Mercit or Mercurial.
 
 ;;; Code:
 
@@ -1333,10 +1333,10 @@ set to the new value of `point'; BODY is responsible for moving
 `point' forward.
 
 If it turns out inside BODY that the section is empty, then
-`mercit-cancel-section' can be used to abort and remove all traces
-of the partially inserted section.  This can happen when creating
-a section by washing Git's output and Git didn't actually output
-anything this time around.
+`mercit-cancel-section' can be used to abort and remove all
+traces of the partially inserted section.  This can happen when
+creating a section by washing Mercurial's output and Mercurial
+didn't actually output anything this time around.
 
 \(fn [NAME] (CLASS &optional VALUE HIDE) &rest BODY)"
   (declare (indent defun)

@@ -1,4 +1,4 @@
-;;; git-rebase.el --- Edit Git rebase files  -*- lexical-binding:t -*-
+;;; git-rebase.el --- Edit Mercurial rebase files  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -25,7 +25,7 @@
 
 ;; When the user initiates an interactive rebase, e.g. using "r e" in
 ;; a Mercit buffer or on the command line using "git rebase -i REV",
-;; Git invokes the `$GIT_SEQUENCE_EDITOR' (or if that is undefined
+;; Mercurial invokes the `$GIT_SEQUENCE_EDITOR' (or if that is undefined
 ;; `$GIT_EDITOR' or even `$EDITOR') letting the user rearrange, drop,
 ;; reword, edit, and squash commits.
 
@@ -33,8 +33,8 @@
 ;; doing so much more fun, by making the buffer more colorful and
 ;; providing the following commands:
 ;;
-;;   C-c C-c  Tell Git to make it happen.
-;;   C-c C-k  Tell Git that you changed your mind, i.e. abort.
+;;   C-c C-c  Tell Mercurial to make it happen.
+;;   C-c C-k  Tell Mercurial that you changed your mind, i.e. abort.
 ;;
 ;;   p        Move point to previous line.
 ;;   n        Move point to next line.
@@ -81,7 +81,7 @@
 ;;;; Variables
 
 (defgroup git-rebase nil
-  "Edit Git rebase sequences."
+  "Edit Mercurial rebase sequences."
   :link '(info-link "(mercit)Editing Rebase Sequences")
   :group 'tools)
 
@@ -103,7 +103,7 @@
 ;;;; Faces
 
 (defgroup git-rebase-faces nil
-  "Faces used by Git-Rebase mode."
+  "Faces used by Mercurial-Rebase mode."
   :group 'faces
   :group 'git-rebase)
 
@@ -175,14 +175,14 @@
     (define-key map [M-down]        #'git-rebase-move-line-down)
     (define-key map [remap undo]    #'git-rebase-undo)
     map)
-  "Keymap for Git-Rebase mode.")
+  "Keymap for Mercurial-Rebase mode.")
 
 (put 'git-rebase-reword       :advertised-binding (kbd "r"))
 (put 'git-rebase-move-line-up :advertised-binding (kbd "M-p"))
 (put 'git-rebase-kill-line    :advertised-binding (kbd "k"))
 
 (easy-menu-define git-rebase-mode-menu git-rebase-mode-map
-  "Git-Rebase mode menu"
+  "Mercurial-Rebase mode menu"
   '("Rebase"
     ["Pick" git-rebase-pick t]
     ["Reword" git-rebase-reword t]
@@ -199,8 +199,8 @@
     ["Finish" with-editor-finish t]))
 
 (defvar git-rebase-command-descriptions
-  '((with-editor-finish           . "tell Git to make it happen")
-    (with-editor-cancel           . "tell Git that you changed your mind, i.e. abort")
+  '((with-editor-finish           . "tell Mercurial to make it happen")
+    (with-editor-cancel           . "tell Mercurial that you changed your mind, i.e. abort")
     (git-rebase-backward-line     . "move point to previous line")
     (forward-line                 . "move point to next line")
     (git-rebase-move-line-up      . "move the commit at point up")
@@ -698,11 +698,11 @@ Like `forward-line' but go into the opposite direction."
 ;;; Mode
 
 ;;;###autoload
-(define-derived-mode git-rebase-mode special-mode "Git Rebase"
-  "Major mode for editing of a Git rebase file.
+(define-derived-mode git-rebase-mode special-mode "Mercurial Rebase"
+  "Major mode for editing of a Mercurial rebase file.
 
 Rebase files are generated when you run \"git rebase -i\" or run
-`mercit-interactive-rebase'.  They describe how Git should perform
+`mercit-interactive-rebase'.  They describe how Mercurial should perform
 the rebase.  See the documentation for git-rebase (e.g., by
 running \"man git-rebase\" at the command line) for details."
   :group 'git-rebase
@@ -746,7 +746,7 @@ running \"man git-rebase\" at the command line) for details."
   (re-search-forward (concat git-rebase-comment-re ".*") limit t))
 
 (defun git-rebase-mode-font-lock-keywords ()
-  "Font lock keywords for Git-Rebase mode."
+  "Font lock keywords for Mercurial-Rebase mode."
   `((,(concat "^" (cdr (assq 'commit git-rebase-line-regexps)))
      (1 'git-rebase-action)
      (3 'git-rebase-hash)
@@ -785,7 +785,7 @@ running \"man git-rebase\" at the command line) for details."
      (1 'git-rebase-label t))))
 
 (defun git-rebase-mode-show-keybindings ()
-  "Modify the \"Commands:\" section of the comment Git generates
+  "Modify the \"Commands:\" section of the comment Mercurial generates
 at the bottom of the file so that in place of the one-letter
 abbreviation for the command, it shows the command's keybinding.
 By default, this is the same except for the \"pick\" command."

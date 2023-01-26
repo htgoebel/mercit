@@ -29,7 +29,7 @@
 ;;; Options
 
 (defgroup mercit-status nil
-  "Inspect and manipulate Git repositories."
+  "Inspect and manipulate Mercurial repositories."
   :link '(info-link "(mercit)Status Buffer")
   :group 'mercit-modes)
 
@@ -201,7 +201,7 @@ Valid values are:
 
 ;;;###autoload
 (defun mercit-init (directory)
-  "Initialize a Git repository, then show its status.
+  "Initialize a Mercurial repository, then show its status.
 
 If the directory is below an existing repository, then the user
 has to confirm that a new one should be created inside.  If the
@@ -229,9 +229,9 @@ Non-interactively DIRECTORY is (re-)initialized unconditionally."
 
 ;;;###autoload
 (defun mercit-status (&optional directory cache)
-  "Show the status of the current Git repository in a buffer.
+  "Show the status of the current Mercurial repository in a buffer.
 
-If the current directory isn't located within a Git repository,
+If the current directory isn't located within a Mercurial repository,
 then prompt for an existing repository or an arbitrary directory,
 depending on option `mercit-repository-directories', and show the
 status of the selected repository instead.
@@ -306,10 +306,10 @@ also contains other useful hints.")
 
 ;;;###autoload
 (defun mercit-status-quick ()
-  "Show the status of the current Git repository, maybe without refreshing.
+  "Show the status of the current Mercurial repository, maybe without refreshing.
 
-If the status buffer of the current Git repository exists but
-isn't being displayed in the selected frame, then display it
+If the status buffer of the current Mercurial repository exists
+but isn't being displayed in the selected frame, then display it
 without refreshing it.
 
 If the status buffer is being displayed in the selected frame,
@@ -504,9 +504,9 @@ The sections are inserted by running the functions on the hook
   "Keymap for `error' sections.")
 
 (defun mercit-insert-error-header ()
-  "Insert the message about the Git error that just occurred.
+  "Insert the message about the Mercurial error that just occurred.
 
-This function is only aware of the last error that occur when Git
+This function is only aware of the last error that occur when Mercurial
 was run for side-effects.  If, for example, an error occurs while
 generating a diff, then that error won't be inserted.  Refreshing
 the status buffer causes this section to disappear again."

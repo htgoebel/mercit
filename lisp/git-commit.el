@@ -1,4 +1,4 @@
-;;; git-commit.el --- Edit Git commit messages  -*- lexical-binding:t; coding:utf-8 -*-
+;;; git-commit.el --- Edit Mercurial commit messages  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -33,11 +33,11 @@
 
 ;;; Commentary:
 
-;; This package assists the user in writing good Git commit messages.
+;; This package assists the user in writing good Mercurial commit messages.
 
-;; While Git allows for the message to be provided on the command
-;; line, it is preferable to tell Git to create the commit without
-;; actually passing it a message.  Git then invokes the `$GIT_EDITOR'
+;; While Mercurial allows for the message to be provided on the command
+;; line, it is preferable to tell Mercurial to create the commit without
+;; actually passing it a message.  Mercurial then invokes the `$GIT_EDITOR'
 ;; (or if that is undefined `$EDITOR') asking the user to provide the
 ;; message by editing the file ".git/COMMIT_EDITMSG" (or another file
 ;; in that directory, e.g. ".git/MERGE_MSG" for merge commits).
@@ -49,7 +49,7 @@
 ;; fit, it is done here by running a setup function, which among other
 ;; things turns on the preferred major-mode, by default `text-mode'.
 
-;; Git waits for the `$EDITOR' to finish and then either creates the
+;; Mercurial waits for the `$EDITOR' to finish and then either creates the
 ;; commit using the contents of the file as commit message, or, if the
 ;; editor process exited with a non-zero exit status, aborts without
 ;; creating a commit.  Unfortunately Emacsclient (which is what Emacs
@@ -62,11 +62,11 @@
 ;; is saved, but Emacseditor's exit code differs.
 ;;
 ;;   C-c C-c  Finish the editing session successfully by returning
-;;            with exit code 0.  Git then creates the commit using
+;;            with exit code 0.  Mercurial then creates the commit using
 ;;            the message it finds in the file.
 ;;
 ;;   C-c C-k  Aborts the edit editing session by returning with exit
-;;            code 1.  Git then aborts the commit.
+;;            code 1.  Mercurial then aborts the commit.
 
 ;; Aborting the commit does not cause the message to be lost, but
 ;; relying solely on the file not being tampered with is risky.  This
@@ -93,7 +93,7 @@
 ;;   C-c C-p  Insert a Reported-by header.
 ;;   C-c C-i  Insert a Suggested-by header.
 
-;; When Git requests a commit message from the user, it does so by
+;; When Mercurial requests a commit message from the user, it does so by
 ;; having her edit a file which initially contains some comments,
 ;; instructing her what to do, and providing useful information, such
 ;; as which files were modified.  These comments, even when left
@@ -143,17 +143,17 @@
 ;;;; Variables
 
 (defgroup git-commit nil
-  "Edit Git commit messages."
+  "Edit Mercurial commit messages."
   :prefix "git-commit-"
   :link '(info-link "(mercit)Editing Commit Messages")
   :group 'tools)
 
 (define-minor-mode global-git-commit-mode
-  "Edit Git commit messages.
+  "Edit Mercurial commit messages.
 
 This global mode arranges for `git-commit-setup' to be called
-when a Git commit message file is opened.  That usually happens
-when Git uses the Emacsclient as $GIT_EDITOR to have the user
+when a Mercurial commit message file is opened.  That usually happens
+when Mercurial uses the Emacsclient as $GIT_EDITOR to have the user
 provide such a commit message.
 
 Loading the library `git-commit' by default enables this mode,
@@ -176,7 +176,7 @@ full loading."
     (remove-hook 'find-file-hook #'git-commit-setup-check-buffer)))
 
 (defcustom git-commit-major-mode #'text-mode
-  "Major mode used to edit Git commit messages.
+  "Major mode used to edit Mercurial commit messages.
 The major mode configured here is turned on by the minor mode
 `git-commit-mode'."
   :group 'git-commit
@@ -225,7 +225,7 @@ to edit a commit message.  If a commit is created without the
 user typing a message into a buffer, then this hook is not run.
 
 This hook is not run until the new commit has been created.  If
-that takes Git longer than `git-commit-post-finish-hook-timeout'
+that takes Mercurial longer than `git-commit-post-finish-hook-timeout'
 seconds, then this hook isn't run at all.  For certain commands
 such as `mercit-rebase-continue' this hook is never run because
 doing so would lead to a race condition.
@@ -308,7 +308,7 @@ no effect."
 ;;;; Faces
 
 (defgroup git-commit-faces nil
-  "Faces used for highlighting Git commit messages."
+  "Faces used for highlighting Mercurial commit messages."
   :prefix "git-commit-"
   :group 'git-commit
   :group 'faces)
@@ -404,7 +404,7 @@ This is only used if Mercit is available."
 
 (require 'easymenu)
 (easy-menu-define git-commit-mode-menu git-commit-mode-map
-  "Git Commit Mode Menu"
+  "Mercurial Commit Mode Menu"
   '("Commit"
     ["Previous" git-commit-prev-message t]
     ["Next" git-commit-next-message t]
@@ -588,7 +588,7 @@ to recover older messages")
       (run-hooks 'git-commit-post-finish-hook))))
 
 (define-minor-mode git-commit-mode
-  "Auxiliary minor mode used when editing Git commit messages.
+  "Auxiliary minor mode used when editing Mercurial commit messages.
 This mode is only responsible for setting up some key bindings.
 Don't use it directly, instead enable `global-git-commit-mode'."
   :lighter "")
@@ -1022,7 +1022,7 @@ Added to `font-lock-extend-region-functions'."
          (2 'bold t)))))
 
 (defvar git-commit-font-lock-keywords git-commit-font-lock-keywords-3
-  "Font-Lock keywords for Git-Commit mode.")
+  "Font-Lock keywords for Mercurial-Commit mode.")
 
 (defun git-commit-setup-font-lock ()
   (with-demoted-errors "Error running git-commit-setup-font-lock: %S"

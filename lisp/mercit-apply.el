@@ -1,4 +1,4 @@
-;;; mercit-apply.el --- Apply Git diffs  -*- lexical-binding:t -*-
+;;; mercit-apply.el --- Apply Mercurial diffs  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -20,9 +20,9 @@
 
 ;;; Commentary:
 
-;; This library implements commands for applying Git diffs or parts
+;; This library implements commands for applying Mercurial diffs or parts
 ;; of such a diff.  The supported "apply variants" are apply, stage,
-;; unstage, discard, and reverse - more than Git itself knows about,
+;; unstage, discard, and reverse - more than Mercurial itself knows about,
 ;; at least at the porcelain level.
 
 ;;; Code:

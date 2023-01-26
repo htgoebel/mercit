@@ -46,7 +46,7 @@
 ;;; Options
 
 (defgroup mercit nil
-  "Controlling Git from Emacs."
+  "Controlling Mercurial from Emacs."
   :link '(url-link "https://mercit.vc")
   :link '(info-link "(mercit)FAQ")
   :link '(info-link "(mercit)")

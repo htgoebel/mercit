@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; Support for Git commands that replay commits and help the user make
+;; Support for Mercurial commands that replay commits and help the user make
 ;; changes along the way.  Supports `cherry-pick', `revert', `rebase',
 ;; `rebase--interactive' and `am'.
 

@@ -1,4 +1,4 @@
-;;; mercit-log.el --- Inspect Git history  -*- lexical-binding:t; coding:utf-8 -*-
+;;; mercit-log.el --- Inspect Mercurial history  -*- lexical-binding:t; coding:utf-8 -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; This library implements support for looking at Git logs, including
+;; This library implements support for looking at Mercurial logs, including
 ;; special logs like cherry-logs, as well as for selecting a commit
 ;; from a log.
 
@@ -57,7 +57,7 @@
 ;;;; Log Mode
 
 (defgroup mercit-log nil
-  "Inspect and manipulate Git history."
+  "Inspect and manipulate Mercurial history."
   :link '(info-link "(mercit)Logging")
   :group 'mercit-commands
   :group 'mercit-modes)
@@ -1017,7 +1017,7 @@ of the current repository first; creating it if necessary."
   "Keymap for `mercit-log-mode'.")
 
 (define-derived-mode mercit-log-mode mercit-mode "Mercit Log"
-  "Mode for looking at Git log.
+  "Mode for looking at Mercurial log.
 
 This mode is documented in info node `(mercit)Log Buffer'.
 

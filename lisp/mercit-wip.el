@@ -248,7 +248,7 @@ modes, instead of in a backup file as `backup-buffer' would.
 This function ignores the variables that affect `backup-buffer'
 and can be used along-side that function, which is recommended
 because this function only backs up files that are tracked in
-a Git repository."
+a Mercurial repository."
   (when (and (not mercit-wip-buffer-backed-up)
              buffer-file-name
              (mercit-inside-worktree-p t)

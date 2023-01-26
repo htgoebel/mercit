@@ -1,4 +1,4 @@
-;;; mercit-diff.el --- Inspect Git diffs  -*- lexical-binding:t -*-
+;;; mercit-diff.el --- Inspect Mercurial diffs  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; This library implements support for looking at Git diffs and
+;; This library implements support for looking at Mercurial diffs and
 ;; commits.
 
 ;;; Code:
@@ -91,7 +91,7 @@
 ;;;; Diff Mode
 
 (defgroup mercit-diff nil
-  "Inspect and manipulate Git diffs."
+  "Inspect and manipulate Mercurial diffs."
   :link '(info-link "(mercit)Diffing")
   :group 'mercit-commands
   :group 'mercit-modes)
@@ -327,7 +327,7 @@ and `--compact-summary'.  See the git-diff(1) manpage."
 ;;;; Revision Mode
 
 (defgroup mercit-revision nil
-  "Inspect and manipulate Git commits."
+  "Inspect and manipulate Mercurial commits."
   :link '(info-link "(mercit)Revision Buffer")
   :group 'mercit-modes)
 
@@ -1878,7 +1878,7 @@ commit or stash at point, then prompt for a commit."
   "Keymap for `mercit-diff-mode'.")
 
 (define-derived-mode mercit-diff-mode mercit-mode "Mercit Diff"
-  "Mode for looking at a Git diff.
+  "Mode for looking at a Mercurial diff.
 
 This mode is documented in info node `(mercit)Diff Buffer'.
 
@@ -2465,7 +2465,7 @@ section or a child thereof."
 ;;; Revision Mode
 
 (define-derived-mode mercit-revision-mode mercit-diff-mode "Mercit Rev"
-  "Mode for looking at a Git commit.
+  "Mode for looking at a Mercurial commit.
 
 This mode is documented in info node `(mercit)Revision Buffer'.
 

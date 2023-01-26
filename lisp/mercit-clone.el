@@ -82,7 +82,7 @@ name.  If the provided name contains a slash, then that is used.
 Otherwise if the name omits the owner of the repository, then the
 default user specified in the matched entry is used.
 
-If USER contains a dot, then it is treated as a Git variable and
+If USER contains a dot, then it is treated as a Mercurial variable and
 the value of that is used as the username.  Otherwise it is used
 as the username itself."
   :package-version '(mercit . "3.4.0")

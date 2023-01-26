@@ -1,4 +1,4 @@
-;;; mercit-repos.el --- Listing repositories  -*- lexical-binding:t -*-
+();;; mercit-repos.el --- Listing repositories  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -35,11 +35,11 @@
 ;;; Options
 
 (defcustom mercit-repository-directories nil
-  "List of directories that are or contain Git repositories.
+  "List of directories that are or contain Mercurial repositories.
 
 Each element has the form (DIRECTORY . DEPTH).  DIRECTORY has
 to be a directory or a directory file-name, a string.  DEPTH,
-an integer, specifies the maximum depth to look for Git
+an integer, specifies the maximum depth to look for Mercurial
 repositories.  If it is 0, then only add DIRECTORY itself.
 
 This option controls which repositories are being listed by
@@ -264,7 +264,7 @@ If it contains \"%s\" then the directory is substituted for that."
   "Local keymap for Mercit-Repolist mode buffers.")
 
 (define-derived-mode mercit-repolist-mode tabulated-list-mode "Repos"
-  "Major mode for browsing a list of Git repositories."
+  "Major mode for browsing a list of Mercurial repositories."
   (setq-local x-stretch-cursor  nil)
   (setq tabulated-list-padding  0)
   (add-hook 'tabulated-list-revert-hook #'mercit-repolist-refresh nil t)
@@ -470,7 +470,7 @@ which only lists the first one found."
 ;;; Read Repository
 
 (defun mercit-read-repository (&optional read-directory-name)
-  "Read a Git repository in the minibuffer, with completion.
+  "Read a Mercurial repository in the minibuffer, with completion.
 
 The completion choices are the basenames of top-levels of
 repositories found in the directories specified by option
@@ -486,14 +486,14 @@ instead."
   (if-let ((repos (and (not read-directory-name)
                        mercit-repository-directories
                        (mercit-repos-alist))))
-      (let ((reply (mercit-completing-read "Git repository" repos)))
+      (let ((reply (mercit-completing-read "Mercurial repository" repos)))
         (file-name-as-directory
          (or (cdr (assoc reply repos))
              (if (file-directory-p reply)
                  (expand-file-name reply)
                (user-error "Not a repository or a directory: %s" reply)))))
     (file-name-as-directory
-     (read-directory-name "Git repository: "
+     (read-directory-name "Mercurial repository: "
                           (or (mercit-toplevel) default-directory)))))
 
 (defun mercit-list-repos ()

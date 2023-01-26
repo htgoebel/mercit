@@ -29,7 +29,7 @@
 ;;; Options
 
 (defgroup mercit-refs nil
-  "Inspect and manipulate Git branches and tags."
+  "Inspect and manipulate Mercurial branches and tags."
   :link '(info-link "(mercit)References Buffer")
   :group 'mercit-modes)
 
@@ -85,7 +85,7 @@ commit counts."
 (defvar mercit-refs-show-push-remote nil
   "Whether to show the push-remotes of local branches.
 Also show the commits that the local branch is ahead and behind
-the push-target.  Unfortunately there is a bug in Git that makes
+the push-target.  Unfortunately there is a bug in Mercurial that makes
 this useless (the commits ahead and behind the upstream are
 shown), so this isn't enabled yet.")
 

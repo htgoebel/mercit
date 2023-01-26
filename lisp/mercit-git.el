@@ -1,4 +1,4 @@
-;;; mercit-git.el --- Git functionality  -*- lexical-binding:t -*-
+;;; mercit-git.el --- Mercurial functionality  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; This library implements wrappers for various Git plumbing commands.
+;; This library implements wrappers for various Mercurial plumbing commands.
 
 ;;; Code:
 
@@ -61,7 +61,7 @@
   (cl-pushnew 'orig-rev eieio--known-slot-names)
   (cl-pushnew 'number eieio--known-slot-names))
 
-;;; Git implementations
+;;; Mercurial implementations
 
 (defvar mercit-inhibit-libgit t
   "Whether to inhibit the use of libgit.")
@@ -86,7 +86,7 @@ Use the function by the same name instead of this variable.")
     mercit--libgit-available-p))
 
 (defun mercit-gitimpl ()
-  "Return the Git implementation used in this repository."
+  "Return the Mercurial implementation used in this repository."
   (if (and (not mercit-inhibit-libgit)
            (not (file-remote-p default-directory))
            (mercit--libgit-available-p))
@@ -97,7 +97,7 @@ Use the function by the same name instead of this variable.")
 
 ;; For now this is shared between `mercit-process' and `mercit-git'.
 (defgroup mercit-process nil
-  "Git and other external processes used by Mercit."
+  "Mercurial and other external processes used by Mercit."
   :group 'mercit)
 
 (defvar mercit-git-environment
@@ -106,14 +106,14 @@ Use the function by the same name instead of this variable.")
 
 (defcustom mercit-git-output-coding-system
   (and (eq system-type 'windows-nt) 'utf-8)
-  "Coding system for receiving output from Git.
+  "Coding system for receiving output from Mercurial.
 
 If non-nil, the Git config value `i18n.logOutputEncoding' should
 be set via `mercit-git-global-arguments' to value consistent with
 this."
   :package-version '(mercit . "2.9.0")
   :group 'mercit-process
-  :type '(choice (coding-system :tag "Coding system to decode Git output")
+  :type '(choice (coding-system :tag "Coding system to decode Mercurial output")
                  (const :tag "Use system default" nil)))
 
 (defvar mercit-git-w32-path-hack nil
@@ -155,14 +155,14 @@ successfully.")
       (and (eq system-type 'darwin)
            (executable-find "hg"))
       "hg")
-  "The Git executable used by Mercit on the local host.
+  "The Mercurial executable used by Mercit on the local host.
 On remote machines `mercit-remote-git-executable' is used instead."
   :package-version '(mercit . "3.2.0")
   :group 'mercit-process
   :type 'string)
 
 (defcustom mercit-remote-git-executable "hg"
-  "The Git executable used by Mercit on remote machines.
+  "The Mercurial executable used by Mercit on remote machines.
 On the local host `mercit-git-executable' is used instead.
 Consider customizing `tramp-remote-path' instead of this
 option."
@@ -179,7 +179,7 @@ option."
     "--config" "color.pagermode=no"
     "--encoding" "UTF-8"
     )
-  "Global Git arguments.
+  "Global Mercurial arguments.
 
 The arguments set here are used every time the git executable is
 run as a subprocess.  They are placed right after the executable
@@ -187,10 +187,10 @@ itself and before the git command - as in `git HERE... COMMAND
 REST'.  See the manpage `git(1)' for valid arguments.
 
 Be careful what you add here, especially if you are using Tramp
-to connect to servers with ancient Git versions.  Never remove
+to connect to servers with ancient Mercurial versions.  Never remove
 anything that is part of the default value, unless you really
 know what you are doing.  And think very hard before adding
-something; it will be used every time Mercit runs Git for any
+something; it will be used every time Mercit runs Mercurial for any
 purpose."
   :package-version '(mercit . "2.9.0")
   :group 'mercit-commands
@@ -250,7 +250,7 @@ framework ultimately determines how the collection is displayed."
   :group 'mercit-miscellaneous
   :type '(choice string (repeat string)))
 
-;;; Git
+;;; Mercurial
 
 (defvar mercit-git-debug nil
   "Whether to enable additional reporting of git errors.
@@ -286,7 +286,7 @@ Also see `mercit-process-extreme-logging'.")
 See info node `(mercit)Debugging Tools' for more information."
   (interactive)
   (setq mercit-git-debug (not mercit-git-debug))
-  (message "Additional reporting of Git errors %s"
+  (message "Additional reporting of Mercurial errors %s"
            (if mercit-git-debug "enabled" "disabled")))
 
 (defvar mercit--refresh-cache nil)
@@ -354,10 +354,10 @@ is remote."
     mercit-git-executable))
 
 (defun mercit-process-git-arguments (args)
-  "Prepare ARGS for a function that invokes Git.
+  "Prepare ARGS for a function that invokes Mercurial.
 
-Mercit has many specialized functions for running Git; they all
-pass arguments through this function before handing them to Git,
+Mercit has many specialized functions for running Mercurial; they all
+pass arguments through this function before handing them to Mercurial,
 to do the following.
 
 * Flatten ARGS, removing nil arguments.
@@ -374,19 +374,19 @@ to do the following.
     args))
 
 (defun mercit-git-exit-code (&rest args)
-  "Execute Git with ARGS, returning its exit code."
+  "Execute Mercurial with ARGS, returning its exit code."
   (mercit-process-git nil args))
 
 (defun mercit-git-success (&rest args)
-  "Execute Git with ARGS, returning t if its exit code is 0."
+  "Execute Mercurial with ARGS, returning t if its exit code is 0."
   (= (mercit-git-exit-code args) 0))
 
 (defun mercit-git-failure (&rest args)
-  "Execute Git with ARGS, returning t if its exit code is 1."
+  "Execute Mercurial with ARGS, returning t if its exit code is 1."
   (= (mercit-git-exit-code args) 1))
 
 (defun mercit-git-string-p (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
+  "Execute Mercurial with ARGS, returning the first line of its output.
 If the exit code isn't zero or if there is no output, then return
 nil.  Neither of these results is considered an error; if that is
 what you want, then use `mercit-git-string-ng' instead.
@@ -402,7 +402,7 @@ still subject to major changes."
              (buffer-substring-no-properties (point) (line-end-position)))))))
 
 (defun mercit-git-string-ng (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
+  "Execute Mercurial with ARGS, returning the first line of its output.
 If the exit code isn't zero or if there is no output, then that
 is considered an error, but instead of actually signaling an
 error, return nil.  Additionally the output is put in the process
@@ -434,7 +434,7 @@ still subject to major changes.  Also see `mercit-git-string-p'."
           nil)))))
 
 (defun mercit-git-str (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
+  "Execute Mercurial with ARGS, returning the first line of its output.
 If there is no output, return nil.  If the output begins with a
 newline, return an empty string.  Like `mercit-git-string' but
 ignore `mercit-git-debug'."
@@ -447,7 +447,7 @@ ignore `mercit-git-debug'."
         (buffer-substring-no-properties (point) (line-end-position))))))
 
 (defun mercit-git-output (&rest args)
-  "Execute Git with ARGS, returning its output."
+  "Execute Mercurial with ARGS, returning its output."
   (setq args (flatten-tree args))
   (mercit--with-refresh-cache (cons default-directory args)
     (mercit--with-temp-process-buffer
@@ -463,7 +463,7 @@ ignore `mercit-git-debug'."
     (output (signal 'mercit-invalid-git-boolean (list output)))))
 
 (defun mercit-git-true (&rest args)
-  "Execute Git with ARGS, returning t if it prints any of \"1\",
+  "Execute Mercurial with ARGS, returning t if it prints any of \"1\",
 \"yes\", \"true\", or \"on\" (all case insensitive).  If it
 prints \"0\", \"no\", \"false\", or \"off\" (all case
 insensitive), then return nil .  For any other output signal
@@ -471,7 +471,7 @@ insensitive), then return nil .  For any other output signal
   (mercit--mercurial-bool (mercit-git-output args)))
 
 (defun mercit-git-false (&rest args)
-  "Execute Git with ARGS, returning t if it prints any of \"0\",
+  "Execute Mercurial with ARGS, returning t if it prints any of \"0\",
 \"no\", \"false\", or \"off\" (all case insensitive).  If it
 prints \"1\", \"yes\", \"true\", or \"on\" (all case
 insensitive), then return nil.  For any other output signal
@@ -479,7 +479,7 @@ insensitive), then return nil.  For any other output signal
   (not (mercit--mercurial-bool (mercit-git-output args))))
 
 (defun mercit-git-config-p (variable &optional default)
-  "Return the boolean value of the Git variable VARIABLE.
+  "Return the boolean value of the Mercurial variable VARIABLE.
 VARIABLE has to be specified as a string.  Return DEFAULT (which
 defaults to nil) if VARIABLE is unset.  If VARIABLE's value isn't
 a boolean, then raise an error."
@@ -493,8 +493,8 @@ a boolean, then raise an error."
             (if default t nil)))))))
 
 (defun mercit-git-insert (&rest args)
-  "Execute Git with ARGS, inserting its output at point.
-If Git exits with a non-zero exit status, then show a message and
+  "Execute Mercurial with ARGS, inserting its output at point.
+If Mercurial exits with a non-zero exit status, then show a message and
 add a section in the respective process buffer."
   (setq args (mercit-process-git-arguments args))
   (if mercit-git-debug
@@ -530,7 +530,7 @@ add a section in the respective process buffer."
        (match-string-no-properties 1)))
 
 (defun mercit-git-string (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
+  "Execute Mercurial with ARGS, returning the first line of its output.
 If there is no output, return nil.  If the output begins with a
 newline, return an empty string."
   (setq args (flatten-tree args))
@@ -542,27 +542,27 @@ newline, return an empty string."
         (buffer-substring-no-properties (point) (line-end-position))))))
 
 (defun mercit-git-lines (&rest args)
-  "Execute Git with ARGS, returning its output as a list of lines.
+  "Execute Mercurial with ARGS, returning its output as a list of lines.
 Empty lines anywhere in the output are omitted.
 
-If Git exits with a non-zero exit status, then report show a
+If Mercurial exits with a non-zero exit status, then report show a
 message and add a section in the respective process buffer."
   (mercit--with-temp-process-buffer
     (apply #'mercit-git-insert args)
     (split-string (buffer-string) "\n" t)))
 
 (defun mercit-git-items (&rest args)
-  "Execute Git with ARGS, returning its null-separated output as a list.
+  "Execute Mercurial with ARGS, returning its null-separated output as a list.
 Empty items anywhere in the output are omitted.
 
-If Git exits with a non-zero exit status, then report show a
+If Mercurial exits with a non-zero exit status, then report show a
 message and add a section in the respective process buffer."
   (mercit--with-temp-process-buffer
     (apply #'mercit-git-insert args)
     (split-string (buffer-string) "\\0" t)))
 
 (defun mercit-git-wash (washer &rest args)
-  "Execute Git with ARGS, inserting washed output at point.
+  "Execute Mercurial with ARGS, inserting washed output at point.
 Actually first insert the raw output at point.  If there is no
 output, call `mercit-cancel-section'.  Otherwise temporarily narrow
 the buffer to the inserted text, move to its beginning, and then
@@ -585,12 +585,12 @@ call function WASHER with ARGS as its sole argument."
       (mercit-maybe-make-margin-overlay))))
 
 (defun mercit-git-executable-find (command)
-  "Search for COMMAND in Git's exec path, falling back to `exec-path'.
+  "Search for COMMAND in Mercurial's exec path, falling back to `exec-path'.
 Like `executable-find', return the absolute file name of the
 executable."
   (executable-find "hg"))
 
-;;; Git Version
+;;; Mercurial Version
 
 (defconst mercit--git-version-regexp
   "\\`Mercurial Distributed SCM (version \\([0-9]+\\(\\.[0-9]+\\)\\{1,2\\}\\))")
@@ -606,8 +606,8 @@ executable."
   (version< (mercit-git-version) n))
 
 (defun mercit-git-version ()
-  "Return the Git version used for `default-directory'.
-Raise an error if Git cannot be found, if it exits with a
+  "Return the Mercurial version used for `default-directory'.
+Raise an error if Mercurial cannot be found, if it exits with a
 non-zero status, or the output does not have the expected
 format."
   (mercit--with-refresh-cache default-directory
@@ -644,7 +644,7 @@ using `mercit-debug-git-executable'.")
                          output)))))))))
 
 (defun mercit-git-version-assert (&optional minimal who)
-  "Assert that the used Git version is greater than or equal to MINIMAL.
+  "Assert that the used Mercurial version is greater than or equal to MINIMAL.
 If optional MINIMAL is nil, compare with `mercit--minimal-git'
 instead.  Optional WHO if non-nil specifies what functionality
 needs at least MINIMAL, otherwise it defaults to \"Mercit\"."
@@ -671,7 +671,7 @@ values of `mercit-remote-git-executable' and `exec-path'.\n"))
       (display-warning 'mercit msg :error))))
 
 (defun mercit--safe-git-version ()
-  "Return the Git version used for `default-directory' or an error message."
+  "Return the Mercurial version used for `default-directory' or an error message."
   (mercit--with-temp-process-buffer
     (let* ((mercit-git-global-arguments nil)
            (status (mercit-process-git t "version"))
@@ -731,12 +731,12 @@ See info node `(mercit)Debugging Tools' for more information."
        configs))))
 
 (defun mercit-get (&rest keys)
-  "Return the value of the Git variable specified by KEYS."
+  "Return the value of the Mercurial variable specified by KEYS."
   (car (last (apply #'mercit-get-all keys))))
 
 (defun mercit-get-all (&rest keys)
   ;; FIXME: Mercurial has no multi-value config vars
-  "Return all values of the Git variable specified by KEYS."
+  "Return all values of the Mercurial variable specified by KEYS."
   (let ((mercit-git-debug nil)
         (arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
@@ -747,7 +747,7 @@ See info node `(mercit)Debugging Tools' for more information."
       (mercit-git-items "config" arg "--template" "{value}\\0" key))))  ;; FIXME
 
 (defun mercit-get-boolean (&rest keys)
-  "Return the boolean value of the Git variable specified by KEYS.
+  "Return the boolean value of the Mercurial variable specified by KEYS.
 Also see `mercit-git-config-p'."
   (let ((arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
@@ -760,7 +760,7 @@ Also see `mercit-git-config-p'."
 
 (defun mercit-set (value &rest keys)
   ;; FIXME Can't set variables using the mercurial command line
-  "Set the value of the Git variable specified by KEYS to VALUE."
+  "Set the value of the Mercurial variable specified by KEYS to VALUE."
   (let ((arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
                   (pop keys)))
@@ -775,7 +775,7 @@ Also see `mercit-git-config-p'."
 
 (defun mercit-set-all (values &rest keys)
   ;; FIXME Can't set variables using the mercurial command line
-  "Set all values of the Git variable specified by KEYS to VALUES."
+  "Set all values of the Mercurial variable specified by KEYS to VALUES."
   (let ((arg (and (or (null (car keys))
                       (string-prefix-p "--" (car keys)))
                   (pop keys)))
@@ -810,7 +810,7 @@ Also see `mercit-git-config-p'."
 If the `GIT_DIR' environment variable is define then return that.
 Otherwise return the .git directory for DIRECTORY, or if that is
 nil, then for `default-directory' instead.  If the directory is
-not located inside a Git repository, then return nil."
+not located inside a Mercurial repository, then return nil."
   (let ((default-directory (or directory default-directory)))
     (mercit-git-dir)))
 
@@ -819,7 +819,7 @@ not located inside a Git repository, then return nil."
 
 If the `GIT_DIR' environment variable is define then return that.
 Otherwise return the .git directory for `default-directory'.  If
-the directory is not located inside a Git repository, then return
+the directory is not located inside a Mercurial repository, then return
 nil."
   (mercit--with-refresh-cache (list default-directory 'mercit-git-dir path)
     (mercit--with-safe-default-directory nil
@@ -988,7 +988,7 @@ is non-nil, in which case return nil."
 (cl-defgeneric mercit-bare-repo-p (&optional noerror)  ;; TODO
   "Return t if the current repository is bare.
 If it is non-bare, then return nil.  If `default-directory'
-isn't below a Git repository, then signal an error unless
+isn't below a Mercurial repository, then signal an error unless
 NOERROR is non-nil, in which case return nil."
   (and nil  ;;  hg status --rev null
        (mercit--assert-default-directory noerror)
@@ -1010,7 +1010,7 @@ NOERROR is non-nil, in which case return nil."
                            default-directory))))))
 
 (defun mercit-git-repo-p (directory &optional non-bare)
-  "Return t if DIRECTORY is a Git repository.
+  "Return t if DIRECTORY is a Mercurial repository.
 When optional NON-BARE is non-nil also return nil if DIRECTORY is
 a bare repository."
   (and (file-directory-p directory) ; Avoid archives, see #3397.
@@ -1026,7 +1026,7 @@ a bare repository."
 
 If optional FILE is nil or omitted, return the relative path of
 the file being visited in the current buffer, if any, else nil.
-If the file is not inside a Git repository, then return nil.
+If the file is not inside a Mercurial repository, then return nil.
 
 If TRACKED is non-nil, return the path only if it matches a
 tracked file."
@@ -1186,9 +1186,9 @@ Sorted from longest to shortest CYGWIN name."
 (defun mercit-convert-filename-for-git (filename)
   "Convert FILENAME so that it can be passed to git.
 1. If it's a absolute filename, then pass through `expand-file-name'
-   to replace things such as \"~/\" that Git does not understand.
+   to replace things such as \"~/\" that Mercurial does not understand.
 2. If it's a remote filename, then remove the remote part.
-3. Deal with an `windows-nt' Emacs vs. Cygwin Git incompatibility."
+3. Deal with an `windows-nt' Emacs vs. Cygwin Mercurial incompatibility."
   (if (file-name-absolute-p filename)
       (if-let ((cyg:win (cl-rassoc filename mercit-cygwin-mount-points
                                    :test (lambda (f win) (string-prefix-p win f)))))
@@ -1226,7 +1226,7 @@ Sorted from longest to shortest CYGWIN name."
 ;;; Predicates
 
 (defun mercit-no-commit-p ()
-  "Return t if there is no commit in the current Git repository."
+  "Return t if there is no commit in the current Mercurial repository."
   (not (mercit-rev-verify ".")))
 
 (defun mercit-merge-commit-p (commit)
@@ -1335,7 +1335,7 @@ string \"true\", otherwise return nil."
 (defalias 'mercit-rev-hash #'mercit-commit-p)
 
 (defun mercit--rev-dereference (rev)  ;; TODO
-  "Return a rev that forces Git to interpret REV as a commit.
+  "Return a rev that forces Mercurial to interpret REV as a commit.
 If REV is nil or has the form \":/TEXT\", return REV itself."
   (cond ((not rev) nil)
         ((string-match-p "^:/" rev) rev)
@@ -1385,7 +1385,7 @@ When \"--exclude\" cannot be used and `git-name-rev' returns a
 ref that should have been excluded, then that is discarded and
 this function returns nil instead.  This is unfortunate because
 there might be other refs that do match.  To fix that, update
-Git."
+Mercurial."
   (if (mercit-git-version< "2.13")
       (and-let*
           ((ref (mercit-git-string "name-rev" "--name-only" "--no-undefined"

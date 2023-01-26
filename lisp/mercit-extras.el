@@ -41,7 +41,7 @@
   "Additional functionality for Mercit."
   :group 'mercit-extensions)
 
-;;; Git Tools
+;;; Mercurial Tools
 ;;;; Git-Mergetool
 
 ;;;###autoload (autoload 'mercit-git-mergetool "mercit-extras" nil t)
@@ -263,7 +263,7 @@ is no file at point, then instead visit `default-directory'."
       (let ((args (car (mercit-log-arguments)))
             (files (compat-call dired-get-marked-files
                                 nil nil #'mercit-file-tracked-p nil
-                                "No marked file is being tracked by Git")))
+                                "No marked file is being tracked by Mercurial")))
         (when (and follow
                    (not (member "--follow" args))
                    (not (cdr files)))
@@ -410,7 +410,7 @@ in HEAD as well as staged changes in the diff to check."
          ;; `diff-find-source-location' consults these vars.
          (defvar diff-vc-revisions)
          (setq-local diff-vc-revisions (list rev1 rev2))
-         (setq-local diff-vc-backend 'Git)
+         (setq-local diff-vc-backend 'Mercurial)
          (diff-add-log-current-defuns)))))
    (t (user-error "`mercit-generate-changelog' requires Emacs 27 or greater"))))
 
@@ -851,7 +851,7 @@ abbreviated revision to the `kill-ring' and the
 
 ;;;###autoload
 (defun mercit-display-repository-buffer (buffer)
-  "Display a Mercit buffer belonging to the current Git repository.
+  "Display a Mercit buffer belonging to the current Mercurial repository.
 The buffer is displayed using `mercit-display-buffer', which see."
   (interactive (list (mercit--read-repository-buffer
                       "Display mercit buffer: ")))
@@ -859,21 +859,21 @@ The buffer is displayed using `mercit-display-buffer', which see."
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer (buffer)
-  "Switch to a Mercit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Mercurial repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer: ")))
   (switch-to-buffer buffer))
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer-other-window (buffer)
-  "Switch to a Mercit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Mercurial repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer in another window: ")))
   (switch-to-buffer-other-window buffer))
 
 ;;;###autoload
 (defun mercit-switch-to-repository-buffer-other-frame (buffer)
-  "Switch to a Mercit buffer belonging to the current Git repository."
+  "Switch to a Mercit buffer belonging to the current Mercurial repository."
   (interactive (list (mercit--read-repository-buffer
                       "Switch to mercit buffer in another frame: ")))
   (switch-to-buffer-other-frame buffer))
@@ -894,7 +894,7 @@ The buffer is displayed using `mercit-display-buffer', which see."
                                               buffer-file-name)))
                      (equal (mercit-rev-parse-safe "--show-toplevel")
                             topdir))))))
-    (user-error "Not inside a Git repository")))
+    (user-error "Not inside a Mercurial repository")))
 
 ;;; Miscellaneous
 

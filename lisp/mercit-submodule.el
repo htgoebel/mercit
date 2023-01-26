@@ -637,7 +637,7 @@ These sections can be expanded to show the respective commits."
   "Local keymap for Mercit-Submodule-List mode buffers.")
 
 (define-derived-mode mercit-submodule-list-mode tabulated-list-mode "Modules"
-  "Major mode for browsing a list of Git submodules."
+  "Major mode for browsing a list of Mercurial submodules."
   :group 'mercit-repolist-mode
   (setq-local x-stretch-cursor nil)
   (setq tabulated-list-padding 0)

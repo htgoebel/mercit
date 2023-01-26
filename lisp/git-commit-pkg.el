@@ -1,5 +1,5 @@
 (define-package "git-commit" "3.3.0.50-git"
-  "Edit Git commit messages."
+  "Edit Mercurial commit messages."
   '((emacs       "25.1")
     (compat      "28.1.1.2")
     (transient   "20210920")

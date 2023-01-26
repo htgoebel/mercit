@@ -1,4 +1,4 @@
-;;; mercit-commit.el --- Create Git commits  -*- lexical-binding:t -*-
+;;; mercit-commit.el --- Create Mercurial commits  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2023      The Mercit Project Contributors
 ;; Copyright (C) 2008-2023 The Magit Project Contributors
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; This library implements commands for creating Git commits.  These
+;; This library implements commands for creating Mercurial commits.  These
 ;; commands just initiate the commit, support for writing the commit
 ;; messages is implemented in `git-commit.el'.
 

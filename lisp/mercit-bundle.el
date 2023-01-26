@@ -26,7 +26,7 @@
 
 ;;;###autoload (autoload 'mercit-bundle "mercit-bundle" nil t)
 (transient-define-prefix mercit-bundle ()
-  "Create or verify Git bundles."
+  "Create or verify Mercurial bundles."
   :man-page "git-bundle"
   ["Actions"
    ("c" "create"     mercit-bundle-create)

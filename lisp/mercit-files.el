@@ -21,7 +21,7 @@
 ;;; Commentary:
 
 ;; This library implements support for finding blobs, staged files,
-;; and Git configuration files.  It also implements modes useful in
+;; and Mercurial configuration files.  It also implements modes useful in
 ;; buffers visiting files and blobs, and the commands used by those
 ;; modes.
 
@@ -159,7 +159,7 @@ then only after asking.  A non-nil value for REVERT is ignored if REV is
                    (dolist (regexp revert-without-query)
                      (when (string-match regexp mercit-buffer-file-name)
                        (throw 'found t)))))
-            (yes-or-no-p (format "Revert buffer from Git %s? "
+            (yes-or-no-p (format "Revert buffer from Mercurial %s? "
                                  (if (equal mercit-buffer-refname "{index}")
                                      "index"
                                    (concat "revision " mercit-buffer-refname)))))
@@ -399,7 +399,7 @@ the same location in the respective file in the working tree."
 (defun mercit-file-rename (file newname)
   "Rename or move FILE to NEWNAME.
 NEWNAME may be a file or directory name.  If FILE isn't tracked in
-Git, fallback to using `rename-file'."
+Mercurial, fallback to using `rename-file'."
   (interactive
    (let* ((file (mercit-read-file "Rename file"))
           (path (expand-file-name file (mercit-toplevel))))
@@ -452,7 +452,7 @@ staged as well as unstaged changes."
 
 With a prefix argument FORCE do so even when the files have
 uncommitted changes.  When the files aren't being tracked in
-Git, then fallback to using `delete-file'."
+Mercurial, then fallback to using `delete-file'."
   (interactive (list (--if-let (mercit-region-values 'file t)
                          (mercit-confirm-files 'delete it "Delete")
                        (list (mercit-read-file "Delete file")))

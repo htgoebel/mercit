@@ -189,7 +189,7 @@ Another supported but obsolete value is `github-only'.  It is a
           (const :tag "... but only if remote is on a forge" forge-only)))
 
 (defcustom mercit-branch-direct-configure t
-  "Whether the command `mercit-branch' shows Git variables.
+  "Whether the command `mercit-branch' shows Mercurial variables.
 When set to nil, no variables are displayed by this transient
 command, instead the sub-transient `mercit-branch-configure'
 has to be used to view and change branch related variables."

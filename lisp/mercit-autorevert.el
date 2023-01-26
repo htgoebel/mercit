@@ -79,7 +79,7 @@ is enabled."
 If this is non-nil and either `global-auto-revert-mode' or
 `mercit-auto-revert-mode' is enabled, then Mercit immediately
 reverts buffers by explicitly calling `auto-revert-buffers'
-after running Git for side-effects.
+after running Mercurial for side-effects.
 
 If `auto-revert-use-notify' is non-nil (and file notifications
 are actually supported), then `mercit-auto-revert-immediately'
@@ -167,16 +167,16 @@ from Lisp, also enable the mode if ARG is omitted or nil, and
 toggle it if ARG is `toggle'; disable the mode otherwise.
 
 Mercit Auto Revert mode is a global minor mode that reverts
-buffers associated with a file that is located inside a Git
+buffers associated with a file that is located inside a Mercurial
 repository when the file changes on disk.  Use `auto-revert-mode'
 to revert a particular buffer.  Or use `global-auto-revert-mode'
 to revert all file-visiting buffers, not just those that visit
-a file located inside a Git repository.
+a file located inside a Mercurial repository.
 
 This global mode works by turning on the buffer-local mode
 `auto-revert-mode' at the time a buffer is first created.  The
 local mode is turned on if the visited file is being tracked in
-a Git repository at the time when the buffer is created.
+a Mercurial repository at the time when the buffer is created.
 
 If `mercit-auto-revert-tracked-only' is non-nil (the default),
 then only tracked files are reverted.  But if you stage a

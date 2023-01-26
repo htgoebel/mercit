@@ -60,7 +60,7 @@
   (declare (indent 1) (debug t))
   `(mercit-with-test-directory (mercit-test-init-repo "." "--bare") ,@body))
 
-;;; Git
+;;; Mercurial
 
 (ert-deftest mercit--with-safe-default-directory ()
   (mercit-with-test-directory

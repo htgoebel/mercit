@@ -1141,7 +1141,7 @@ Do not add this to a hook variable."
        ;;         (concat "\n" mercit-log-revision-headers-format "\n")
        ;;       (concat "\n" mercit-log-revision-headers-format "\n"))
        ;;   "")
-       "{desc}")
+       "{desc}\n")
       (progn
         (--when-let (--first (string-match "^\\+\\+order=\\(.+\\)$" it) args)
           (setq args (cons (format "--%s-order" (match-string 1 it))
@@ -1154,7 +1154,7 @@ Do not add this to a hook variable."
         (setq args (mercit-diff--maybe-add-stat-arguments args))
         args)
       ;; TODO "--use-mailmap"
-      "--noprefix"
+      ;; TODO "--noprefix"
       revs "--" files)))
 
 (cl-defmethod mercit-menu-common-value ((_section mercit-commit-section))

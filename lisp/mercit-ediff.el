@@ -118,17 +118,17 @@ recommend you do not further complicate that by enabling this.")
   "Show differences using the Ediff package."
   :info-manual "(ediff)"
   ["Ediff"
-   [("E" "Dwim"          mercit-ediff-dwim)
-    ("s" "Stage"         mercit-ediff-stage)]
-   [("m" "Resolve rest"            mercit-ediff-resolve-rest)
-    ("M" "Resolve all conflicts"   mercit-ediff-resolve-all)
-    ("t" "Resolve using mergetool" mercit-git-mergetool)]
-   [("u" "Show unstaged" mercit-ediff-show-unstaged)
-    ("i" "Show staged"   mercit-ediff-show-staged)
-    ("w" "Show worktree" mercit-ediff-show-working-tree)]
-   [("c" "Show commit"   mercit-ediff-show-commit)
-    ("r" "Show range"    mercit-ediff-compare)
-    ("z" "Show stash"    mercit-ediff-show-stash)]])
+   [("E" "*Dwim"          mercit-ediff-dwim)
+    ("s" "*Stage"         mercit-ediff-stage)]
+   [("m" "*Resolve rest"            mercit-ediff-resolve-rest)
+    ("M" "*Resolve all conflicts"   mercit-ediff-resolve-all)
+    ("t" "*Resolve using mergetool" mercit-git-mergetool)]
+   [("u" "*Show unstaged" mercit-ediff-show-unstaged)
+    ("i" "*Show staged"   mercit-ediff-show-staged)
+    ("w" "*Show worktree" mercit-ediff-show-working-tree)]
+   [("c" "*Show commit"   mercit-ediff-show-commit)
+    ("r" "*Show range"    mercit-ediff-compare)
+    ("z" "*Show stash"    mercit-ediff-show-stash)]])
 
 (defmacro mercit-ediff-buffers (a b &optional c setup quit file)
   "Run Ediff on two or three buffers.
@@ -469,12 +469,12 @@ mind at all, then it asks the user for a command to run."
               (call-interactively
                (mercit-read-char-case
                    "Failed to read your mind; do you want to " t
-                 (?c "[c]ommit"  #'mercit-ediff-show-commit)
-                 (?r "[r]ange"   #'mercit-ediff-compare)
-                 (?s "[s]tage"   #'mercit-ediff-stage)
-                 (?m "[m] resolve remaining conflicts"
+                 (?c "*[c]ommit"  #'mercit-ediff-show-commit)
+                 (?r "*[r]ange"   #'mercit-ediff-compare)
+                 (?s "*[s]tage"   #'mercit-ediff-stage)
+                 (?m "*[m] resolve remaining conflicts"
                      #'mercit-ediff-resolve-rest)
-                 (?M "[M] resolve all conflicts"
+                 (?M "*[M] resolve all conflicts"
                      #'mercit-ediff-resolve-all))))
              ((eq command #'mercit-ediff-compare)
               (apply #'mercit-ediff-compare revA revB

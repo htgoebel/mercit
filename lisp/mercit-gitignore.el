@@ -33,11 +33,11 @@
   "Instruct Mercurial to ignore a file or pattern."
   :man-page "gitignore"
   ["Gitignore"
-   ("t" "shared at toplevel (.gitignore)"
+   ("t" "*shared at toplevel (.gitignore)"
     mercit-gitignore-in-topdir)
-   ("s" "shared in subdirectory (path/to/.gitignore)"
+   ("s" "*shared in subdirectory (path/to/.gitignore)"
     mercit-gitignore-in-subdir)
-   ("p" "privately (.git/info/exclude)"
+   ("p" "*privately (.git/info/exclude)"
     mercit-gitignore-in-gitdir)
    ("g" mercit-gitignore-on-system
     :if (lambda () (mercit-get "core.excludesfile"))
@@ -45,11 +45,11 @@
                    (format "privately for all repositories (%s)"
                            (mercit-get "core.excludesfile"))))]
   ["Skip worktree"
-   (7 "w" "do skip worktree"     mercit-skip-worktree)
-   (7 "W" "do not skip worktree" mercit-no-skip-worktree)]
+   (7 "w" "*do skip worktree"     mercit-skip-worktree)
+   (7 "W" "*do not skip worktree" mercit-no-skip-worktree)]
   ["Assume unchanged"
-   (7 "u" "do assume unchanged"     mercit-assume-unchanged)
-   (7 "U" "do not assume unchanged" mercit-no-assume-unchanged)])
+   (7 "u" "*do assume unchanged"     mercit-assume-unchanged)
+   (7 "U" "*do not assume unchanged" mercit-no-assume-unchanged)])
 
 ;;; Gitignore Commands
 

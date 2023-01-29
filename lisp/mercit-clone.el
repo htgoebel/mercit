@@ -117,40 +117,40 @@ default.  Also see `mercit-clone-name-alist'."
   "Clone a repository."
   :man-page "git-clone"
   ["Fetch arguments"
-   ("-B" "Clone a single branch"  "--single-branch")
-   ("-n" "Do not clone tags"      "--no-tags")
-   ("-S" "Clones submodules"      "--recurse-submodules" :level 6)
-   ("-l" "Do not optimize"        "--no-local" :level 7)]
+   ("-B" "*Clone a single branch"  "--single-branch")
+   ("-n" "*Do not clone tags"      "--no-tags")
+   ("-S" "*Clones submodules"      "--recurse-submodules" :level 6)
+   ("-l" "*Do not optimize"        "--no-local" :level 7)]
   ["Setup arguments"
-   ("-o" "Set name of remote"     ("-o" "--origin="))
-   ("-b" "Set HEAD branch"        ("-b" "--branch="))
+   ("-o" "*Set name of remote"     ("-o" "--origin="))
+   ("-b" "*Set HEAD branch"        ("-b" "--branch="))
    (mercit-clone:--filter
     :if (lambda () (mercit-git-version>= "2.17.0"))
     :level 7)
-   ("-g" "Separate git directory" "--separate-git-dir="
+   ("-g" "*Separate git directory" "--separate-git-dir="
     transient-read-directory :level 7)
-   ("-t" "Use template directory" "--template="
+   ("-t" "*Use template directory" "--template="
     transient-read-existing-directory :level 6)]
   ["Local sharing arguments"
-   ("-s" "Share objects"          ("-s" "--shared" :level 7))
-   ("-h" "Do not use hardlinks"   "--no-hardlinks")]
+   ("-s" "*Share objects"          ("-s" "--shared" :level 7))
+   ("-h" "*Do not use hardlinks"   "--no-hardlinks")]
   ["Clone"
-   ("C" "regular"            mercit-clone-regular)
-   ("s" "shallow"            mercit-clone-shallow)
-   ("d" "shallow since date" mercit-clone-shallow-since :level 7)
-   ("e" "shallow excluding"  mercit-clone-shallow-exclude :level 7)
-   (">" "sparse checkout"    mercit-clone-sparse
+   ("C" "*regular"            mercit-clone-regular)
+   ("s" "*shallow"            mercit-clone-shallow)
+   ("d" "*shallow since date" mercit-clone-shallow-since :level 7)
+   ("e" "*shallow excluding"  mercit-clone-shallow-exclude :level 7)
+   (">" "*sparse checkout"    mercit-clone-sparse
     :if (lambda () (mercit-git-version>= "2.25.0"))
     :level 6)
-   ("b" "bare"               mercit-clone-bare)
-   ("m" "mirror"             mercit-clone-mirror)]
+   ("b" "*bare"               mercit-clone-bare)
+   ("m" "*mirror"             mercit-clone-mirror)]
   (interactive (list (or mercit-clone-always-transient current-prefix-arg)))
   (if transient
       (transient-setup 'mercit-clone)
     (call-interactively #'mercit-clone-regular)))
 
 (transient-define-argument mercit-clone:--filter ()
-  :description "Filter some objects"
+  :description "*Filter some objects"
   :class 'transient-option
   :key "-f"
   :argument "--filter="
@@ -290,19 +290,19 @@ Then show the status buffer for the new repository."
 
 (defun mercit-clone-read-repository ()
   (mercit-read-char-case "Clone from " nil
-    (?u "[u]rl or name"
+    (?u "*[u]rl or name"
         (let ((str (mercit-read-string-ns "Clone from url or name")))
           (if (string-match-p "\\(://\\|@\\)" str)
               str
             (mercit-clone--name-to-url str))))
-    (?p "[p]ath"
+    (?p "*[p]ath"
         (mercit-convert-filename-for-git
          (read-directory-name "Clone repository: ")))
-    (?l "[l]ocal url"
+    (?l "*[l]ocal url"
         (concat "file://"
                 (mercit-convert-filename-for-git
                  (read-directory-name "Clone repository: file://"))))
-    (?b "or [b]undle"
+    (?b "or *[b]undle"
         (mercit-convert-filename-for-git
          (read-file-name "Clone from bundle: ")))))
 

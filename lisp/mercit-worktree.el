@@ -44,12 +44,12 @@ Used by `mercit-worktree-checkout' and `mercit-worktree-branch'."
   "Act on a worktree."
   :man-page "git-worktree"
   [["Create new"
-    ("b" "worktree"              mercit-worktree-checkout)
-    ("c" "branch and worktree"   mercit-worktree-branch)]
+    ("b" "*worktree"              mercit-worktree-checkout)
+    ("c" "*branch and worktree"   mercit-worktree-branch)]
    ["Commands"
-    ("m" "Move worktree"         mercit-worktree-move)
-    ("k" "Delete worktree"       mercit-worktree-delete)
-    ("g" "Visit worktree"        mercit-worktree-status)]])
+    ("m" "*Move worktree"         mercit-worktree-move)
+    ("k" "*Delete worktree"       mercit-worktree-delete)
+    ("g" "*Visit worktree"        mercit-worktree-status)]])
 
 ;;;###autoload
 (defun mercit-worktree-checkout (path branch)

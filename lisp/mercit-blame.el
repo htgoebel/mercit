@@ -927,33 +927,33 @@ instead of the hash, like `kill-ring-save' would."
   :man-page "git-blame"
   :value '("-w")
   ["Arguments"
-   ("-w" "Ignore whitespace" "-w")
-   ("-r" "Do not treat root commits as boundaries" "--root")
-   ("-P" "Follow only first parent" "--first-parent")
+   ("-w" "*Ignore whitespace" "-w")
+   ("-r" "*Do not treat root commits as boundaries" "--root")
+   ("-P" "*Follow only first parent" "--first-parent")
    (mercit-blame:-M)
    (mercit-blame:-C)]
   ["Actions"
-   ("b" "Show commits adding lines" mercit-blame-addition)
-   ("r" "Show commits removing lines" mercit-blame-removal)
-   ("f" "Show last commits that still have lines" mercit-blame-reverse)
-   ("m" "Blame echo" mercit-blame-echo)
-   ("q" "Quit blaming" mercit-blame-quit)]
+   ("b" "*Show commits adding lines" mercit-blame-addition)
+   ("r" "*Show commits removing lines" mercit-blame-removal)
+   ("f" "*Show last commits that still have lines" mercit-blame-reverse)
+   ("m" "*Blame echo" mercit-blame-echo)
+   ("q" "*Quit blaming" mercit-blame-quit)]
   ["Refresh"
    :if-non-nil mercit-blame-mode
-   ("c" "Cycle style" mercit-blame-cycle-style :transient t)])
+   ("c" "*Cycle style" mercit-blame-cycle-style :transient t)])
 
 (defun mercit-blame-arguments ()
   (transient-args 'mercit-blame))
 
 (transient-define-argument mercit-blame:-M ()
-  :description "Detect lines moved or copied within a file"
+  :description "*Detect lines moved or copied within a file"
   :class 'transient-option
   :argument "-M"
   :allow-empty t
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit-blame:-C ()
-  :description "Detect lines moved or copied between files"
+  :description "*Detect lines moved or copied between files"
   :class 'transient-option
   :argument "-C"
   :allow-empty t

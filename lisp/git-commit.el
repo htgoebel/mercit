@@ -789,17 +789,17 @@ Save current message first."
 (transient-define-prefix git-commit-insert-pseudo-header ()
   "Insert a commit message pseudo header."
   [["Insert ... by yourself"
-    ("a"   "Ack"          git-commit-ack)
-    ("m"   "Modified"     git-commit-modified)
-    ("r"   "Reviewed"     git-commit-review)
-    ("s"   "Signed-off"   git-commit-signoff)
-    ("t"   "Tested"       git-commit-test)]
+    ("a"   "*Ack"          git-commit-ack)
+    ("m"   "*Modified"     git-commit-modified)
+    ("r"   "*Reviewed"     git-commit-review)
+    ("s"   "*Signed-off"   git-commit-signoff)
+    ("t"   "*Tested"       git-commit-test)]
    ["Insert ... by someone"
-    ("C-c" "Cc"           git-commit-cc)
-    ("C-r" "Reported"     git-commit-reported)
-    ("C-i" "Suggested"    git-commit-suggested)
-    ("C-a" "Co-authored"  git-commit-co-authored)
-    ("C-d" "Co-developed" git-commit-co-developed)]])
+    ("C-c" "*Cc"           git-commit-cc)
+    ("C-r" "*Reported"     git-commit-reported)
+    ("C-i" "*Suggested"    git-commit-suggested)
+    ("C-a" "*Co-authored"  git-commit-co-authored)
+    ("C-d" "*Co-developed" git-commit-co-developed)]])
 
 (defun git-commit-ack (name mail)
   "Insert a header acknowledging that you have looked at the commit."

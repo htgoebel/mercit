@@ -861,31 +861,31 @@ and `:slant'."
   ["Limit arguments"
    (mercit:--)
    (mercit-diff:--ignore-submodules)
-   ("-b" "Ignore whitespace changes"      ("-b" "--ignore-space-change"))
-   ("-w" "Ignore all whitespace"          ("-w" "--ignore-all-space"))
-   (5 "-D" "Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
+   ("-b" "*Ignore whitespace changes"      ("-b" "--ignore-space-change"))
+   ("-w" "*Ignore all whitespace"          ("-w" "--ignore-all-space"))
+   (5 "-D" "*Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
   ["Context arguments"
    (mercit-diff:-U)
-   ("-W" "Show surrounding functions"     ("-W" "--function-context"))]
+   ("-W" "*Show surrounding functions"     ("-W" "--function-context"))]
   ["Tune arguments"
    (mercit-diff:--diff-algorithm)
    (mercit-diff:-M)
    (mercit-diff:-C)
-   ("-x" "Disallow external diff drivers" "--no-ext-diff")
-   ("-s" "Show stats"                     "--stat")
-   ("=g" "Show signature"                 "--show-signature")
-   (5 "-R" "Reverse sides"                "-R")
+   ("-x" "*Disallow external diff drivers" "--no-ext-diff")
+   ("-s" "*Show stats"                     "--stat")
+   ("=g" "*Show signature"                 "--show-signature")
+   (5 "-R" "*Reverse sides"                "-R")
    (5 mercit-diff:--color-moved)
    (5 mercit-diff:--color-moved-ws)]
   ["Actions"
-   [("d" "Dwim"          mercit-diff-dwim)
-    ("r" "Diff range"    mercit-diff-range)
-    ("p" "Diff paths"    mercit-diff-paths)]
-   [("u" "Diff unstaged" mercit-diff-unstaged)
-    ("s" "Diff staged"   mercit-diff-staged)
-    ("w" "Diff worktree" mercit-diff-working-tree)]
-   [("c" "Show commit"   mercit-show-commit)
-    ("t" "Show stash"    mercit-stash-show)]])
+   [("d" "*Dwim"          mercit-diff-dwim)
+    ("r" "*Diff range"    mercit-diff-range)
+    ("p" "*Diff paths"    mercit-diff-paths)]
+   [("u" "*Diff unstaged" mercit-diff-unstaged)
+    ("s" "*Diff staged"   mercit-diff-staged)
+    ("w" "*Diff worktree" mercit-diff-working-tree)]
+   [("c" "*Show commit"   mercit-show-commit)
+    ("t" "*Show stash"    mercit-stash-show)]])
 
 ;;;###autoload (autoload 'mercit-diff-refresh "mercit-diff" nil t)
 (transient-define-prefix mercit-diff-refresh ()
@@ -895,38 +895,38 @@ and `:slant'."
   ["Limit arguments"
    (mercit:--)
    (mercit-diff:--ignore-submodules)
-   ("-b" "Ignore whitespace changes"      ("-b" "--ignore-space-change"))
-   ("-w" "Ignore all whitespace"          ("-w" "--ignore-all-space"))
-   (5 "-D" "Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
+   ("-b" "*Ignore whitespace changes"      ("-b" "--ignore-space-change"))
+   ("-w" "*Ignore all whitespace"          ("-w" "--ignore-all-space"))
+   (5 "-D" "*Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
   ["Context arguments"
    (mercit-diff:-U)
-   ("-W" "Show surrounding functions"     ("-W" "--function-context"))]
+   ("-W" "*Show surrounding functions"     ("-W" "--function-context"))]
   ["Tune arguments"
    (mercit-diff:--diff-algorithm)
    (mercit-diff:-M)
    (mercit-diff:-C)
-   ("-x" "Disallow external diff drivers" "--no-ext-diff")
-   ("-s" "Show stats"                     "--stat"
+   ("-x" "*Disallow external diff drivers" "--no-ext-diff")
+   ("-s" "*Show stats"                     "--stat"
     :if-derived mercit-diff-mode)
-   ("=g" "Show signature"                 "--show-signature"
+   ("=g" "*Show signature"                 "--show-signature"
     :if-derived mercit-diff-mode)
-   (5 "-R" "Reverse sides"                "-R"
+   (5 "-R" "*Reverse sides"                "-R"
       :if-derived mercit-diff-mode)
    (5 mercit-diff:--color-moved)
    (5 mercit-diff:--color-moved-ws)]
   [["Refresh"
-    ("g" "buffer"                   mercit-diff-refresh)
-    ("s" "buffer and set defaults"  transient-set  :transient nil)
-    ("w" "buffer and save defaults" transient-save :transient nil)]
+    ("g" "*buffer"                   mercit-diff-refresh)
+    ("s" "*buffer and set defaults"  transient-set  :transient nil)
+    ("w" "*buffer and save defaults" transient-save :transient nil)]
    ["Toggle"
-    ("t" "hunk refinement"          mercit-diff-toggle-refine-hunk)
-    ("F" "file filter"              mercit-diff-toggle-file-filter)
-    ("b" "buffer lock"              mercit-toggle-buffer-lock
+    ("t" "*hunk refinement"          mercit-diff-toggle-refine-hunk)
+    ("F" "*file filter"              mercit-diff-toggle-file-filter)
+    ("b" "*buffer lock"              mercit-toggle-buffer-lock
      :if-mode (mercit-diff-mode mercit-revision-mode mercit-stash-mode))]
    [:if-mode mercit-diff-mode
     :description "Do"
-    ("r" "switch range type"        mercit-diff-switch-range-type)
-    ("f" "flip revisions"           mercit-diff-flip-revs)]]
+    ("r" "*switch range type"        mercit-diff-switch-range-type)
+    ("f" "*flip revisions"           mercit-diff-flip-revs)]]
   (interactive)
   (if (not (eq transient-current-command 'mercit-diff-refresh))
       (transient-setup 'mercit-diff-refresh)
@@ -938,7 +938,7 @@ and `:slant'."
 ;;;; Infix Commands
 
 (transient-define-argument mercit:-- ()
-  :description "Limit to files"
+  :description "*Limit to files"
   :class 'transient-files
   :key "--"
   :argument "--"
@@ -954,27 +954,27 @@ and `:slant'."
                                    history))
 
 (transient-define-argument mercit-diff:-U ()
-  :description "Context lines"
+  :description "*Context lines"
   :class 'transient-option
   :argument "-U"
   :reader #'transient-read-number-N0)
 
 (transient-define-argument mercit-diff:-M ()
-  :description "Detect renames"
+  :description "*Detect renames"
   :class 'transient-option
   :argument "-M"
   :allow-empty t
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit-diff:-C ()
-  :description "Detect copies"
+  :description "*Detect copies"
   :class 'transient-option
   :argument "-C"
   :allow-empty t
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit-diff:--diff-algorithm ()
-  :description "Diff algorithm"
+  :description "*Diff algorithm"
   :class 'transient-option
   :key "-A"
   :argument "--diff-algorithm="
@@ -982,13 +982,13 @@ and `:slant'."
 
 (defun mercit-diff-select-algorithm (&rest _ignore)
   (mercit-read-char-case nil t
-    (?d "[d]efault"   "default")
-    (?m "[m]inimal"   "minimal")
-    (?p "[p]atience"  "patience")
-    (?h "[h]istogram" "histogram")))
+    (?d "*[d]efault"   "default")
+    (?m "*[m]inimal"   "minimal")
+    (?p "*[p]atience"  "patience")
+    (?h "*[h]istogram" "histogram")))
 
 (transient-define-argument mercit-diff:--ignore-submodules ()
-  :description "Ignore submodules"
+  :description "*Ignore submodules"
   :class 'transient-option
   :key "-i"
   :argument "--ignore-submodules="
@@ -996,12 +996,12 @@ and `:slant'."
 
 (defun mercit-diff-select-ignore-submodules (&rest _ignored)
   (mercit-read-char-case "Ignore submodules " t
-    (?u "[u]ntracked" "untracked")
-    (?d "[d]irty"     "dirty")
-    (?a "[a]ll"       "all")))
+    (?u "*[u]ntracked" "untracked")
+    (?d "*[d]irty"     "dirty")
+    (?a "*[a]ll"       "all")))
 
 (transient-define-argument mercit-diff:--color-moved ()
-  :description "Color moved lines"
+  :description "*Color moved lines"
   :class 'transient-option
   :key "-m"
   :argument "--color-moved="
@@ -1009,14 +1009,14 @@ and `:slant'."
 
 (defun mercit-diff-select-color-moved-mode (&rest _ignore)
   (mercit-read-char-case "Color moved " t
-    (?d "[d]efault" "default")
-    (?p "[p]lain"   "plain")
-    (?b "[b]locks"  "blocks")
-    (?z "[z]ebra"   "zebra")
-    (?Z "[Z] dimmed-zebra" "dimmed-zebra")))
+    (?d "*[d]efault" "default")
+    (?p "*[p]lain"   "plain")
+    (?b "*[b]locks"  "blocks")
+    (?z "*[z]ebra"   "zebra")
+    (?Z "*[Z] dimmed-zebra" "dimmed-zebra")))
 
 (transient-define-argument mercit-diff:--color-moved-ws ()
-  :description "Whitespace treatment for --color-moved"
+  :description "*Whitespace treatment for --color-moved"
   :class 'transient-option
   :key "=w"
   :argument "--color-moved-ws="
@@ -1024,11 +1024,11 @@ and `:slant'."
 
 (defun mercit-diff-select-color-moved-ws-mode (&rest _ignore)
   (mercit-read-char-case "Ignore whitespace " t
-    (?i "[i]ndentation"  "allow-indentation-change")
-    (?e "[e]nd of line"  "ignore-space-at-eol")
-    (?s "[s]pace change" "ignore-space-change")
-    (?a "[a]ll space"    "ignore-all-space")
-    (?n "[n]o"           "no")))
+    (?i "*[i]ndentation"  "allow-indentation-change")
+    (?e "*[e]nd of line"  "ignore-space-at-eol")
+    (?s "*[s]pace change" "ignore-space-change")
+    (?a "*[a]ll space"    "ignore-all-space")
+    (?n "*[n]o"           "no")))
 
 ;;;; Setup Commands
 

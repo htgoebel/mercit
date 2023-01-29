@@ -29,28 +29,28 @@
   "Create or verify Mercurial bundles."
   :man-page "git-bundle"
   ["Actions"
-   ("c" "create"     mercit-bundle-create)
-   ("v" "verify"     mercit-bundle-verify)
-   ("l" "list-heads" mercit-bundle-list-heads)])
+   ("c" "*create"     mercit-bundle-create)
+   ("v" "*verify"     mercit-bundle-verify)
+   ("l" "*list-heads" mercit-bundle-list-heads)])
 
 ;;;###autoload (autoload 'mercit-bundle-import "mercit-bundle" nil t)
 (transient-define-prefix mercit-bundle-create (&optional file refs args)
   "Create a bundle."
   :man-page "git-bundle"
   ["Arguments"
-   ("-a" "Include all refs" "--all")
-   ("-b" "Include branches" "--branches=" :allow-empty t)
-   ("-t" "Include tags"     "--tags="     :allow-empty t)
-   ("-r" "Include remotes"  "--remotes="  :allow-empty t)
-   ("-g" "Include refs"     "--glob=")
-   ("-e" "Exclude refs"     "--exclude=")
+   ("-a" "*Include all refs" "--all")
+   ("-b" "*Include branches" "--branches=" :allow-empty t)
+   ("-t" "*Include tags"     "--tags="     :allow-empty t)
+   ("-r" "*Include remotes"  "--remotes="  :allow-empty t)
+   ("-g" "*Include refs"     "--glob=")
+   ("-e" "*Exclude refs"     "--exclude=")
    (mercit-log:-n)
    (mercit-log:--since)
    (mercit-log:--until)]
   ["Actions"
-   ("c" "create regular bundle" mercit-bundle-create)
-   ("t" "create tracked bundle" mercit-bundle-create-tracked)
-   ("u" "update tracked bundle" mercit-bundle-update-tracked)]
+   ("c" "*create regular bundle" mercit-bundle-create)
+   ("t" "*create tracked bundle" mercit-bundle-create-tracked)
+   ("u" "*update tracked bundle" mercit-bundle-update-tracked)]
   (interactive
    (and (eq transient-current-command 'mercit-bundle-create)
         (list (read-file-name "Create bundle: " nil nil nil

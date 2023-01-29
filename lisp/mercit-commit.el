@@ -119,32 +119,32 @@ Also see https://github.com/magit/magit/issues/4132."
   :info-manual "(mercit)Initiating a Commit"
   :man-page "git-commit"
   ["Arguments"
-   ("-a" "Stage all modified and deleted files"   ("-a" "--all"))
-   ("-e" "Allow empty commit"                     "--allow-empty")
-   ("-v" "Show diff of changes to be committed"   ("-v" "--verbose"))
-   ("-n" "Disable hooks"                          ("-n" "--no-verify"))
-   ("-R" "Claim authorship and reset author date" "--reset-author")
-   (mercit:--author :description "Override the author")
-   (7 "-D" "Override the author date" "--date=" transient-read-date)
-   ("-s" "Add Signed-off-by line"                 ("-s" "--signoff"))
+   ("-a" "*Stage all modified and deleted files"   ("-a" "--all"))
+   ("-e" "*Allow empty commit"                     "--allow-empty")
+   ("-v" "*Show diff of changes to be committed"   ("-v" "--verbose"))
+   ("-n" "*Disable hooks"                          ("-n" "--no-verify"))
+   ("-R" "*Claim authorship and reset author date" "--reset-author")
+   (mercit:--author :description "*Override the author")
+   (7 "-D" "*Override the author date" "--date=" transient-read-date)
+   ("-s" "*Add Signed-off-by line"                 ("-s" "--signoff"))
    (5 mercit:--gpg-sign)
    (mercit-commit:--reuse-message)]
   [["Create"
-    ("c" "Commit"         mercit-commit-create)]
+    ("c" "*Commit"         mercit-commit-create)]
    ["Edit HEAD"
-    ("e" "Extend"         mercit-commit-extend)
-    ("w" "Reword"         mercit-commit-reword)
-    ("a" "Amend"          mercit-commit-amend)
-    (6 "n" "Reshelve"     mercit-commit-reshelve)]
+    ("e" "*Extend"         mercit-commit-extend)
+    ("w" "*Reword"         mercit-commit-reword)
+    ("a" "*Amend"          mercit-commit-amend)
+    (6 "n" "*Reshelve"     mercit-commit-reshelve)]
    ["Edit"
-    ("f" "Fixup"          mercit-commit-fixup)
-    ("s" "Squash"         mercit-commit-squash)
-    ("A" "Augment"        mercit-commit-augment)
-    (6 "x" "Absorb changes" mercit-commit-autofixup)
-    (6 "X" "Absorb modules" mercit-commit-absorb-modules)]
+    ("f" "*Fixup"          mercit-commit-fixup)
+    ("s" "*Squash"         mercit-commit-squash)
+    ("A" "*Augment"        mercit-commit-augment)
+    (6 "x" "*Absorb changes" mercit-commit-autofixup)
+    (6 "X" "*Absorb modules" mercit-commit-absorb-modules)]
    [""
-    ("F" "Instant fixup"  mercit-commit-instant-fixup)
-    ("S" "Instant squash" mercit-commit-instant-squash)]]
+    ("F" "*Instant fixup"  mercit-commit-instant-fixup)
+    ("S" "*Instant squash" mercit-commit-instant-squash)]]
   (interactive)
   (if-let ((buffer (mercit-commit-message-buffer)))
       (switch-to-buffer buffer)
@@ -154,7 +154,7 @@ Also see https://github.com/magit/magit/issues/4132."
   (transient-args 'mercit-commit))
 
 (transient-define-argument mercit-commit:--reuse-message ()
-  :description "Reuse commit message"
+  :description "*Reuse commit message"
   :class 'transient-option
   :shortarg "-C"
   :argument "--reuse-message="
@@ -288,9 +288,9 @@ depending on the value of option `mercit-commit-squash-confirm'."
       (when (and rebase (not (mercit-rev-ancestor-p commit "HEAD")))
         (mercit-read-char-case
             (format "%s isn't an ancestor of HEAD.  " commit) nil
-          (?c "[c]reate without rebasing" (setq rebase nil))
-          (?s "[s]elect other"            (setq commit nil))
-          (?a "[a]bort"                   (user-error "Quit")))))
+          (?c "*[c]reate without rebasing" (setq rebase nil))
+          (?s "*[s]elect other"            (setq commit nil))
+          (?a "*[a]bort"                   (user-error "Quit")))))
     (when commit
       (setq commit (mercit-rebase-interactive-assert commit t)))
     (if (and commit
@@ -446,8 +446,8 @@ arguments.  This command requires git-absorb executable, which
 is available from https://github.com/tummychow/git-absorb.
 See `mercit-commit-autofixup' for an alternative implementation."
   ["Arguments"
-   ("-f" "Skip safety checks"       ("-f" "--force"))
-   ("-v" "Display more output"      ("-v" "--verbose"))]
+   ("-f" "*Skip safety checks"       ("-f" "--force"))
+   ("-v" "*Display more output"      ("-v" "--verbose"))]
   ["Actions"
    ("x"  "Absorb" mercit-commit-absorb)]
   (interactive (if current-prefix-arg
@@ -492,7 +492,7 @@ See `mercit-commit-absorb' for an alternative implementation."
    (mercit-autofixup:--context)
    (mercit-autofixup:--strict)]
   ["Actions"
-   ("x"  "Absorb" mercit-commit-autofixup)]
+   ("x"  "*Absorb" mercit-commit-autofixup)]
   (interactive (if current-prefix-arg
                    (list 'transient nil nil)
                  (list 'select
@@ -516,14 +516,14 @@ See `mercit-commit-absorb' for an alternative implementation."
         nil nil nil nil commit))))
 
 (transient-define-argument mercit-autofixup:--context ()
-  :description "Diff context lines"
+  :description "*Diff context lines"
   :class 'transient-option
   :shortarg "-c"
   :argument "--context="
   :reader #'transient-read-number-N0)
 
 (transient-define-argument mercit-autofixup:--strict ()
-  :description "Strictness"
+  :description "*Strictness"
   :class 'transient-option
   :shortarg "-s"
   :argument "--strict="

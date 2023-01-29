@@ -40,7 +40,7 @@
    ("D" mercit-global-notes.displayRef)]
   ["Arguments for prune"
    :if-not mercit-notes-merging-p
-   ("-n" "Dry run" ("-n" "--dry-run"))]
+   ("-n" "*Dry run" ("-n" "--dry-run"))]
   ["Arguments for edit and remove"
    :if-not mercit-notes-merging-p
    (mercit-notes:--ref)]
@@ -49,14 +49,14 @@
    (mercit-notes:--strategy)]
   ["Actions"
    :if-not mercit-notes-merging-p
-   ("T" "Edit"         mercit-notes-edit)
-   ("r" "Remove"       mercit-notes-remove)
-   ("m" "Merge"        mercit-notes-merge)
-   ("p" "Prune"        mercit-notes-prune)]
+   ("T" "*Edit"         mercit-notes-edit)
+   ("r" "*Remove"       mercit-notes-remove)
+   ("m" "*Merge"        mercit-notes-merge)
+   ("p" "*Prune"        mercit-notes-prune)]
   ["Actions"
    :if mercit-notes-merging-p
-   ("c" "Commit merge" mercit-notes-merge-commit)
-   ("a" "Abort merge"  mercit-notes-merge-abort)])
+   ("c" "*Commit merge" mercit-notes-merge-commit)
+   ("a" "*Abort merge"  mercit-notes-merge-abort)])
 
 (defun mercit-notes-merging-p ()
   (let ((dir (mercit-git-dir "NOTES_MERGE_WORKTREE")))
@@ -65,41 +65,41 @@
 
 (transient-define-infix mercit-core.notesRef ()
   :class 'mercit--git-variable
-  :variable "core.notesRef"
+  :variable "*core.notesRef"
   :reader #'mercit-notes-read-ref
   :prompt "Set local core.notesRef")
 
 (transient-define-infix mercit-notes.displayRef ()
   :class 'mercit--git-variable
-  :variable "notes.displayRef"
+  :variable "*notes.displayRef"
   :multi-value t
   :reader #'mercit-notes-read-refs
   :prompt "Set local notes.displayRef")
 
 (transient-define-infix mercit-global-core.notesRef ()
   :class 'mercit--git-variable
-  :variable "core.notesRef"
+  :variable "*core.notesRef"
   :global t
   :reader #'mercit-notes-read-ref
   :prompt "Set global core.notesRef")
 
 (transient-define-infix mercit-global-notes.displayRef ()
   :class 'mercit--git-variable
-  :variable "notes.displayRef"
+  :variable "*notes.displayRef"
   :global t
   :multi-value t
   :reader #'mercit-notes-read-refs
   :prompt "Set global notes.displayRef")
 
 (transient-define-argument mercit-notes:--ref ()
-  :description "Manipulate ref"
+  :description "*Manipulate ref"
   :class 'transient-option
   :key "-r"
   :argument "--ref="
   :reader #'mercit-notes-read-ref)
 
 (transient-define-argument mercit-notes:--strategy ()
-  :description "Merge strategy"
+  :description "*Merge strategy"
   :class 'transient-option
   :shortarg "-s"
   :argument "--strategy="

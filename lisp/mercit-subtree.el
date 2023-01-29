@@ -29,8 +29,8 @@
   "Import or export subtrees."
   :man-page "git-subtree"
   ["Actions"
-   ("i" "Import" mercit-subtree-import)
-   ("e" "Export" mercit-subtree-export)])
+   ("i" "*Import" mercit-subtree-import)
+   ("e" "*Export" mercit-subtree-export)])
 
 ;;;###autoload (autoload 'mercit-subtree-import "mercit-subtree" nil t)
 (transient-define-prefix mercit-subtree-import ()
@@ -39,12 +39,12 @@
   ["Arguments"
    (mercit-subtree:--prefix)
    (mercit-subtree:--message)
-   ("-s" "Squash" "--squash")]
+   ("-s" "*Squash" "--squash")]
   ["Actions"
-   [("a" "Add"        mercit-subtree-add)
-    ("c" "Add commit" mercit-subtree-add-commit)]
-   [("m" "Merge"      mercit-subtree-merge)
-    ("f" "Pull"       mercit-subtree-pull)]])
+   [("a" "*Add"        mercit-subtree-add)
+    ("c" "*Add commit" mercit-subtree-add-commit)]
+   [("m" "*Merge"      mercit-subtree-merge)
+    ("f" "*Pull"       mercit-subtree-pull)]])
 
 ;;;###autoload (autoload 'mercit-subtree-export "mercit-subtree" nil t)
 (transient-define-prefix mercit-subtree-export ()
@@ -55,14 +55,14 @@
    (mercit-subtree:--annotate)
    (mercit-subtree:--branch)
    (mercit-subtree:--onto)
-   ("-i" "Ignore joins" "--ignore-joins")
-   ("-j" "Rejoin"       "--rejoin")]
+   ("-i" "*Ignore joins" "--ignore-joins")
+   ("-j" "*Rejoin"       "--rejoin")]
   ["Actions"
-   ("p" "Push"          mercit-subtree-push)
-   ("s" "Split"         mercit-subtree-split)])
+   ("p" "*Push"          mercit-subtree-push)
+   ("s" "*Split"         mercit-subtree-split)])
 
 (transient-define-argument mercit-subtree:--prefix ()
-  :description "Prefix"
+  :description "*Prefix"
   :class 'transient-option
   :shortarg "-P"
   :argument "--prefix="
@@ -80,25 +80,25 @@
       prefix)))
 
 (transient-define-argument mercit-subtree:--message ()
-  :description "Message"
+  :description "*Message"
   :class 'transient-option
   :shortarg "-m"
   :argument "--message=")
 
 (transient-define-argument mercit-subtree:--annotate ()
-  :description "Annotate"
+  :description "*Annotate"
   :class 'transient-option
   :key "-a"
   :argument "--annotate=")
 
 (transient-define-argument mercit-subtree:--branch ()
-  :description "Branch"
+  :description "*Branch"
   :class 'transient-option
   :shortarg "-b"
   :argument "--branch=")
 
 (transient-define-argument mercit-subtree:--onto ()
-  :description "Onto"
+  :description "*Onto"
   :class 'transient-option
   :key "-o"
   :argument "--onto="

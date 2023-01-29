@@ -58,34 +58,34 @@
   [:class transient-subgroups
    :if-not mercit-bisect-in-progress-p
    ["Arguments"
-    ("-n" "Don't checkout commits"              "--no-checkout")
-    ("-p" "Follow only first parent of a merge" "--first-parent"
+    ("-n" "*Don't checkout commits"              "--no-checkout")
+    ("-p" "*Follow only first parent of a merge" "--first-parent"
      :if (lambda () (mercit-git-version>= "2.29")))
     (6 mercit-bisect:--term-old
        :if (lambda () (mercit-git-version>= "2.7")))
     (6 mercit-bisect:--term-new
        :if (lambda () (mercit-git-version>= "2.7")))]
    ["Actions"
-    ("B" "Start"        mercit-bisect-start)
-    ("s" "Start script" mercit-bisect-run)]]
+    ("B" "*Start"        mercit-bisect-start)
+    ("s" "*Start script" mercit-bisect-run)]]
   ["Actions"
    :if mercit-bisect-in-progress-p
-   ("B" "Bad"          mercit-bisect-bad)
-   ("g" "Good"         mercit-bisect-good)
-   (6 "m" "Mark"       mercit-bisect-mark
+   ("B" "*Bad"          mercit-bisect-bad)
+   ("g" "*Good"         mercit-bisect-good)
+   (6 "m" "*Mark"       mercit-bisect-mark
       :if (lambda () (mercit-git-version>= "2.7")))
-   ("k" "Skip"         mercit-bisect-skip)
-   ("r" "Reset"        mercit-bisect-reset)
-   ("s" "Run script"   mercit-bisect-run)])
+   ("k" "*Skip"         mercit-bisect-skip)
+   ("r" "*Reset"        mercit-bisect-reset)
+   ("s" "*Run script"   mercit-bisect-run)])
 
 (transient-define-argument mercit-bisect:--term-old ()
-  :description "Old/good term"
+  :description "*Old/good term"
   :class 'transient-option
   :key "=o"
   :argument "--term-old=")
 
 (transient-define-argument mercit-bisect:--term-new ()
-  :description "New/bad term"
+  :description "*New/bad term"
   :class 'transient-option
   :key "=n"
   :argument "--term-new=")

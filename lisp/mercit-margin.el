@@ -60,10 +60,10 @@ does not carry to other options."
   "Change what information is displayed in the margin."
   :info-manual "(mercit) Log Margin"
   ["Margin"
-   ("L" "Toggle visibility" mercit-toggle-margin      :transient t)
-   ("l" "Cycle style"       mercit-cycle-margin-style :transient t)
-   ("d" "Toggle details"    mercit-toggle-margin-details)
-   ("v" "Change verbosity"  mercit-refs-set-show-commit-count
+   ("L" "*Toggle visibility" mercit-toggle-margin      :transient t)
+   ("l" "*Cycle style"       mercit-cycle-margin-style :transient t)
+   ("d" "*Toggle details"    mercit-toggle-margin-details)
+   ("v" "*Change verbosity"  mercit-refs-set-show-commit-count
     :if-derived mercit-refs-mode)])
 
 (defun mercit-toggle-margin ()

@@ -327,16 +327,16 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
            (mercit-show-refs-arguments mercit-prefix-use-buffer-arguments))
   ["Arguments"
    (mercit-for-each-ref:--contains)
-   ("-M" "Merged"               "--merged=" mercit-transient-read-revision)
-   ("-m" "Merged to HEAD"       "--merged")
-   ("-N" "Not merged"           "--no-merged=" mercit-transient-read-revision)
-   ("-n" "Not merged to HEAD"   "--no-merged")
+   ("-M" "*Merged"               "--merged=" mercit-transient-read-revision)
+   ("-m" "*Merged to HEAD"       "--merged")
+   ("-N" "*Not merged"           "--no-merged=" mercit-transient-read-revision)
+   ("-n" "*Not merged to HEAD"   "--no-merged")
    (mercit-for-each-ref:--sort)]
   ["Actions"
-   ("y" "Show refs, comparing them with HEAD"           mercit-show-refs-head)
-   ("c" "Show refs, comparing them with current branch" mercit-show-refs-current)
-   ("o" "Show refs, comparing them with other branch"   mercit-show-refs-other)
-   ("r" "Show refs, changing commit count display"
+   ("y" "*Show refs, comparing them with HEAD"           mercit-show-refs-head)
+   ("c" "*Show refs, comparing them with current branch" mercit-show-refs-current)
+   ("o" "*Show refs, comparing them with other branch"   mercit-show-refs-other)
+   ("r" "*Show refs, changing commit count display"
     mercit-refs-set-show-commit-count)]
   (interactive (list (or (derived-mode-p 'mercit-refs-mode)
                          current-prefix-arg)))
@@ -364,14 +364,14 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
     args))
 
 (transient-define-argument mercit-for-each-ref:--contains ()
-  :description "Contains"
+  :description "*Contains"
   :class 'transient-option
   :key "-c"
   :argument "--contains="
   :reader #'mercit-transient-read-revision)
 
 (transient-define-argument mercit-for-each-ref:--sort ()
-  :description "Sort"
+  :description "*Sort"
   :class 'transient-option
   :key "-s"
   :argument "--sort="
@@ -410,9 +410,9 @@ Compared with a branch read from the user."
   (interactive)
   (setq-local mercit-refs-show-commit-count
               (mercit-read-char-case "Show commit counts for " nil
-                (?a "[a]ll refs" 'all)
-                (?b "[b]ranches only" t)
-                (?n "[n]othing" nil)))
+                (?a "*[a]ll refs" 'all)
+                (?b "*[b]ranches only" t)
+                (?n "*[n]othing" nil)))
   (mercit-refresh))
 
 (defun mercit-visit-ref ()

@@ -85,30 +85,30 @@ AUTHOR-WIDTH has to be an integer.  When the name of the author
   "Stash uncommitted changes."
   :man-page "git-stash"
   ["Arguments"
-   ("-u" "Also save untracked files" ("-u" "--include-untracked"))
-   ("-a" "Also save untracked and ignored files" ("-a" "--all"))]
+   ("-u" "*Also save untracked files" ("-u" "--include-untracked"))
+   ("-a" "*Also save untracked and ignored files" ("-a" "--all"))]
   [["Stash"
-    ("z" "both"          mercit-stash-both)
-    ("i" "index"         mercit-stash-index)
-    ("w" "worktree"      mercit-stash-worktree)
-    ("x" "keeping index" mercit-stash-keep-index)
-    ("P" "push"          mercit-stash-push :level 5)]
+    ("z" "*both"          mercit-stash-both)
+    ("i" "*index"         mercit-stash-index)
+    ("w" "*worktree"      mercit-stash-worktree)
+    ("x" "*keeping index" mercit-stash-keep-index)
+    ("P" "*push"          mercit-stash-push :level 5)]
    ["Snapshot"
-    ("Z" "both"          mercit-snapshot-both)
-    ("I" "index"         mercit-snapshot-index)
-    ("W" "worktree"      mercit-snapshot-worktree)
-    ("r" "to wip ref"    mercit-wip-commit)]
+    ("Z" "*both"          mercit-snapshot-both)
+    ("I" "*index"         mercit-snapshot-index)
+    ("W" "*worktree"      mercit-snapshot-worktree)
+    ("r" "*to wip ref"    mercit-wip-commit)]
    ["Use"
-    ("a" "Apply"         mercit-stash-apply)
-    ("p" "Pop"           mercit-stash-pop)
-    ("k" "Drop"          mercit-stash-drop)]
+    ("a" "*Apply"         mercit-stash-apply)
+    ("p" "*Pop"           mercit-stash-pop)
+    ("k" "*Drop"          mercit-stash-drop)]
    ["Inspect"
-    ("l" "List"          mercit-stash-list)
-    ("v" "Show"          mercit-stash-show)]
+    ("l" "*List"          mercit-stash-list)
+    ("v" "*Show"          mercit-stash-show)]
    ["Transform"
-    ("b" "Branch"        mercit-stash-branch)
-    ("B" "Branch here"   mercit-stash-branch-here)
-    ("f" "Format patch"  mercit-stash-format-patch)]])
+    ("b" "*Branch"        mercit-stash-branch)
+    ("B" "*Branch here"   mercit-stash-branch-here)
+    ("f" "*Format patch"  mercit-stash-format-patch)]])
 
 (defun mercit-stash-arguments ()
   (transient-args 'mercit-stash))
@@ -219,12 +219,12 @@ specifying a list of files to be stashed."
    (mercit:-- :reader (lambda (prompt initial-input history)
                        (mercit-read-files prompt initial-input history
                                          #'mercit-modified-files)))
-   ("-u" "Also save untracked files" ("-u" "--include-untracked"))
-   ("-a" "Also save untracked and ignored files" ("-a" "--all"))
-   ("-k" "Keep index" ("-k" "--keep-index"))
-   ("-K" "Don't keep index" "--no-keep-index")]
+   ("-u" "*Also save untracked files" ("-u" "--include-untracked"))
+   ("-a" "*Also save untracked and ignored files" ("-a" "--all"))
+   ("-k" "*Keep index" ("-k" "--keep-index"))
+   ("-K" "*Don't keep index" "--no-keep-index")]
   ["Actions"
-   ("P" "push" mercit-stash-push)]
+   ("P" "*push" mercit-stash-push)]
   (interactive (if (eq transient-current-command 'mercit-stash-push)
                    (list nil (transient-args 'mercit-stash-push))
                  (list t)))

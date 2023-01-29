@@ -43,9 +43,9 @@
   :incompatible '(("--ff-only" "--rebase"))
   [:description
    (lambda () (if mercit-pull-or-fetch "Pull arguments" "Arguments"))
-   ("-f" "Fast-forward only" "--ff-only")
-   ("-r" "Rebase local commits" ("-r" "--rebase"))
-   ("-A" "Autostash" "--autostash" :level 7)]
+   ("-f" "*Fast-forward only" "--ff-only")
+   ("-r" "*Rebase local commits" ("-r" "--rebase"))
+   ("-A" "*Autostash" "--autostash" :level 7)]
   [:description
    (lambda ()
      (if-let ((branch (mercit-get-current-branch)))
@@ -56,19 +56,19 @@
        (propertize "Pull from" 'face 'transient-heading)))
    ("p" mercit-pull-from-pushremote)
    ("u" mercit-pull-from-upstream)
-   ("e" "elsewhere"         mercit-pull-branch)]
+   ("e" "*elsewhere"         mercit-pull-branch)]
   ["Fetch from"
    :if-non-nil mercit-pull-or-fetch
-   ("f" "remotes"           mercit-fetch-all-no-prune)
-   ("F" "remotes and prune" mercit-fetch-all-prune)]
+   ("f" "*remotes"           mercit-fetch-all-no-prune)
+   ("F" "*remotes and prune" mercit-fetch-all-prune)]
   ["Fetch"
    :if-non-nil mercit-pull-or-fetch
-   ("o" "another branch"    mercit-fetch-branch)
-   ("s" "explicit refspec"  mercit-fetch-refspec)
-   ("m" "submodules"        mercit-fetch-modules)]
+   ("o" "*another branch"    mercit-fetch-branch)
+   ("s" "*explicit refspec"  mercit-fetch-refspec)
+   ("m" "*submodules"        mercit-fetch-modules)]
   ["Configure"
    ("r" mercit-branch.<branch>.rebase :if mercit-get-current-branch)
-   ("C" "variables..." mercit-branch-configure)]
+   ("C" "*variables..." mercit-branch-configure)]
   (interactive)
   (transient-setup 'mercit-pull nil nil :scope (mercit-get-current-branch)))
 

@@ -52,11 +52,11 @@ the prefix argument."
 (transient-define-prefix mercit-patch ()
   "Create or apply patches."
   ["Actions"
-   [("c"  "Create patches"     mercit-patch-create)
-    ("w"  "Apply patches"      mercit-am)]
-   [("a"  "Apply plain patch"  mercit-patch-apply)
-    ("s"  "Save diff as patch" mercit-patch-save)]
-   [("r"  "Request pull"       mercit-request-pull)]])
+   [("c" "*Create patches"     mercit-patch-create)
+    ("w" "*Apply patches"      mercit-am)]
+   [("a" "*Apply plain patch"  mercit-patch-apply)
+    ("s" "*Save diff as patch" mercit-patch-save)]
+   [("r" "*Request pull"       mercit-request-pull)]])
 
 ;;;###autoload (autoload 'mercit-patch-create "mercit-patch" nil t)
 (transient-define-prefix mercit-patch-create (range args files)
@@ -79,8 +79,8 @@ which creates patches for all commits that are reachable from
    (5 mercit-format-patch:--interdiff)
    (mercit-format-patch:--range-diff)
    (mercit-format-patch:--subject-prefix)
-   ("C-m r  " "RFC subject prefix" "--rfc")
-   ("C-m l  " "Add cover letter" "--cover-letter")
+   ("C-m r  " "*RFC subject prefix" "--rfc")
+   ("C-m l  " "*Add cover letter" "--cover-letter")
    (5 mercit-format-patch:--cover-from-description)
    (5 mercit-format-patch:--notes)
    (mercit-format-patch:--output-directory)]
@@ -90,8 +90,8 @@ which creates patches for all commits that are reachable from
    (mercit-diff:-C)
    (mercit-diff:--diff-algorithm)
    (mercit:--)
-   (7 "-b" "Ignore whitespace changes" ("-b" "--ignore-space-change"))
-   (7 "-w" "Ignore all whitespace"     ("-w" "--ignore-all-space"))]
+   (7 "-b" "*Ignore whitespace changes" ("-b" "--ignore-space-change"))
+   (7 "-w" "*Ignore all whitespace"     ("-w" "--ignore-all-space"))]
   ["Actions"
    ("c" "Create patches" mercit-patch-create)]
   (interactive
@@ -123,13 +123,13 @@ which creates patches for all commits that are reachable from
               topdir))))))))
 
 (transient-define-argument mercit-format-patch:--in-reply-to ()
-  :description "In reply to"
+  :description "*In reply to"
   :class 'transient-option
   :key "C-m C-r"
   :argument "--in-reply-to=")
 
 (transient-define-argument mercit-format-patch:--thread ()
-  :description "Thread style"
+  :description "*Thread style"
   :class 'transient-option
   :key "C-m s  "
   :argument "--thread="
@@ -137,11 +137,11 @@ which creates patches for all commits that are reachable from
 
 (defun mercit-format-patch-select-thread-style (&rest _ignore)
   (mercit-read-char-case "Thread style " t
-    (?d "[d]eep" "deep")
-    (?s "[s]hallow" "shallow")))
+    (?d "*[d]eep" "deep")
+    (?s "*[s]hallow" "shallow")))
 
 (transient-define-argument mercit-format-patch:--base ()
-  :description "Insert base commit"
+  :description "*Insert base commit"
   :class 'transient-option
   :key "C-m b  "
   :argument "--base="
@@ -153,7 +153,7 @@ which creates patches for all commits that are reachable from
       (user-error "Nothing selected")))
 
 (transient-define-argument mercit-format-patch:--reroll-count ()
-  :description "Reroll count"
+  :description "*Reroll count"
   :class 'transient-option
   :key "C-m v  "
   :shortarg "-v"
@@ -161,14 +161,14 @@ which creates patches for all commits that are reachable from
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit-format-patch:--interdiff ()
-  :description "Insert interdiff"
+  :description "*Insert interdiff"
   :class 'transient-option
   :key "C-m d i"
   :argument "--interdiff="
   :reader #'mercit-transient-read-revision)
 
 (transient-define-argument mercit-format-patch:--range-diff ()
-  :description "Insert range-diff"
+  :description "*Insert range-diff"
   :class 'transient-option
   :key "C-m d r"
   :argument "--range-diff="
@@ -178,13 +178,13 @@ which creates patches for all commits that are reachable from
   (mercit-read-range-or-commit prompt))
 
 (transient-define-argument mercit-format-patch:--subject-prefix ()
-  :description "Subject Prefix"
+  :description "*Subject Prefix"
   :class 'transient-option
   :key "C-m p  "
   :argument "--subject-prefix=")
 
 (transient-define-argument mercit-format-patch:--cover-from-description ()
-  :description "Use branch description"
+  :description "*Use branch description"
   :class 'transient-option
   :key "C-m D  "
   :argument "--cover-from-description="
@@ -192,41 +192,41 @@ which creates patches for all commits that are reachable from
 
 (defun mercit-format-patch-select-description-mode (&rest _ignore)
   (mercit-read-char-case "Use description as " t
-    (?m "[m]essage" "message")
-    (?s "[s]ubject" "subject")
-    (?a "[a]uto"    "auto")
-    (?n "[n]othing" "none")))
+    (?m "*[m]essage" "message")
+    (?s "*[s]ubject" "subject")
+    (?a "*[a]uto"    "auto")
+    (?n "*[n]othing" "none")))
 
 (transient-define-argument mercit-format-patch:--notes ()
-  :description "Insert commentary from notes"
+  :description "*Insert commentary from notes"
   :class 'transient-option
   :key "C-m n  "
   :argument "--notes="
   :reader #'mercit-notes-read-ref)
 
 (transient-define-argument mercit-format-patch:--from ()
-  :description "From"
+  :description "*From"
   :class 'transient-option
   :key "C-m C-f"
   :argument "--from="
   :reader #'mercit-transient-read-person)
 
 (transient-define-argument mercit-format-patch:--to ()
-  :description "To"
+  :description "*To"
   :class 'transient-option
   :key "C-m C-t"
   :argument "--to="
   :reader #'mercit-transient-read-person)
 
 (transient-define-argument mercit-format-patch:--cc ()
-  :description "CC"
+  :description "*CC"
   :class 'transient-option
   :key "C-m C-c"
   :argument "--cc="
   :reader #'mercit-transient-read-person)
 
 (transient-define-argument mercit-format-patch:--output-directory ()
-  :description "Output directory"
+  :description "*Output directory"
   :class 'transient-option
   :key "C-m o  "
   :shortarg "-o"
@@ -238,9 +238,9 @@ which creates patches for all commits that are reachable from
   "Apply the patch file FILE."
   :man-page "git-apply"
   ["Arguments"
-   ("-i" "Also apply to index" "--index")
-   ("-c" "Only apply to index" "--cached")
-   ("-3" "Fall back on 3way merge" ("-3" "--3way"))]
+   ("-i" "*Also apply to index" "--index")
+   ("-c" "*Only apply to index" "--cached")
+   ("-3" "*Fall back on 3way merge" ("-3" "--3way"))]
   ["Actions"
    ("a"  "Apply patch" mercit-patch-apply)]
   (interactive

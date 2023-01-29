@@ -39,20 +39,20 @@
   "Fetch from another repository."
   :man-page "git-fetch"
   ["Arguments"
-   ("-p" "Prune deleted branches" ("-p" "--prune"))
-   ("-t" "Fetch all tags" ("-t" "--tags"))
-   (7 "-u" "Fetch full history" "--unshallow")]
+   ("-p" "*Prune deleted branches" ("-p" "--prune"))
+   ("-t" "*Fetch all tags" ("-t" "--tags"))
+   (7 "-u" "*Fetch full history" "--unshallow")]
   ["Fetch from"
    ("p" mercit-fetch-from-pushremote)
    ("u" mercit-fetch-from-upstream)
-   ("e" "elsewhere"        mercit-fetch-other)
-   ("a" "all remotes"      mercit-fetch-all)]
+   ("e" "*elsewhere"        mercit-fetch-other)
+   ("a" "*all remotes"      mercit-fetch-all)]
   ["Fetch"
-   ("o" "another branch"   mercit-fetch-branch)
-   ("r" "explicit refspec" mercit-fetch-refspec)
-   ("m" "submodules"       mercit-fetch-modules)]
+   ("o" "*another branch"   mercit-fetch-branch)
+   ("r" "*explicit refspec" mercit-fetch-refspec)
+   ("m" "*submodules"       mercit-fetch-modules)]
   ["Configure"
-   ("C" "variables..." mercit-branch-configure)])
+   ("C" "*variables..." mercit-branch-configure)])
 
 (defun mercit-fetch-arguments ()
   (transient-args 'mercit-fetch))
@@ -175,10 +175,10 @@ with a prefix argument."
                       (format "--jobs=%s" mercit-fetch-modules-jobs))
                      (t "--jobs=4")))
   ["Arguments"
-   ("-v" "verbose"        "--verbose")
-   ("-j" "number of jobs" "--jobs=" :reader transient-read-number-N+)]
+   ("-v" "*verbose"        "--verbose")
+   ("-j" "*number of jobs" "--jobs=" :reader transient-read-number-N+)]
   ["Action"
-   ("m" "fetch modules" mercit-fetch-modules)]
+   ("m" "*fetch modules" mercit-fetch-modules)]
   (interactive (if current-prefix-arg
                    (list t)
                  (list nil (transient-args 'mercit-fetch-modules))))

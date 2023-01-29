@@ -33,14 +33,14 @@
   "Reset the `HEAD', index and/or worktree to a previous state."
   :man-page "git-reset"
   ["Reset"
-   ("m" "mixed    (HEAD and index)"        mercit-reset-mixed)
-   ("s" "soft     (HEAD only)"             mercit-reset-soft)
-   ("h" "hard     (HEAD, index and files)" mercit-reset-hard)
-   ("k" "keep     (HEAD and index, keeping uncommitted)" mercit-reset-keep)
-   ("i" "index    (only)"                  mercit-reset-index)
-   ("w" "worktree (only)"                  mercit-reset-worktree)
+   ("m" "*mixed    (HEAD and index)"        mercit-reset-mixed)
+   ("s" "*soft     (HEAD only)"             mercit-reset-soft)
+   ("h" "*hard     (HEAD, index and files)" mercit-reset-hard)
+   ("k" "*keep     (HEAD and index, keeping uncommitted)" mercit-reset-keep)
+   ("i" "*index    (only)"                  mercit-reset-index)
+   ("w" "*worktree (only)"                  mercit-reset-worktree)
    ""
-   ("f" "a file"                           mercit-file-checkout)])
+   ("f" "*a file"                           mercit-file-checkout)])
 
 ;;;###autoload
 (defun mercit-reset-mixed (commit)

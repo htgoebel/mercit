@@ -38,34 +38,34 @@
   :incompatible '(("--ff-only" "--no-ff"))
   ["Arguments"
    :if-not mercit-merge-in-progress-p
-   ("-f" "Fast-forward only" "--ff-only")
-   ("-n" "No fast-forward"   "--no-ff")
+   ("-f" "*Fast-forward only" "--ff-only")
+   ("-n" "*No fast-forward"   "--no-ff")
    (mercit-merge:--strategy)
    (5 mercit-merge:--strategy-option)
-   (5 "-b" "Ignore changes in amount of whitespace" "-Xignore-space-change")
-   (5 "-w" "Ignore whitespace when comparing lines" "-Xignore-all-space")
+   (5 "-b" "*Ignore changes in amount of whitespace" "-Xignore-space-change")
+   (5 "-w" "*Ignore whitespace when comparing lines" "-Xignore-all-space")
    (5 mercit-diff:--diff-algorithm :argument "-Xdiff-algorithm=")
    (5 mercit:--gpg-sign)]
   ["Actions"
    :if-not mercit-merge-in-progress-p
-   [("m" "Merge"                  mercit-merge-plain)
-    ("e" "Merge and edit message" mercit-merge-editmsg)
-    ("n" "Merge but don't commit" mercit-merge-nocommit)
-    ("a" "Absorb"                 mercit-merge-absorb)]
-   [("p" "Preview merge"          mercit-merge-preview)
+   [("m" "*Merge"                  mercit-merge-plain)
+    ("e" "*Merge and edit message" mercit-merge-editmsg)
+    ("n" "*Merge but don't commit" mercit-merge-nocommit)
+    ("a" "*Absorb"                 mercit-merge-absorb)]
+   [("p" "*Preview merge"          mercit-merge-preview)
     ""
-    ("s" "Squash merge"           mercit-merge-squash)
-    ("i" "Dissolve"               mercit-merge-into)]]
+    ("s" "*Squash merge"           mercit-merge-squash)
+    ("i" "*Dissolve"               mercit-merge-into)]]
   ["Actions"
    :if mercit-merge-in-progress-p
-   ("m" "Commit merge" mercit-commit-create)
-   ("a" "Abort merge"  mercit-merge-abort)])
+   ("m" "*Commit merge" mercit-commit-create)
+   ("a" "*Abort merge"  mercit-merge-abort)])
 
 (defun mercit-merge-arguments ()
   (transient-args 'mercit-merge))
 
 (transient-define-argument mercit-merge:--strategy ()
-  :description "Strategy"
+  :description "*Strategy"
   :class 'transient-option
   ;; key for merge and rebase: "-s"
   ;; key for cherry-pick and revert: "=s"
@@ -76,7 +76,7 @@
   :choices '("resolve" "recursive" "octopus" "ours" "subtree"))
 
 (transient-define-argument mercit-merge:--strategy-option ()
-  :description "Strategy Option"
+  :description "*Strategy Option"
   :class 'transient-option
   :key "-X"
   :argument "--strategy-option="
@@ -281,9 +281,9 @@ then also remove the respective remote branch."
 
 (defun mercit-checkout-read-stage (file)
   (mercit-read-char-case (format "For %s checkout: " file) t
-    (?o "[o]ur stage"   "--ours")
-    (?t "[t]heir stage" "--theirs")
-    (?c "[c]onflict"    "--merge")))
+    (?o "*[o]ur stage"   "--ours")
+    (?t "*[t]heir stage" "--theirs")
+    (?c "*[c]onflict"    "--merge")))
 
 ;;; Sections
 

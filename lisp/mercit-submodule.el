@@ -155,13 +155,13 @@ and also setting this variable to t will lead to tears."
   "Act on a submodule."
   :man-page "git-submodule"
   ["Arguments"
-   ("-f" "Force"            ("-f" "--force"))
-   ("-r" "Recursive"        "--recursive")
-   ("-N" "Do not fetch"     ("-N" "--no-fetch"))
-   ("-C" "Checkout tip"     "--checkout")
-   ("-R" "Rebase onto tip"  "--rebase")
-   ("-M" "Merge tip"        "--merge")
-   ("-U" "Use upstream tip" "--remote")]
+   ("-f" "*Force"            ("-f" "--force"))
+   ("-r" "*Recursive"        "--recursive")
+   ("-N" "*Do not fetch"     ("-N" "--no-fetch"))
+   ("-C" "*Checkout tip"     "--checkout")
+   ("-R" "*Rebase onto tip"  "--rebase")
+   ("-M" "*Merge tip"        "--merge")
+   ("-U" "*Use upstream tip" "--remote")]
   ["One module actions"
    ("a" mercit-submodule-add)
    ("r" mercit-submodule-register)
@@ -169,10 +169,10 @@ and also setting this variable to t will lead to tears."
    ("u" mercit-submodule-update)
    ("s" mercit-submodule-synchronize)
    ("d" mercit-submodule-unpopulate)
-   ("k" "Remove" mercit-submodule-remove)]
+   ("k" "*Remove" mercit-submodule-remove)]
   ["All modules actions"
-   ("l" "List all modules"  mercit-list-submodules)
-   ("f" "Fetch all modules" mercit-fetch-modules)])
+   ("l" "*List all modules"  mercit-list-submodules)
+   ("f" "*Fetch all modules" mercit-fetch-modules)])
 
 (defun mercit-submodule-arguments (&rest filters)
   (--filter (and (member it filters) it)

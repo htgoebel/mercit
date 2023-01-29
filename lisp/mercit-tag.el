@@ -36,22 +36,22 @@
   "Create or delete a tag."
   :man-page "git-tag"
   ["Arguments"
-   ("-f" "Force"    ("-f" "--force"))
-   ("-a" "Annotate" ("-a" "--annotate"))
-   ("-s" "Sign"     ("-s" "--sign"))
+   ("-f" "*Force"    ("-f" "--force"))
+   ("-a" "*Annotate" ("-a" "--annotate"))
+   ("-s" "*Sign"     ("-s" "--sign"))
    (mercit-tag:--local-user)]
   [["Create"
-    ("t"  "tag"     mercit-tag-create)
-    ("r"  "release" mercit-tag-release)]
+    ("t" "*tag"     mercit-tag-create)
+    ("r" "*release" mercit-tag-release)]
    ["Do"
-    ("k"  "delete"  mercit-tag-delete)
-    ("p"  "prune"   mercit-tag-prune)]])
+    ("k" "*delete"  mercit-tag-delete)
+    ("p" "*prune"   mercit-tag-prune)]])
 
 (defun mercit-tag-arguments ()
   (transient-args 'mercit-tag))
 
 (transient-define-argument mercit-tag:--local-user ()
-  :description "Sign as"
+  :description "*Sign as"
   :class 'transient-option
   :shortarg "-u"
   :argument "--local-user="

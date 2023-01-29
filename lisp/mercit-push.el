@@ -33,12 +33,12 @@
   "Push to another repository."
   :man-page "git-push"
   ["Arguments"
-   ("-f" "Force with lease" (nil "--force-with-lease"))
-   ("-F" "Force"            ("-f" "--force"))
-   ("-h" "Disable hooks"    "--no-verify")
-   ("-n" "Dry run"          ("-n" "--dry-run"))
-   (5 "-u" "Set upstream"   "--set-upstream")
-   (7 "-t" "Follow tags"    "--follow-tags")]
+   ("-f" "*Force with lease" (nil "--force-with-lease"))
+   ("-F" "*Force"            ("-f" "--force"))
+   ("-h" "*Disable hooks"    "--no-verify")
+   ("-n" "*Dry run"          ("-n" "--dry-run"))
+   (5 "-u" "*Set upstream"   "--set-upstream")
+   (7 "-t" "*Follow tags"    "--follow-tags")]
   [:if mercit-get-current-branch
    :description (lambda ()
                   (format (propertize "Push %s to" 'face 'transient-heading)
@@ -46,16 +46,16 @@
                                       'face 'mercit-branch-local)))
    ("p" mercit-push-current-to-pushremote)
    ("u" mercit-push-current-to-upstream)
-   ("e" "elsewhere" mercit-push-current)]
+   ("e" "*elsewhere" mercit-push-current)]
   ["Push"
-   [("o" "another branch"    mercit-push-other)
-    ("r" "explicit refspecs" mercit-push-refspecs)
-    ("m" "matching branches" mercit-push-matching)]
-   [("T" "a tag"             mercit-push-tag)
-    ("t" "all tags"          mercit-push-tags)
-    (6 "n" "a note ref"      mercit-push-notes-ref)]]
+   [("o" "*another branch"    mercit-push-other)
+    ("r" "*explicit refspecs" mercit-push-refspecs)
+    ("m" "*matching branches" mercit-push-matching)]
+   [("T" "*a tag"             mercit-push-tag)
+    ("t" "*all tags"          mercit-push-tags)
+    (6 "n" "*a note ref"      mercit-push-notes-ref)]]
   ["Configure"
-   ("C" "Set variables..."  mercit-branch-configure)])
+   ("C" "*Set variables..."  mercit-branch-configure)])
 
 (defun mercit-push-arguments ()
   (transient-args 'mercit-push))

@@ -222,25 +222,25 @@ has to be used to view and change branch related variables."
    ("r" mercit-branch.<branch>.rebase)
    ("p" mercit-branch.<branch>.pushRemote)]
   [["Checkout"
-    ("b" "branch/revision"   mercit-checkout)
-    ("l" "local branch"      mercit-branch-checkout)
-    (6 "o" "new orphan"      mercit-branch-orphan)]
+    ("b" "*branch/revision"   mercit-checkout)
+    ("l" "*local branch"      mercit-branch-checkout)
+    (6 "o" "*new orphan"      mercit-branch-orphan)]
    [""
-    ("c" "new branch"        mercit-branch-and-checkout)
-    ("s" "new spin-off"      mercit-branch-spinoff)
-    (5 "w" "new worktree"    mercit-worktree-checkout)]
+    ("c" "*new branch"        mercit-branch-and-checkout)
+    ("s" "*new spin-off"      mercit-branch-spinoff)
+    (5 "w" "*new worktree"    mercit-worktree-checkout)]
    ["Create"
-    ("n" "new branch"        mercit-branch-create)
-    ("S" "new spin-out"      mercit-branch-spinout)
-    (5 "W" "new worktree"    mercit-worktree-branch)]
+    ("n" "*new branch"        mercit-branch-create)
+    ("S" "*new spin-out"      mercit-branch-spinout)
+    (5 "W" "*new worktree"    mercit-worktree-branch)]
    ["Do"
-    ("C" "configure..."      mercit-branch-configure)
-    ("m" "rename"            mercit-branch-rename)
-    ("x" "reset"             mercit-branch-reset)
-    ("k" "delete"            mercit-branch-delete)]
+    ("C" "*configure..."      mercit-branch-configure)
+    ("m" "*rename"            mercit-branch-rename)
+    ("x" "*reset"             mercit-branch-reset)
+    ("k" "*delete"            mercit-branch-delete)]
    [""
-    (7 "h" "shelve"          mercit-branch-shelve)
-    (7 "H" "unshelve"        mercit-branch-unshelve)]]
+    (7 "h" "*shelve"          mercit-branch-shelve)
+    (7 "H" "*unshelve"        mercit-branch-unshelve)]]
   (interactive (list (mercit-get-current-branch)))
   (transient-setup 'mercit-branch nil nil :scope branch))
 
@@ -623,12 +623,12 @@ defaulting to the branch at point."
           (pcase (if (or (equal branch target)
                          (not target))
                      (mercit-read-char-case prompt nil
-                       (?d "[d]etach HEAD & delete" 'detach)
-                       (?a "[a]bort"                'abort))
+                       (?d "*[d]etach HEAD & delete" 'detach)
+                       (?a "*[a]bort"                'abort))
                    (mercit-read-char-case prompt nil
-                     (?d "[d]etach HEAD & delete" 'detach)
-                     (?c (format "[c]heckout %s & delete" target) 'target)
-                     (?a "[a]bort" 'abort)))
+                     (?d "*[d]etach HEAD & delete" 'detach)
+                     (?c (format "*[c]heckout %s & delete" target) 'target)
+                     (?a "*[a]bort" 'abort)))
             (`detach (unless (or (equal force '(4))
                                  (member branch force)
                                  (mercit-branch-merged-p branch t))
@@ -838,7 +838,7 @@ and also rename the respective reflog file."
   "Edit the description of BRANCH."
   :class 'mercit--git-variable
   :transient nil
-  :variable "branch.%s.description"
+  :variable "*branch.%s.description"
   (interactive (list (oref transient-current-prefix scope)))
   (mercit-run-git-with-editor "branch" "--edit-description" branch))
 
@@ -892,7 +892,7 @@ and also rename the respective reflog file."
 (transient-define-infix mercit-branch.<branch>.rebase ()
   :class 'mercit--git-variable:choices
   :scope #'mercit--read-branch-scope
-  :variable "branch.%s.rebase"
+  :variable "*branch.%s.rebase"
   :fallback "pull.rebase"
   :choices '("true" "false")
   :default "false")
@@ -900,30 +900,30 @@ and also rename the respective reflog file."
 (transient-define-infix mercit-branch.<branch>.pushRemote ()
   :class 'mercit--git-variable:choices
   :scope #'mercit--read-branch-scope
-  :variable "branch.%s.pushRemote"
+  :variable "*branch.%s.pushRemote"
   :fallback "remote.pushDefault"
   :choices #'mercit-list-remotes)
 
 (transient-define-infix mercit-pull.rebase ()
   :class 'mercit--git-variable:choices
-  :variable "pull.rebase"
+  :variable "*pull.rebase"
   :choices '("true" "false")
   :default "false")
 
 (transient-define-infix mercit-remote.pushDefault ()
   :class 'mercit--git-variable:choices
-  :variable "remote.pushDefault"
+  :variable "*remote.pushDefault"
   :choices #'mercit-list-remotes)
 
 (transient-define-infix mercit-branch.autoSetupMerge ()
   :class 'mercit--git-variable:choices
-  :variable "branch.autoSetupMerge"
+  :variable "*branch.autoSetupMerge"
   :choices '("always" "true" "false")
   :default "true")
 
 (transient-define-infix mercit-branch.autoSetupRebase ()
   :class 'mercit--git-variable:choices
-  :variable "branch.autoSetupRebase"
+  :variable "*branch.autoSetupRebase"
   :choices '("always" "local" "remote" "never")
   :default "never")
 

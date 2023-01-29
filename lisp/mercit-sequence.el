@@ -134,29 +134,29 @@ This discards all changes made since the sequence started."
    :if-not mercit-sequencer-in-progress-p
    (mercit-cherry-pick:--mainline)
    ("=s" mercit-merge:--strategy)
-   ("-F" "Attempt fast-forward"               "--ff")
-   ("-x" "Reference cherry in commit message" "-x")
-   ("-e" "Edit commit messages"               ("-e" "--edit"))
-   ("-s" "Add Signed-off-by lines"            ("-s" "--signoff"))
+   ("-F" "*Attempt fast-forward"               "--ff")
+   ("-x" "*Reference cherry in commit message" "-x")
+   ("-e" "*Edit commit messages"               ("-e" "--edit"))
+   ("-s" "*Add Signed-off-by lines"            ("-s" "--signoff"))
    (5 mercit:--gpg-sign)]
   [:if-not mercit-sequencer-in-progress-p
    ["Apply here"
-    ("A" "Pick"    mercit-cherry-copy)
-    ("a" "Apply"   mercit-cherry-apply)
-    ("h" "Harvest" mercit-cherry-harvest)
-    ("m" "Squash"  mercit-merge-squash)]
+    ("A" "*Pick"    mercit-cherry-copy)
+    ("a" "*Apply"   mercit-cherry-apply)
+    ("h" "*Harvest" mercit-cherry-harvest)
+    ("m" "*Squash"  mercit-merge-squash)]
    ["Apply elsewhere"
-    ("d" "Donate"  mercit-cherry-donate)
-    ("n" "Spinout" mercit-cherry-spinout)
-    ("s" "Spinoff" mercit-cherry-spinoff)]]
+    ("d" "*Donate"  mercit-cherry-donate)
+    ("n" "*Spinout" mercit-cherry-spinout)
+    ("s" "*Spinoff" mercit-cherry-spinoff)]]
   ["Actions"
    :if mercit-sequencer-in-progress-p
-   ("A" "Continue" mercit-sequencer-continue)
-   ("s" "Skip"     mercit-sequencer-skip)
-   ("a" "Abort"    mercit-sequencer-abort)])
+   ("A" "*Continue" mercit-sequencer-continue)
+   ("s" "*Skip"     mercit-sequencer-skip)
+   ("a" "*Abort"    mercit-sequencer-abort)])
 
 (transient-define-argument mercit-cherry-pick:--mainline ()
-  :description "Replay merge relative to parent"
+  :description "*Replay merge relative to parent"
   :class 'transient-option
   :shortarg "-m"
   :argument "--mainline="
@@ -367,20 +367,20 @@ the process manually."
   ["Arguments"
    :if-not mercit-sequencer-in-progress-p
    (mercit-cherry-pick:--mainline)
-   ("-e" "Edit commit message"       ("-e" "--edit"))
-   ("-E" "Don't edit commit message" "--no-edit")
+   ("-e" "*Edit commit message"       ("-e" "--edit"))
+   ("-E" "*Don't edit commit message" "--no-edit")
    ("=s" mercit-merge:--strategy)
-   ("-s" "Add Signed-off-by lines"   ("-s" "--signoff"))
+   ("-s" "*Add Signed-off-by lines"   ("-s" "--signoff"))
    (5 mercit:--gpg-sign)]
   ["Actions"
    :if-not mercit-sequencer-in-progress-p
-   ("V" "Revert commit(s)" mercit-revert-and-commit)
-   ("v" "Revert changes"   mercit-revert-no-commit)]
+   ("V" "*Revert commit(s)" mercit-revert-and-commit)
+   ("v" "*Revert changes"   mercit-revert-no-commit)]
   ["Actions"
    :if mercit-sequencer-in-progress-p
-   ("V" "Continue" mercit-sequencer-continue)
-   ("s" "Skip"     mercit-sequencer-skip)
-   ("a" "Abort"    mercit-sequencer-abort)])
+   ("V" "*Continue" mercit-sequencer-continue)
+   ("s" "*Skip"     mercit-sequencer-skip)
+   ("a" "*Abort"    mercit-sequencer-abort)])
 
 (defun mercit-revert-read-args (prompt)
   (list (or (mercit-region-values 'commit)
@@ -422,31 +422,31 @@ without prompting."
   :value '("--3way")
   ["Arguments"
    :if-not mercit-am-in-progress-p
-   ("-3" "Fall back on 3way merge"           ("-3" "--3way"))
+   ("-3" "*Fall back on 3way merge"           ("-3" "--3way"))
    (mercit-apply:-p)
-   ("-c" "Remove text before scissors line"  ("-c" "--scissors"))
-   ("-k" "Inhibit removal of email cruft"    ("-k" "--keep"))
-   ("-b" "Limit removal of email cruft"      "--keep-non-patch")
-   ("-d" "Use author date as committer date" "--committer-date-is-author-date")
-   ("-t" "Use current time as author date"   "--ignore-date")
-   ("-s" "Add Signed-off-by lines"           ("-s" "--signoff"))
+   ("-c" "*Remove text before scissors line"  ("-c" "--scissors"))
+   ("-k" "*Inhibit removal of email cruft"    ("-k" "--keep"))
+   ("-b" "*Limit removal of email cruft"      "--keep-non-patch")
+   ("-d" "*Use author date as committer date" "--committer-date-is-author-date")
+   ("-t" "*Use current time as author date"   "--ignore-date")
+   ("-s" "*Add Signed-off-by lines"           ("-s" "--signoff"))
    (5 mercit:--gpg-sign)]
   ["Apply"
    :if-not mercit-am-in-progress-p
-   ("m" "maildir"     mercit-am-apply-maildir)
-   ("w" "patches"     mercit-am-apply-patches)
-   ("a" "plain patch" mercit-patch-apply)]
+   ("m" "*maildir"     mercit-am-apply-maildir)
+   ("w" "*patches"     mercit-am-apply-patches)
+   ("a" "*plain patch" mercit-patch-apply)]
   ["Actions"
    :if mercit-am-in-progress-p
-   ("w" "Continue" mercit-am-continue)
-   ("s" "Skip"     mercit-am-skip)
-   ("a" "Abort"    mercit-am-abort)])
+   ("w" "*Continue" mercit-am-continue)
+   ("s" "*Skip"     mercit-am-skip)
+   ("a" "*Abort"    mercit-am-abort)])
 
 (defun mercit-am-arguments ()
   (transient-args 'mercit-am))
 
 (transient-define-argument mercit-apply:-p ()
-  :description "Remove leading slashes from paths"
+  :description "*Remove leading slashes from paths"
   :class 'transient-option
   :argument "-p"
   :allow-empty t
@@ -515,24 +515,24 @@ This discards all changes made since the sequence started."
   :value '("--autostash")
   ["Arguments"
    :if-not mercit-rebase-in-progress-p
-   ("-k" "Keep empty commits"       "--keep-empty")
-   ("-p" "Preserve merges"          ("-p" "--preserve-merges")
+   ("-k" "*Keep empty commits"       "--keep-empty")
+   ("-p" "*Preserve merges"          ("-p" "--preserve-merges")
     :if (lambda () (mercit-git-version< "2.33.0")))
-   ("-r" "Rebase merges"            ("-r" "--rebase-merges=")
+   ("-r" "*Rebase merges"            ("-r" "--rebase-merges=")
     mercit-rebase-merges-select-mode
     :if (lambda () (mercit-git-version>= "2.18.0")))
-   ("-u" "Update branches"          "--update-refs"
+   ("-u" "*Update branches"          "--update-refs"
     :if (lambda () (mercit-git-version>= "2.38.0")))
    (7 mercit-merge:--strategy)
    (7 mercit-merge:--strategy-option)
    (7 "=X" mercit-diff:--diff-algorithm :argument "-Xdiff-algorithm=")
-   (7 "-f" "Force rebase"           ("-f" "--force-rebase"))
-   ("-d" "Use author date as committer date" "--committer-date-is-author-date")
-   ("-t" "Use current time as author date"   "--ignore-date")
-   ("-a" "Autosquash"               "--autosquash")
-   ("-A" "Autostash"                "--autostash")
-   ("-i" "Interactive"              ("-i" "--interactive"))
-   ("-h" "Disable hooks"            "--no-verify")
+   (7 "-f" "*Force rebase"           ("-f" "--force-rebase"))
+   ("-d" "*Use author date as committer date" "--committer-date-is-author-date")
+   ("-t" "*Use current time as author date"   "--ignore-date")
+   ("-a" "*Autosquash"               "--autosquash")
+   ("-A" "*Autostash"                "--autostash")
+   ("-i" "*Interactive"              ("-i" "--interactive"))
+   ("-h" "*Disable hooks"            "--no-verify")
    (7 mercit-rebase:--exec)
    (5 mercit:--gpg-sign)]
   [:if-not mercit-rebase-in-progress-p
@@ -542,25 +542,25 @@ This discards all changes made since the sequence started."
                                       'face 'mercit-branch-local)))
    ("p" mercit-rebase-onto-pushremote)
    ("u" mercit-rebase-onto-upstream)
-   ("e" "elsewhere" mercit-rebase-branch)]
+   ("e" "*elsewhere" mercit-rebase-branch)]
   ["Rebase"
    :if-not mercit-rebase-in-progress-p
-   [("i" "interactively"      mercit-rebase-interactive)
-    ("s" "a subset"           mercit-rebase-subset)]
-   [("m" "to modify a commit" mercit-rebase-edit-commit)
-    ("w" "to reword a commit" mercit-rebase-reword-commit)
-    ("k" "to remove a commit" mercit-rebase-remove-commit)
-    ("f" "to autosquash"      mercit-rebase-autosquash)
-    (6 "t" "to change dates"  mercit-reshelve-since)]]
+   [("i" "*interactively"      mercit-rebase-interactive)
+    ("s" "*a subset"           mercit-rebase-subset)]
+   [("m" "*to modify a commit" mercit-rebase-edit-commit)
+    ("w" "*to reword a commit" mercit-rebase-reword-commit)
+    ("k" "*to remove a commit" mercit-rebase-remove-commit)
+    ("f" "*to autosquash"      mercit-rebase-autosquash)
+    (6 "t" "*to change dates"  mercit-reshelve-since)]]
   ["Actions"
    :if mercit-rebase-in-progress-p
-   ("r" "Continue" mercit-rebase-continue)
-   ("s" "Skip"     mercit-rebase-skip)
-   ("e" "Edit"     mercit-rebase-edit)
-   ("a" "Abort"    mercit-rebase-abort)])
+   ("r" "*Continue" mercit-rebase-continue)
+   ("s" "*Skip"     mercit-rebase-skip)
+   ("e" "*Edit"     mercit-rebase-edit)
+   ("a" "*Abort"    mercit-rebase-abort)])
 
 (transient-define-argument mercit-rebase:--exec ()
-  :description "Run command after commits"
+  :description "*Run command after commits"
   :class 'transient-option
   :shortarg "-x"
   :argument "--exec="
@@ -568,8 +568,8 @@ This discards all changes made since the sequence started."
 
 (defun mercit-rebase-merges-select-mode (&rest _ignore)
   (mercit-read-char-case nil t
-    (?n "[n]o-rebase-cousins" "no-rebase-cousins")
-    (?r "[r]ebase-cousins" "rebase-cousins")))
+    (?n "*[n]o-rebase-cousins" "no-rebase-cousins")
+    (?r "*[r]ebase-cousins" "rebase-cousins")))
 
 (defun mercit-rebase-arguments ()
   (transient-args 'mercit-rebase))
@@ -726,9 +726,9 @@ START has to be selected from a list of recent commits."
   (if (and (mercit-git-lines "rev-list" "--merges" (concat since "..HEAD"))
            (not rebase-merges))
       (mercit-read-char-case "Proceed despite merge in rebase range?  " nil
-        (?c "[c]ontinue" since)
-        (?s "[s]elect other" nil)
-        (?a "[a]bort" (user-error "Quit")))
+        (?c "*[c]ontinue" since)
+        (?s "*[s]elect other" nil)
+        (?a "*[a]bort" (user-error "Quit")))
     since))
 
 (defun mercit-rebase--target-commit (since)

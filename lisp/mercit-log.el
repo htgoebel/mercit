@@ -415,57 +415,57 @@ commits before and half after."
    (7 mercit-log:--since)
    (7 mercit-log:--until)
    (mercit-log:--grep)
-   (7 "-i" "Search case-insensitive" ("-i" "--regexp-ignore-case"))
-   (7 "-I" "Invert search pattern"   "--invert-grep")
+   (7 "-i" "*Search case-insensitive" ("-i" "--regexp-ignore-case"))
+   (7 "-I" "*Invert search pattern"   "--invert-grep")
    (mercit-log:-G)     ;2
    (mercit-log:-S)     ;2
    (mercit-log:-L)     ;2
-   (7 "=m" "Omit merges"            "--no-merges")
-   (7 "=p" "First parent"           "--first-parent")]
+   (7 "=m" "*Omit merges"            "--no-merges")
+   (7 "=p" "*First parent"           "--first-parent")]
   ["History simplification"
-   (  "-D" "Simplify by decoration"                  "--simplify-by-decoration")
+   (  "-D" "*Simplify by decoration"                  "--simplify-by-decoration")
    (mercit:--)
-   (  "-f" "Follow renames when showing single-file log"     "--follow") ;3
-   (6 "/s" "Only commits changing given paths"               "--sparse")
-   (7 "/d" "Only selected commits plus meaningful history"   "--dense")
-   (7 "/a" "Only commits existing directly on ancestry path" "--ancestry-path")
-   (6 "/f" "Do not prune history"                            "--full-history")
-   (7 "/m" "Prune some history"                              "--simplify-merges")]
+   (  "-f" "*Follow renames when showing single-file log"     "--follow") ;3
+   (6 "/s" "*Only commits changing given paths"               "--sparse")
+   (7 "/d" "*Only selected commits plus meaningful history"   "--dense")
+   (7 "/a" "*Only commits existing directly on ancestry path" "--ancestry-path")
+   (6 "/f" "*Do not prune history"                            "--full-history")
+   (7 "/m" "*Prune some history"                              "--simplify-merges")]
   ["Commit ordering"
    (mercit-log:--*-order)
-   ("-r" "Reverse order" "--reverse")]
+   ("-r" "*Reverse order" "--reverse")]
   ["Formatting"
-   ("-g" "Show graph"          "--graph")          ;1
-   ("-c" "Show graph in color" "--color")          ;2
-   ("-d" "Show refnames"       "--decorate")       ;3
-   ("=S" "Show signatures"     "--show-signature") ;1
-   ("-h" "Show header"         "++header")         ;4
-   ("-p" "Show diffs"          ("-p" "--patch"))   ;2
-   ("-s" "Show diffstats"      "--stat")]          ;2
+   ("-g" "*Show graph"          "--graph")          ;1
+   ("-c" "*Show graph in color" "--color")          ;2
+   ("-d" "*Show refnames"       "--decorate")       ;3
+   ("=S" "*Show signatures"     "--show-signature") ;1
+   ("-h" "*Show header"         "++header")         ;4
+   ("-p" "*Show diffs"          ("-p" "--patch"))   ;2
+   ("-s" "*Show diffstats"      "--stat")]          ;2
   [["Log"
-    ("l" "current"             mercit-log-current)
-    ("h" "HEAD"                mercit-log-head)
-    ("u" "related"             mercit-log-related)
-    ("o" "other"               mercit-log-other)]
+    ("l" "*current"             mercit-log-current)
+    ("h" "*HEAD"                mercit-log-head)
+    ("u" "*related"             mercit-log-related)
+    ("o" "*other"               mercit-log-other)]
    [""
-    ("L" "local branches"      mercit-log-branches)
-    ("b" "all branches"        mercit-log-all-branches)
-    ("a" "all references"      mercit-log-all)
-    (7 "B" "matching branches" mercit-log-matching-branches)
-    (7 "T" "matching tags"     mercit-log-matching-tags)
-    (7 "m" "merged"            mercit-log-merged)]
+    ("L" "*local branches"      mercit-log-branches)
+    ("b" "*all branches"        mercit-log-all-branches)
+    ("a" "*all references"      mercit-log-all)
+    (7 "B" "*matching branches" mercit-log-matching-branches)
+    (7 "T" "*matching tags"     mercit-log-matching-tags)
+    (7 "m" "*merged"            mercit-log-merged)]
    ["Reflog"
-    ("r" "current"             mercit-reflog-current)
-    ("H" "HEAD"                mercit-reflog-head)
-    ("O" "other"               mercit-reflog-other)]
+    ("r" "*current"             mercit-reflog-current)
+    ("H" "*HEAD"                mercit-reflog-head)
+    ("O" "*other"               mercit-reflog-other)]
    [:if (lambda ()
           (and (fboundp 'mercit--any-wip-mode-enabled-p)
                (mercit--any-wip-mode-enabled-p)))
     :description "Wiplog"
-    ("i" "index"          mercit-wip-log-index)
-    ("w" "worktree"       mercit-wip-log-worktree)]
+    ("i" "*index"          mercit-wip-log-index)
+    ("w" "*worktree"       mercit-wip-log-worktree)]
    ["Other"
-    (5 "s" "shortlog"    mercit-shortlog)]])
+    (5 "s" "*shortlog"    mercit-shortlog)]])
 
 ;;;###autoload (autoload 'mercit-log-refresh "mercit-log" nil t)
 (transient-define-prefix mercit-log-refresh ()
@@ -478,50 +478,50 @@ commits before and half after."
     (mercit-log:-n)
     (mercit:--author)
     (mercit-log:--grep)
-    (7 "-i" "Search case-insensitive" ("-i" "--regexp-ignore-case"))
-    (7 "-I" "Invert search pattern"   "--invert-grep")
+    (7 "-i" "*Search case-insensitive" ("-i" "--regexp-ignore-case"))
+    (7 "-I" "*Invert search pattern"   "--invert-grep")
     (mercit-log:-G)
     (mercit-log:-S)
     (mercit-log:-L)]
    ["History simplification"
-    (  "-D" "Simplify by decoration"                  "--simplify-by-decoration")
+    (  "-D" "*Simplify by decoration"                  "--simplify-by-decoration")
     (mercit:--)
-    (  "-f" "Follow renames when showing single-file log"     "--follow") ;3
-    (6 "/s" "Only commits changing given paths"               "--sparse")
-    (7 "/d" "Only selected commits plus meaningful history"   "--dense")
-    (7 "/a" "Only commits existing directly on ancestry path" "--ancestry-path")
-    (6 "/f" "Do not prune history"                            "--full-history")
-    (7 "/m" "Prune some history"                              "--simplify-merges")]
+    (  "-f" "*Follow renames when showing single-file log"     "--follow") ;3
+    (6 "/s" "*Only commits changing given paths"               "--sparse")
+    (7 "/d" "*Only selected commits plus meaningful history"   "--dense")
+    (7 "/a" "*Only commits existing directly on ancestry path" "--ancestry-path")
+    (6 "/f" "*Do not prune history"                            "--full-history")
+    (7 "/m" "*Prune some history"                              "--simplify-merges")]
    ["Commit ordering"
     (mercit-log:--*-order)
-    ("-r" "Reverse order" "--reverse")]
+    ("-r" "*Reverse order" "--reverse")]
    ["Formatting"
-    ("-g" "Show graph"              "--graph")
-    ("-c" "Show graph in color"     "--color")
-    ("-d" "Show refnames"           "--decorate")
-    ("=S" "Show signatures"         "--show-signature")
-    ("-h" "Show header"             "++header")
-    ("-p" "Show diffs"              ("-p" "--patch"))
-    ("-s" "Show diffstats"          "--stat")]]
+    ("-g" "*Show graph"              "--graph")
+    ("-c" "*Show graph in color"     "--color")
+    ("-d" "*Show refnames"           "--decorate")
+    ("=S" "*Show signatures"         "--show-signature")
+    ("-h" "*Show header"             "++header")
+    ("-p" "*Show diffs"              ("-p" "--patch"))
+    ("-s" "*Show diffstats"          "--stat")]]
   [:if-not-mode mercit-log-mode
    :description "Arguments"
    (mercit-log:-n)
    (mercit-log:--*-order)
-   ("-g" "Show graph"               "--graph")
-   ("-c" "Show graph in color"      "--color")
-   ("-d" "Show refnames"            "--decorate")]
+   ("-g" "*Show graph"               "--graph")
+   ("-c" "*Show graph in color"      "--color")
+   ("-d" "*Show refnames"            "--decorate")]
   [["Refresh"
-    ("g" "buffer"                   mercit-log-refresh)
-    ("s" "buffer and set defaults"  transient-set  :transient nil)
-    ("w" "buffer and save defaults" transient-save :transient nil)]
+    ("g" "*buffer"                   mercit-log-refresh)
+    ("s" "*buffer and set defaults"  transient-set  :transient nil)
+    ("w" "*buffer and save defaults" transient-save :transient nil)]
    ["Margin"
-    ("L" "toggle visibility"        mercit-toggle-margin      :transient t)
-    ("l" "cycle style"              mercit-cycle-margin-style :transient t)
-    ("d" "toggle details"           mercit-toggle-margin-details)
-    ("x" "toggle shortstat"         mercit-toggle-log-margin-style)]
+    ("L" "*toggle visibility"        mercit-toggle-margin      :transient t)
+    ("l" "*cycle style"              mercit-cycle-margin-style :transient t)
+    ("d" "*toggle details"           mercit-toggle-margin-details)
+    ("x" "*toggle shortstat"         mercit-toggle-log-margin-style)]
    [:if-mode mercit-log-mode
     :description "Toggle"
-    ("b" "buffer lock"              mercit-toggle-buffer-lock)]]
+    ("b" "*buffer lock"              mercit-toggle-buffer-lock)]]
   (interactive)
   (cond
    ((not (eq transient-current-command 'mercit-log-refresh))
@@ -541,7 +541,7 @@ commits before and half after."
 ;;;; Infix Commands
 
 (transient-define-argument mercit-log:-n ()
-  :description "Limit number of commits"
+  :description "*Limit number of commits"
   :class 'transient-option
   ;; For historic reasons (and because it easy to guess what "-n"
   ;; stands for) this is the only argument where we do not use the
@@ -551,28 +551,28 @@ commits before and half after."
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit:--author ()
-  :description "Limit to author"
+  :description "*Limit to author"
   :class 'transient-option
   :key "-A"
   :argument "--author="
   :reader #'mercit-transient-read-person)
 
 (transient-define-argument mercit-log:--since ()
-  :description "Limit to commits since"
+  :description "*Limit to commits since"
   :class 'transient-option
   :key "=s"
   :argument "--since="
   :reader #'transient-read-date)
 
 (transient-define-argument mercit-log:--until ()
-  :description "Limit to commits until"
+  :description "*Limit to commits until"
   :class 'transient-option
   :key "=u"
   :argument "--until="
   :reader #'transient-read-date)
 
 (transient-define-argument mercit-log:--*-order ()
-  :description "Order commits by"
+  :description "*Order commits by"
   :class 'transient-switches
   :key "-o"
   :argument-format "--%s-order"
@@ -580,23 +580,23 @@ commits before and half after."
   :choices '("topo" "author-date" "date"))
 
 (transient-define-argument mercit-log:--grep ()
-  :description "Search messages"
+  :description "*Search messages"
   :class 'transient-option
   :key "-F"
   :argument "--grep=")
 
 (transient-define-argument mercit-log:-G ()
-  :description "Search changes"
+  :description "*Search changes"
   :class 'transient-option
   :argument "-G")
 
 (transient-define-argument mercit-log:-S ()
-  :description "Search occurrences"
+  :description "*Search occurrences"
   :class 'transient-option
   :argument "-S")
 
 (transient-define-argument mercit-log:-L ()
-  :description "Trace line evolution"
+  :description "*Trace line evolution"
   :class 'transient-option
   :argument "-L"
   :reader #'mercit-read-file-trace)
@@ -958,16 +958,16 @@ of the current repository first; creating it if necessary."
   :man-page "git-shortlog"
   :value '("--numbered" "--summary")
   ["Arguments"
-   ("-n" "Sort by number of commits"      ("-n" "--numbered"))
-   ("-s" "Show commit count summary only" ("-s" "--summary"))
-   ("-e" "Show email addresses"           ("-e" "--email"))
-   ("-g" "Group commits by" "--group="
+   ("-n" "*Sort by number of commits"      ("-n" "--numbered"))
+   ("-s" "*Show commit count summary only" ("-s" "--summary"))
+   ("-e" "*Show email addresses"           ("-e" "--email"))
+   ("-g" "*Group commits by" "--group="
     :choices ("author" "committer" "trailer:"))
-   (7 "-f" "Format string" "--format=")
-   (7 "-w" "Linewrap" "-w" :class transient-option)]
+   (7 "-f" "*Format string" "--format=")
+   (7 "-w" "*Linewrap" "-w" :class transient-option)]
   ["Shortlog"
-   ("s" "since" mercit-shortlog-since)
-   ("r" "range" mercit-shortlog-range)])
+   ("s" "*since" mercit-shortlog-since)
+   ("r" "*range" mercit-shortlog-range)])
 
 (defun mercit-git-shortlog (rev args)
   (let ((dir default-directory))

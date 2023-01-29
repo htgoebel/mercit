@@ -75,15 +75,15 @@ has to be used to view and change remote related variables."
    ("S" mercit-remote.<remote>.push)
    ("O" mercit-remote.<remote>.tagopt)]
   ["Arguments for add"
-   ("-f" "Fetch after add" "-f")]
+   ("-f" "*Fetch after add" "-f")]
   ["Actions"
-   [("a" "Add"                  mercit-remote-add)
-    ("r" "Rename"               mercit-remote-rename)
-    ("k" "Remove"               mercit-remote-remove)]
-   [("C" "Configure..."         mercit-remote-configure)
-    ("p" "Prune stale branches" mercit-remote-prune)
-    ("P" "Prune stale refspecs" mercit-remote-prune-refspecs)
-    (7 "z" "Unshallow remote"   mercit-remote-unshallow)]]
+   [("a" "*Add"                  mercit-remote-add)
+    ("r" "*Rename"               mercit-remote-rename)
+    ("k" "*Remove"               mercit-remote-remove)]
+   [("C" "*Configure..."         mercit-remote-configure)
+    ("p" "*Prune stale branches" mercit-remote-prune)
+    ("P" "*Prune stale refspecs" mercit-remote-prune-refspecs)
+    (7 "z" "*Unshallow remote"   mercit-remote-unshallow)]]
   (interactive (list (mercit-get-current-remote)))
   (transient-setup 'mercit-remote nil nil :scope remote))
 
@@ -192,13 +192,13 @@ the now stale refspecs.  Other stale branches are not removed."
              (length refspecs))
           (mercit-read-char-case
               (format "All of %s's refspecs are stale.  " remote) nil
-            (?s "replace with [d]efault refspec"
+            (?s "replace with *[d]efault refspec"
                 (mercit-set-all
                  (list (format "+refs/heads/*:refs/remotes/%s/*" remote))
                  variable))
-            (?r "[r]emove remote"
+            (?r "*[r]emove remote"
                 (mercit-call-git "remote" "rm" remote))
-            (?a "or [a]abort"
+            (?a "or *[a]abort"
                 (user-error "Abort")))
         (if (if (length= stale 1)
                 (pcase-let ((`(,refspec . ,refs) (car stale)))
@@ -305,20 +305,20 @@ refspec."
 (transient-define-infix mercit-remote.<remote>.url ()
   :class 'mercit--git-variable:urls
   :scope #'mercit--read-remote-scope
-  :variable "remote.%s.url"
+  :variable "*remote.%s.url"
   :multi-value t
   :history-key 'mercit-remote.<remote>.*url)
 
 (transient-define-infix mercit-remote.<remote>.fetch ()
   :class 'mercit--git-variable
   :scope #'mercit--read-remote-scope
-  :variable "remote.%s.fetch"
+  :variable "*remote.%s.fetch"
   :multi-value t)
 
 (transient-define-infix mercit-remote.<remote>.pushurl ()
   :class 'mercit--git-variable:urls
   :scope #'mercit--read-remote-scope
-  :variable "remote.%s.pushurl"
+  :variable "*remote.%s.pushurl"
   :multi-value t
   :history-key 'mercit-remote.<remote>.*url
   :seturl-arg "--push")
@@ -326,12 +326,12 @@ refspec."
 (transient-define-infix mercit-remote.<remote>.push ()
   :class 'mercit--git-variable
   :scope #'mercit--read-remote-scope
-  :variable "remote.%s.push")
+  :variable "*remote.%s.push")
 
 (transient-define-infix mercit-remote.<remote>.tagopt ()
   :class 'mercit--git-variable:choices
   :scope #'mercit--read-remote-scope
-  :variable "remote.%s.tagOpt"
+  :variable "*remote.%s.tagOpt"
   :choices '("--no-tags" "--tags"))
 
 ;;; Transfer Utilities

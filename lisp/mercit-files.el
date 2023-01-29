@@ -287,31 +287,31 @@ When invoked outside a file-visiting buffer, then fall back
 to `mercit-dispatch'."
   :info-manual "(mercit) Minor Mode for Buffers Visiting Files"
   ["Actions"
-   [("s" "Stage"      mercit-stage-file)
-    ("u" "Unstage"    mercit-unstage-file)
-    ("c" "Commit"     mercit-commit)
-    ("e" "Edit line"  mercit-edit-line-commit)]
-   [("D" "Diff..."    mercit-diff)
-    ("d" "Diff"       mercit-diff-buffer-file)
-    ("g" "Status"     mercit-status-here)]
-   [("L" "Log..."     mercit-log)
-    ("l" "Log"        mercit-log-buffer-file)
-    ("t" "Trace"      mercit-log-trace-definition)
-    (7 "M" "Merged"   mercit-log-merged)]
-   [("B" "Blame..."   mercit-blame)
-    ("b" "Blame"      mercit-blame-addition)
-    ("r" "...removal" mercit-blame-removal)
-    ("f" "...reverse" mercit-blame-reverse)
-    ("m" "Blame echo" mercit-blame-echo)
-    ("q" "Quit blame" mercit-blame-quit)]
-   [("p" "Prev blob"  mercit-blob-previous)
-    ("n" "Next blob"  mercit-blob-next)
-    ("v" "Goto blob"  mercit-find-file)
-    ("V" "Goto file"  mercit-blob-visit-file)]
-   [(5 "C-c r" "Rename file"   mercit-file-rename)
-    (5 "C-c d" "Delete file"   mercit-file-delete)
-    (5 "C-c u" "Untrack file"  mercit-file-untrack)
-    (5 "C-c c" "Checkout file" mercit-file-checkout)]]
+   [("s" "*Stage"      mercit-stage-file)
+    ("u" "*Unstage"    mercit-unstage-file)
+    ("c" "*Commit"     mercit-commit)
+    ("e" "*Edit line"  mercit-edit-line-commit)]
+   [("D" "*Diff..."    mercit-diff)
+    ("d" "*Diff"       mercit-diff-buffer-file)
+    ("g" "*Status"     mercit-status-here)]
+   [("L" "*Log..."     mercit-log)
+    ("l" "*Log"        mercit-log-buffer-file)
+    ("t" "*Trace"      mercit-log-trace-definition)
+    (7 "M" "*Merged"   mercit-log-merged)]
+   [("B" "*Blame..."   mercit-blame)
+    ("b" "*Blame"      mercit-blame-addition)
+    ("r" "*...removal" mercit-blame-removal)
+    ("f" "*...reverse" mercit-blame-reverse)
+    ("m" "*Blame echo" mercit-blame-echo)
+    ("q" "*Quit blame" mercit-blame-quit)]
+   [("p" "*Prev blob"  mercit-blob-previous)
+    ("n" "*Next blob"  mercit-blob-next)
+    ("v" "*Goto blob"  mercit-find-file)
+    ("V" "*Goto file"  mercit-blob-visit-file)]
+   [(5 "C-c r" "*Rename file"   mercit-file-rename)
+    (5 "C-c d" "*Delete file"   mercit-file-delete)
+    (5 "C-c u" "*Untrack file"  mercit-file-untrack)
+    (5 "C-c c" "*Checkout file" mercit-file-checkout)]]
   (interactive)
   (transient-setup
    (if (mercit-file-relative-name)

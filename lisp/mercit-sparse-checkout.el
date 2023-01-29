@@ -73,15 +73,15 @@ See the `git sparse-checkout' manpage for details about
   :man-page "git-sparse-checkout"
   ["Arguments for enabling"
    :if-not mercit-sparse-checkout-enabled-p
-   ("-i" "Use sparse index" "--sparse-index")]
+   ("-i" "*Use sparse index" "--sparse-index")]
   ["Actions"
    [:if-not mercit-sparse-checkout-enabled-p
-    ("e" "Enable sparse checkout" mercit-sparse-checkout-enable)]
+    ("e" "*Enable sparse checkout" mercit-sparse-checkout-enable)]
    [:if mercit-sparse-checkout-enabled-p
-    ("d" "Disable sparse checkout" mercit-sparse-checkout-disable)
-    ("r" "Reapply rules" mercit-sparse-checkout-reapply)]
-   [("s" "Set directories" mercit-sparse-checkout-set)
-    ("a" "Add directories" mercit-sparse-checkout-add)]])
+    ("d" "*Disable sparse checkout" mercit-sparse-checkout-disable)
+    ("r" "*Reapply rules" mercit-sparse-checkout-reapply)]
+   [("s" "*Set directories" mercit-sparse-checkout-set)
+    ("a" "*Add directories" mercit-sparse-checkout-add)]])
 
 ;;;###autoload
 (defun mercit-sparse-checkout-enable (&optional args)

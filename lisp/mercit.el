@@ -311,72 +311,73 @@ Also see info node `(mercit)Commands for Buffers Visiting Files'."
 (transient-define-prefix mercit-dispatch ()
   "Invoke a Mercit command from a list of available commands."
   :info-manual "(mercit)Top"
+  ["Commands and arguments not yet implemented are marked with *"]
   ["Transient and dwim commands"
    ;; → bound in mercit-mode-map or mercit-section-mode-map
    ;; ↓ bound below
-   [("A" "Apply"          mercit-cherry-pick)
+   [("A" "*Apply"          mercit-cherry-pick)
     ;; a                  ↓
-    ("b" "Branch"         mercit-branch)
-    ("B" "Bisect"         mercit-bisect)
-    ("c" "Commit"         mercit-commit)
-    ("C" "Clone"          mercit-clone)
-    ("d" "Diff"           mercit-diff)
-    ("D" "Diff (change)"  mercit-diff-refresh)
-    ("e" "Ediff (dwim)"   mercit-ediff-dwim)
-    ("E" "Ediff"          mercit-ediff)
-    ("f" "Fetch"          mercit-fetch)
-    ("F" "Pull"           mercit-pull)
+    ("b" "*Branch"         mercit-branch)
+    ("B" "*Bisect"         mercit-bisect)
+    ("c" "*Commit"         mercit-commit)
+    ("C" "*Clone"          mercit-clone)
+    ("d" "*Diff"           mercit-diff)
+    ("D" "*Diff (change)"  mercit-diff-refresh)
+    ("e" "*Ediff (dwim)"   mercit-ediff-dwim)
+    ("E" "*Ediff"          mercit-ediff)
+    ("f" "*Fetch"          mercit-fetch)
+    ("F" "*Pull"           mercit-pull)
     ;; g                  ↓
     ;; G                → mercit-refresh-all
-    ("h" "Help"           mercit-info)
-    ("H" "Section info"   mercit-describe-section :if-derived mercit-mode)]
-   [("i" "Ignore"         mercit-gitignore)
-    ("I" "Init"           mercit-init)
-    ("j" "Jump to section"mercit-status-jump  :if-mode     mercit-status-mode)
-    ("j" "Display status" mercit-status-quick :if-not-mode mercit-status-mode)
-    ("J" "Display buffer" mercit-display-repository-buffer)
+    ("h" "*Help"           mercit-info)
+    ("H" "*Section info"   mercit-describe-section :if-derived mercit-mode)]
+   [("i" "*Ignore"         mercit-gitignore)
+    ("I" "*Init"           mercit-init)
+    ("j" "*Jump to section"mercit-status-jump  :if-mode     mercit-status-mode)
+    ("j" "*Display status" mercit-status-quick :if-not-mode mercit-status-mode)
+    ("J" "*Display buffer" mercit-display-repository-buffer)
     ;; k                  ↓
     ;; K                → mercit-file-untrack
-    ("l" "Log"            mercit-log)
-    ("L" "Log (change)"   mercit-log-refresh)
-    ("m" "Merge"          mercit-merge)
-    ("M" "Remote"         mercit-remote)
+    ("l" "*Log"            mercit-log)
+    ("L" "*Log (change)"   mercit-log-refresh)
+    ("m" "*Merge"          mercit-merge)
+    ("M" "*Remote"         mercit-remote)
     ;; n                → mercit-section-forward
     ;; N       reserved → forge-dispatch
-    ("o" "Submodule"      mercit-submodule)
-    ("O" "Subtree"        mercit-subtree)
+    ("o" "*Submodule"      mercit-submodule)
+    ("O" "*Subtree"        mercit-subtree)
     ;; p                → mercit-section-backward
-    ("P" "Push"           mercit-push)
+    ("P" "*Push"           mercit-push)
     ;; q                → mercit-mode-bury-buffer
-    ("Q" "Command"        mercit-git-command)]
-   [("r" "Rebase"         mercit-rebase)
+    ("Q" "*Command"        mercit-git-command)]
+   [("r" "*Rebase"         mercit-rebase)
     ;; R                → mercit-file-rename
     ;; s                  ↓
     ;; S                  ↓
-    ("t" "Tag"            mercit-tag)
-    ("T" "Note"           mercit-notes)
+    ("t" "*Tag"            mercit-tag)
+    ("T" "*Note"           mercit-notes)
     ;; u                  ↓
     ;; U                  ↓
     ;; v                  ↓
-    ("V" "Revert"         mercit-revert)
-    ("w" "Apply patches"  mercit-am)
-    ("W" "Format patches" mercit-patch)
+    ("V" "*Revert"         mercit-revert)
+    ("w" "*Apply patches"  mercit-am)
+    ("W" "*Format patches" mercit-patch)
     ;; x                → mercit-reset-quickly
-    ("X" "Reset"          mercit-reset)
-    ("y" "Show Refs"      mercit-show-refs)
-    ("Y" "Cherries"       mercit-cherry)
-    ("z" "Stash"          mercit-stash)
-    ("Z" "Worktree"       mercit-worktree)
-    ("!" "Run"            mercit-run)]]
+    ("X" "*Reset"          mercit-reset)
+    ("y" "*Show Refs"      mercit-show-refs)
+    ("Y" "*Cherries"       mercit-cherry)
+    ("z" "*Stash"          mercit-stash)
+    ("Z" "*Worktree"       mercit-worktree)
+    ("!" "*Run"            mercit-run)]]
   ["Applying changes"
    :if-derived mercit-mode
-   [("a" "Apply"          mercit-apply)
-    ("v" "Reverse"        mercit-reverse)
-    ("k" "Discard"        mercit-discard)]
-   [("s" "Stage"          mercit-stage)
-    ("u" "Unstage"        mercit-unstage)]
-   [("S" "Stage all"      mercit-stage-modified)
-    ("U" "Unstage all"    mercit-unstage-all)]]
+   [("a" "*Apply"          mercit-apply)
+    ("v" "*Reverse"        mercit-reverse)
+    ("k" "*Discard"        mercit-discard)]
+   [("s" "*Stage"          mercit-stage)
+    ("u" "*Unstage"        mercit-unstage)]
+   [("S" "*Stage all"      mercit-stage-modified)
+    ("U" "*Unstage all"    mercit-unstage-all)]]
   ["Essential commands"
    :if-derived mercit-mode
    [("g" "       refresh current buffer"   mercit-refresh)
@@ -384,7 +385,8 @@ Also see info node `(mercit)Commands for Buffers Visiting Files'."
     ("<tab>" "   toggle section at point"  mercit-section-toggle)
     ("<return>" "visit thing at point"     mercit-visit-thing)]
    [("C-x m"    "show all key bindings"    describe-mode)
-    ("C-x i"    "show Info manual"         mercit-info)]])
+    ;; ("C-x i"    "show Info manual"         mercit-info)
+    ]])
 
 ;;; Mercurial Popup
 
@@ -402,17 +404,17 @@ This affects `mercit-git-command', `mercit-git-command-topdir',
 (transient-define-prefix mercit-run ()
   "Run git or another command, or launch a graphical utility."
   [["Run git subcommand"
-    ("!" "in repository root"   mercit-git-command-topdir)
-    ("p" "in working directory" mercit-git-command)]
+    ("!" "*in repository root"   mercit-git-command-topdir)
+    ("p" "*in working directory" mercit-git-command)]
    ["Run shell command"
-    ("s" "in repository root"   mercit-shell-command-topdir)
-    ("S" "in working directory" mercit-shell-command)]
+    ("s" "*in repository root"   mercit-shell-command-topdir)
+    ("S" "*in working directory" mercit-shell-command)]
    ["Launch"
-    ("k" "gitk"                 mercit-run-gitk)
-    ("a" "gitk --all"           mercit-run-gitk-all)
-    ("b" "gitk --branches"      mercit-run-gitk-branches)
-    ("g" "git gui"              mercit-run-git-gui)
-    ("m" "git mergetool --gui"  mercit-git-mergetool)]])
+    ("k" "*gitk"                 mercit-run-gitk)
+    ("a" "*gitk --all"           mercit-run-gitk-all)
+    ("b" "*gitk --branches"      mercit-run-gitk-branches)
+    ("g" "*git gui"              mercit-run-git-gui)
+    ("m" "*git mergetool --gui"  mercit-git-mergetool)]])
 
 ;;;###autoload
 (defun mercit-git-command (command)
@@ -480,7 +482,7 @@ is run in the top-level directory of the current working tree."
 ;;; Shared Infix Arguments
 
 (transient-define-argument mercit:--gpg-sign ()
-  :description "Sign using gpg"
+  :description "*Sign using gpg"
   :class 'transient-option
   :shortarg "-S"
   :argument "--gpg-sign="

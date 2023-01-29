@@ -587,10 +587,10 @@ of a side, then keep that side without prompting."
                                               (concat "  " file))
                                             files "\n"))
                          t
-                       (?o "[o]ur stage"   "--ours")
-                       (?t "[t]heir stage" "--theirs")
-                       (?c "[c]onflict"    "--merge")
-                       (?i "decide [i]ndividually" nil)))))
+                       (?o "*[o]ur stage"   "--ours")
+                       (?t "*[t]heir stage" "--theirs")
+                       (?c "*[c]onflict"    "--merge")
+                       (?i "*decide [i]ndividually" nil)))))
       (dolist (file files)
         (mercit-checkout-stage file arg))
     (dolist (file files)
@@ -799,9 +799,9 @@ a separate commit.  A typical workflow would be:
                    (re-search-forward smerge-begin-re nil t)
                    (setq fn
                          (mercit-read-char-case "Keep side: " t
-                           (?o "[o]urs/upper"   #'smerge-keep-upper)
-                           (?b "[b]ase"         #'smerge-keep-base)
-                           (?t "[t]heirs/lower" #'smerge-keep-lower))))
+                           (?o "*[o]urs/upper"   #'smerge-keep-upper)
+                           (?b "*[b]ase"         #'smerge-keep-base)
+                           (?t "*[t]heirs/lower" #'smerge-keep-lower))))
                (re-search-forward smerge-begin-re nil t))))
           (funcall fn)))
       (when (and keep (mercit-anything-unmerged-p file))

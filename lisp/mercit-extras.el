@@ -52,15 +52,15 @@ popup.  See info node `(mercit) Ediffing' for information about
 alternative commands."
   :man-page "git-mergetool"
   ["Settings"
-   ("-t" mercit-git-mergetool:--tool)
-   ("=t" mercit-merge.guitool)
-   ("=T" mercit-merge.tool)
-   ("-r" mercit-mergetool.hideResolved)
-   ("-b" mercit-mergetool.keepBackup)
-   ("-k" mercit-mergetool.keepTemporaries)
-   ("-w" mercit-mergetool.writeToTemp)]
+   ("*-t" mercit-git-mergetool:--tool)
+   ("*=t" mercit-merge.guitool)
+   ("*=T" mercit-merge.tool)
+   ("*-r" mercit-mergetool.hideResolved)
+   ("*-b" mercit-mergetool.keepBackup)
+   ("*-k" mercit-mergetool.keepTemporaries)
+   ("*-w" mercit-mergetool.writeToTemp)]
   ["Actions"
-   (" m" "Invoke mergetool" mercit-git-mergetool)]
+   ("* m" "Invoke mergetool" mercit-git-mergetool)]
   (interactive
    (if (and (not (eq transient-current-prefix 'mercit-git-mergetool))
             current-prefix-arg)
@@ -72,7 +72,7 @@ alternative commands."
     (mercit-run-git-async "mergetool" "--gui" args "--" file)))
 
 (transient-define-infix mercit-git-mergetool:--tool ()
-  :description "Override mergetool"
+  :description "*Override mergetool"
   :class 'transient-option
   :shortarg "-t"
   :argument "--tool="
@@ -80,13 +80,13 @@ alternative commands."
 
 (transient-define-infix mercit-merge.guitool ()
   :class 'mercit--git-variable
-  :variable "merge.guitool"
+  :variable "*merge.guitool"
   :global t
   :reader #'mercit--read-mergetool)
 
 (transient-define-infix mercit-merge.tool ()
   :class 'mercit--git-variable
-  :variable "merge.tool"
+  :variable "*merge.tool"
   :global t
   :reader #'mercit--read-mergetool)
 
@@ -101,25 +101,25 @@ alternative commands."
 
 (transient-define-infix mercit-mergetool.hideResolved ()
   :class 'mercit--git-variable:boolean
-  :variable "mergetool.hideResolved"
+  :variable "*mergetool.hideResolved"
   :default "false"
   :global t)
 
 (transient-define-infix mercit-mergetool.keepBackup ()
   :class 'mercit--git-variable:boolean
-  :variable "mergetool.keepBackup"
+  :variable "*mergetool.keepBackup"
   :default "true"
   :global t)
 
 (transient-define-infix mercit-mergetool.keepTemporaries ()
   :class 'mercit--git-variable:boolean
-  :variable "mergetool.keepTemporaries"
+  :variable "*mergetool.keepTemporaries"
   :default "false"
   :global t)
 
 (transient-define-infix mercit-mergetool.writeToTemp ()
   :class 'mercit--git-variable:boolean
-  :variable "mergetool.writeToTemp"
+  :variable "*mergetool.writeToTemp"
   :default "false"
   :global t)
 

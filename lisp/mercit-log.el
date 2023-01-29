@@ -1808,25 +1808,28 @@ in the pushremote case."
 (defun mercit-insert-unpulled-from-upstream ()
   "Insert commits that haven't been pulled from the upstream yet."
   (when-let ((upstream (mercit-get-upstream-branch)))
-    (mercit-insert-section (unpulled "--rev=-10" t) ;; FIXME ..@{upstream}
+    (mercit-insert-section (unpulled (concat "--rev=" upstream ":."
+                                             "and not . and not 000000000000")
+                                     t)
       (mercit-insert-heading
-        (format (propertize "Unpulled from %s."
-                            'font-lock-face 'mercit-section-heading)
-                upstream))
-      (mercit-insert-log "--rev=-10" mercit-buffer-log-args) ;; FIXME ..@{upstream}
+       (format (propertize "Unpulled from %s."  ;; TODO: name of remote repo?
+                           'font-lock-face 'mercit-section-heading)
+               upstream))
+      (mercit-insert-log (concat "--rev=" upstream ":.")
+                         mercit-buffer-log-args)
       (mercit-log-insert-child-count))))
 
 (mercit-define-section-jumper mercit-jump-to-unpulled-from-pushremote
   "Unpulled from <push-remote>" unpulled
   (concat ".." (mercit-get-push-branch)))
 
-(defun mercit-insert-unpulled-from-pushremote ()
+(defun mercit-insert-unpulled-from-pushremote ()  ;; TODO
   "Insert commits that haven't been pulled from the push-remote yet."
   (--when-let (mercit-get-push-branch)
     (when (mercit--insert-pushremote-log-p)
       (mercit-insert-section (unpulled (concat ".." it) t)
         (mercit-insert-heading
-          (format (propertize "Unpulled from %s."
+          (format (propertize "Unpulled from %s."  ;; TODO: name of remote repo?
                               'font-lock-face 'mercit-section-heading)
                   (propertize it 'font-lock-face 'mercit-branch-remote)))
         (mercit-insert-log (concat ".." it) mercit-buffer-log-args)

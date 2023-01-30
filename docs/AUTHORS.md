@@ -1,23 +1,34 @@
+Mercit Authors
+---------------
+
+- Hartmut Goebel
+
+
+---
+
+
+Magit
+------
+
+Mercit was forked from Magit v3.3.0-491-gb908c79b4.
 The following people have contributed to Magit, including the
-libraries `git-commit.el`, `mercit-popup.el`, and `with-editor.el`
+libraries `git-commit.el`, `magit-popup.el`, and `with-editor.el`
 which are distributed as separate Elpa packages.
 
-For statistics see https://mercit.vc/stats/mercit/authors.html.
-
-Authors
--------
+Magit Authors
+-------------
 
 - Marius Vollmer
 - Jonas Bernoulli
 
-Active Maintainers
-------------------
+Active Magit Maintainers
+------------------------
 
 - Jonas Bernoulli
 - Kyle Meyer
 
-Former Maintainers
-------------------
+Former Magit Maintainers
+------------------------
 
 - Nicolas Dudebout
 - Noam Postavsky

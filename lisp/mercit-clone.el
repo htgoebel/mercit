@@ -35,7 +35,7 @@
   :type 'boolean)
 
 (defcustom mercit-clone-set-remote.pushDefault 'ask
-  "Whether to set the value of `remote.pushDefault' after cloning.
+  "NOT IMPLEMENTED Whether to set the value of `remote.pushDefault' after cloning.
 
 If t, then set without asking.  If nil, then don't set.  If
 `ask', then ask."
@@ -66,9 +66,8 @@ directly."
   :type 'boolean)
 
 (defcustom mercit-clone-name-alist
-  '(("\\`\\(?:github:\\|gh:\\)?\\([^:]+\\)\\'" "github.com" "github.user")
-    ("\\`\\(?:gitlab:\\|gl:\\)\\([^:]+\\)\\'"  "gitlab.com" "gitlab.user")
-    ("\\`\\(?:sourcehut:\\|sh:\\)\\([^:]+\\)\\'" "git.sr.ht" "sourcehut.user"))
+  '(("\\`\\(?:savannah:\\|gnu:\\)?\\([^:]+\\)\\'" "hg.sv.gnu.org" "savannah.user")
+    ("\\`\\(?:heptapod:\\|hepta:\\)\\([^:]+\\)\\'"  "foss.heptapod.net" "heptapod.user"))
   "Alist mapping repository names to repository urls.
 
 Each element has the form (REGEXP HOSTNAME USER).  When the user
@@ -92,8 +91,9 @@ as the username itself."
                        (string :tag "User name or git variable"))))
 
 (defcustom mercit-clone-url-format
-  '(("git.sr.ht" . "git@%h:%n")
-    (t . "git@%h:%n.git"))
+  '(("hg.sv.gnu.org" . "ssh://login@%h/%n")
+    ("foss.heptapod.net" . "ssh://hg@/%h/%n")
+    (t . "https://%h/%n"))
   "Format(s) used when turning repository names into urls.
 
 In a format string, %h is the hostname and %n is the repository
@@ -228,10 +228,10 @@ Then show the status buffer for the new repository."
 (defun mercit-clone-internal (repository directory args &optional sparse)
   (let* ((checkout (not (memq (car args) '("--bare" "--mirror"))))
          (remote (or (transient-arg-value "--origin" args)
-                     (mercit-get "clone.defaultRemote")
-                     "origin"))
+                     "default"))
          (set-push-default
           (and checkout
+               nil  ;; TODO? set remote.pushDefault
                (or (eq  mercit-clone-set-remote.pushDefault t)
                    (and mercit-clone-set-remote.pushDefault
                         (y-or-n-p (format "Set `remote.pushDefault' to %S? "
@@ -262,17 +262,17 @@ Then show the status buffer for the new repository."
                   (= (process-exit-status process) 0))
          (when checkout
            (let ((default-directory directory))
-             (when set-push-default
-               (setf (mercit-get "remote.pushDefault") remote))
+             ;; (when set-push-default
+             ;;   (setf (mercit-get "remote.pushDefault") remote))
              (unless mercit-clone-set-remote-head
                (mercit-remote-unset-head remote))))
-         (when (and sparse checkout)
-           (when (mercit-git-version< "2.25.0")
-             (user-error
-              "`git sparse-checkout' not available until Git v2.25"))
-           (let ((default-directory directory))
-             (mercit-call-git "sparse-checkout" "init" "--cone")
-             (mercit-call-git "checkout" (mercit-get-current-branch))))
+         ;; (when (and sparse checkout)
+         ;;   (when (mercit-git-version< "2.25.0")
+         ;;     (user-error
+         ;;      "`git sparse-checkout' not available until Git v2.25"))
+         ;;   (let ((default-directory directory))
+         ;;     (mercit-call-git "sparse-checkout" "init" "--cone")
+         ;;     (mercit-call-git "checkout" (mercit-get-current-branch))))
          (with-current-buffer (process-get process 'command-buf)
            (mercit-status-setup-buffer directory)))))))
 
@@ -290,14 +290,17 @@ Then show the status buffer for the new repository."
 
 (defun mercit-clone-read-repository ()
   (mercit-read-char-case "Clone from " nil
-    (?u "*[u]rl or name"
+    (?u "[u]rl or *name"
         (let ((str (mercit-read-string-ns "Clone from url or name")))
           (if (string-match-p "\\(://\\|@\\)" str)
               str
             (mercit-clone--name-to-url str))))
-    (?p "*[p]ath"
+    (?f "[f]ilesystem path"
         (mercit-convert-filename-for-git
          (read-directory-name "Clone repository: ")))
+    (?p "*[p]ath alias"
+        (concat (mercit-convert-filename-for-git
+                 (read-string "Clone repository: path://"))))
     (?l "*[l]ocal url"
         (concat "file://"
                 (mercit-convert-filename-for-git
@@ -307,7 +310,7 @@ Then show the status buffer for the new repository."
          (read-file-name "Clone from bundle: ")))))
 
 (defun mercit-clone--url-to-name (url)
-  (and (string-match "\\([^/:]+?\\)\\(/?\\.git\\)?$" url)
+  (and (string-match "\\([^/:]+?\\)/?$" url)
        (match-string 1 url)))
 
 (defun mercit-clone--name-to-url (name)

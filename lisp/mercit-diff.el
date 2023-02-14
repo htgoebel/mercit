@@ -352,16 +352,14 @@ and `--compact-summary'.  See the git-diff(1) manpage."
   :type 'hook)
 
 (defcustom mercit-revision-headers-format "\
-Author:     %aN <%aE>
-AuthorDate: %ad
-Commit:     %cN <%cE>
-CommitDate: %cd
+Author:     {author}
+AuthorDate: {date|date}
 "
   "Format string used to insert headers in revision buffers.
 
 All headers in revision buffers are inserted by the section
 inserter `mercit-insert-revision-headers'.  Some of the headers
-are created by calling `git show --format=FORMAT' where FORMAT
+are created by calling `git log --template=FORMAT' where FORMAT
 is the format specified here.  Other headers are hard coded or
 subject to option `mercit-revision-insert-related-refs'."
   :package-version '(mercit . "0.0.0")
@@ -859,9 +857,10 @@ and `:slant'."
   :class 'mercit-diff-prefix
   ["Limit arguments"
    (mercit:--)
-   (mercit-diff:--ignore-submodules)
-   ("-b" "*Ignore whitespace changes"      ("-b" "--ignore-space-change"))
-   ("-w" "*Ignore all whitespace"          ("-w" "--ignore-all-space"))
+   ;; (mercit-diff:--ignore-submodules)  hg has revered logic, see --subrepos
+   ("-S" "Recurse into subrepos"          ("-S" "--subrepos"))
+   ("-b" "Ignore whitespace changes"      ("-b" "--ignore-space-change"))
+   ("-w" "Ignore all whitespace"          ("-w" "--ignore-all-space"))
    (5 "-D" "*Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
   ["Context arguments"
    (mercit-diff:-U)
@@ -873,7 +872,7 @@ and `:slant'."
    ("-x" "*Disallow external diff drivers" "--no-ext-diff")
    ("-s" "*Show stats"                     "--stat")
    ("=g" "*Show signature"                 "--show-signature")
-   (5 "-R" "*Reverse sides"                "-R")
+   (5 "-R" "Reverse sides"                "--reverse")
    (5 mercit-diff:--color-moved)
    (5 mercit-diff:--color-moved-ws)]
   ["Actions"
@@ -893,9 +892,10 @@ and `:slant'."
   :class 'mercit-diff-refresh-prefix
   ["Limit arguments"
    (mercit:--)
-   (mercit-diff:--ignore-submodules)
-   ("-b" "*Ignore whitespace changes"      ("-b" "--ignore-space-change"))
-   ("-w" "*Ignore all whitespace"          ("-w" "--ignore-all-space"))
+   ;; (mercit-diff:--ignore-submodules)  hg has revered logic, see --subrepos
+   ("-S" "Recurse into subrepos"          ("-S" "--subrepos"))
+   ("-b" "Ignore whitespace changes"      ("-b" "--ignore-space-change"))
+   ("-w" "Ignore all whitespace"          ("-w" "--ignore-all-space"))
    (5 "-D" "*Omit preimage for deletes"    ("-D" "--irreversible-delete"))]
   ["Context arguments"
    (mercit-diff:-U)
@@ -909,7 +909,7 @@ and `:slant'."
     :if-derived mercit-diff-mode)
    ("=g" "*Show signature"                 "--show-signature"
     :if-derived mercit-diff-mode)
-   (5 "-R" "*Reverse sides"                "-R"
+   (5 "-R" "Reverse sides"                "--reverse"
       :if-derived mercit-diff-mode)
    (5 mercit-diff:--color-moved)
    (5 mercit-diff:--color-moved-ws)]
@@ -953,7 +953,7 @@ and `:slant'."
                                    history))
 
 (transient-define-argument mercit-diff:-U ()
-  :description "*Context lines"
+  :description "Context lines"
   :class 'transient-option
   :argument "-U"
   :reader #'transient-read-number-N0)
@@ -1143,9 +1143,9 @@ If no DWIM context is found, nil is returned."
     (if mbase
         (let ((base (mercit-git-string "merge-base" revA revB)))
           (cond
-           ((string= (mercit-rev-parse revA) base)
+           ((string= (mercit-rev-parse "--rev" revA) base)
             (format "%s..%s" revA revB))
-           ((string= (mercit-rev-parse revB) base)
+           ((string= (mercit-rev-parse "--rev" revB) base)
             (format "%s..%s" revB revA))
            (interactive
             (let ((main (mercit-completing-read "View changes along"
@@ -1259,7 +1259,7 @@ the file or blob."
         (let ((line (line-number-at-pos))
               (col (current-column)))
           (with-current-buffer
-              (mercit-diff-setup-buffer (or (mercit-get-current-branch) "HEAD")
+              (mercit-diff-setup-buffer (or (mercit-get-current-branch) ".")
                                        nil
                                        (car (mercit-diff-arguments))
                                        (list file)
@@ -1816,7 +1816,7 @@ commit or stash at point, then prompt for a commit."
                  (setq win (get-buffer-window buf))
                  (with-current-buffer buf
                    (and (equal rev mercit-buffer-revision)
-                        (equal (mercit-rev-parse rev)
+                        (equal (mercit-rev-parse "--rev" rev)
                                mercit-buffer-revision-hash))))
             (with-selected-window win
               (condition-case nil
@@ -1902,7 +1902,7 @@ Staging and applying changes is documented in info node
   (setq mercit--imenu-item-types 'file))
 
 (put 'mercit-diff-mode 'mercit-diff-default-arguments
-     '("--stat" "--no-ext-diff"))
+     '("--git"))  ;; was --stat --no-ext-diff
 
 (defun mercit-diff-setup-buffer (range typearg args files &optional locked)
   (require 'mercit)
@@ -2063,8 +2063,8 @@ keymap is the parent of their keymaps.")
 (defun mercit-insert-diff ()
   "Insert the diff into this `mercit-diff-mode' buffer."
   (mercit--insert-diff
-    "diff" mercit-buffer-range "-p" "--noprefix"
-    (and (member "--stat" mercit-buffer-diff-args) "--numstat")  ;; TODO
+    "diff" "--rev" mercit-buffer-range "--show-function" "--noprefix" "--git"
+    (and (member "--stat" mercit-buffer-diff-args) "--stat")  ;; TODO was --numstat
     mercit-buffer-typearg
     mercit-buffer-diff-args "--"
     mercit-buffer-diff-files))
@@ -2488,7 +2488,7 @@ Staging and applying changes is documented in info node
   (hack-dir-local-variables-non-file-buffer))
 
 (put 'mercit-revision-mode 'mercit-diff-default-arguments
-     '("--stat" "--no-ext-diff"))
+     '("--git"))  ;; was --stat --no-ext-diff
 
 (defun mercit-revision-setup-buffer (rev args files)
   (mercit-setup-buffer #'mercit-revision-mode nil
@@ -2501,7 +2501,7 @@ Staging and applying changes is documented in info node
 (defun mercit-revision-refresh-buffer ()
   (setq mercit-buffer-revision-hash (mercit-rev-hash mercit-buffer-revision))
   (mercit-set-header-line-format
-   (concat (mercit-object-type mercit-buffer-revision-hash)
+   (concat "commit"  ;; was: (mercit-object-type mercit-buffer-revision-hash)
            " "  mercit-buffer-revision
            (pcase (length mercit-buffer-diff-files)
              (0)
@@ -2514,13 +2514,13 @@ Staging and applying changes is documented in info node
 (cl-defmethod mercit-buffer-value (&context (major-mode mercit-revision-mode))
   (cons mercit-buffer-revision mercit-buffer-diff-files))
 
-(defun mercit-insert-revision-diff ()  ;; TODO
+(defun mercit-insert-revision-diff ()
   "Insert the diff into this `mercit-revision-mode' buffer."
   (mercit--insert-diff
-    "show" "-p" "--cc" "--format=" "--noprefix"
-    (and (member "--stat" mercit-buffer-diff-args) "--numstat") ;; TODO
+    "diff" "--noprefix" "--git" "--show-function"
+    (and (member "--stat" mercit-buffer-diff-args) "--stat") ;; TODO was --numstat
     mercit-buffer-diff-args
-    (mercit--rev-dereference mercit-buffer-revision)
+    "--change" (mercit--rev-dereference mercit-buffer-revision)
     "--" mercit-buffer-diff-files))
 
 (defun mercit-insert-revision-tag ()
@@ -2588,7 +2588,7 @@ or a ref which is not a branch, then it inserts nothing."
     (let ((beg (point))
           (rev mercit-buffer-revision))
       (insert (with-temp-buffer
-                (mercit-rev-insert-format "{desc}" rev)
+                (mercit-rev-insert-format "{desc}\n\n" rev)
                 (mercit-revision--wash-message)))
       (if (= (point) (+ beg 2))
           (progn (backward-delete-char 2)
@@ -2638,7 +2638,7 @@ or a ref which is not a branch, then it inserts nothing."
           (mercit--add-face-text-property
            beg (point) 'mercit-diff-revision-summary)
           (mercit-insert-heading))
-        (when mercit-diff-highlight-keywords
+        (when mercit-diff-highlight-keywords  ;; TODO what keywords?
           (save-excursion
             (while (re-search-forward "\\[[^[]*\\]" nil t)
               (let ((beg (match-beginning 0))
@@ -2662,10 +2662,10 @@ or a ref which is not a branch, then it inserts nothing."
 (defun mercit-insert-revision-headers ()
   "Insert headers about the commit into a revision buffer."
   (mercit-insert-section (headers)
-    (--when-let (mercit-rev-format "%D" mercit-buffer-revision "--decorate=full")
+    (--when-let (mercit-rev-format "{branch}" mercit-buffer-revision)  ;; TODO: Tags
       (insert (mercit-format-ref-labels it) ?\s))
     (insert (propertize
-             (mercit-rev-parse (mercit--rev-dereference mercit-buffer-revision))
+             (mercit-rev-parse "--rev" (mercit--rev-dereference mercit-buffer-revision))
              'font-lock-face 'mercit-hash))
     (mercit-insert-heading)
     (let ((beg (point)))
@@ -2681,12 +2681,12 @@ or a ref which is not a branch, then it inserts nothing."
               (insert "Parent:     ")
               (insert (propertize hash 'font-lock-face 'mercit-hash))
               (insert " " msg "\n")))))
-      (mercit--insert-related-refs
-       mercit-buffer-revision "--merged" "Merged"
-       (eq mercit-revision-insert-related-refs 'all))
-      (mercit--insert-related-refs
-       mercit-buffer-revision "--contains" "Contained"
-       (memq mercit-revision-insert-related-refs '(all mixed)))
+      ;; (mercit--insert-related-refs
+      ;;  mercit-buffer-revision "--merged" "Merged"  TODO
+      ;;  (eq mercit-revision-insert-related-refs 'all))
+      ;; (mercit--insert-related-refs
+      ;;  mercit-buffer-revision "--contains" "Contained"  TODO: log --template '{branches}' -r
+      ;;  (memq mercit-revision-insert-related-refs '(all mixed)))
       (when-let ((follows (mercit-get-current-tag mercit-buffer-revision t)))
         (let ((tag (car  follows))
               (cnt (cadr follows)))
@@ -2794,7 +2794,7 @@ or a ref which is not a branch, then it inserts nothing."
   (hack-dir-local-variables-non-file-buffer))
 
 (put 'mercit-merge-preview-mode 'mercit-diff-default-arguments
-     '("--no-ext-diff"))
+     '())  ;; was --no-ext-diff
 
 (defun mercit-merge-preview-setup-buffer (rev)
   (mercit-setup-buffer #'mercit-merge-preview-mode nil
@@ -2803,10 +2803,10 @@ or a ref which is not a branch, then it inserts nothing."
 
 (defun mercit-merge-preview-refresh-buffer ()
   (let* ((branch (mercit-get-current-branch))
-         (head (or branch (mercit-rev-verify "HEAD"))))
+         (head (or branch (mercit-rev-verify "."))))
     (mercit-set-header-line-format (format "Preview merge of %s into %s"
                                           mercit-buffer-revision
-                                          (or branch "HEAD")))
+                                          (or branch ".")))
     (mercit-insert-section (diffbuf)
       (mercit--insert-diff
         "merge-tree" (mercit-git-string "merge-base" head mercit-buffer-revision)

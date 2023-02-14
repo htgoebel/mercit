@@ -75,9 +75,8 @@
   :options '("--follow" "--grep" "-G" "-S" "-L"))
 
 (defcustom mercit-log-revision-headers-format "\
-{notes}
-Author:    {author}
-Committer: {committer}"  ;; TODO was {desc}{notes}
+{if(desc, '\n{desc}'}
+Author:    {author}"  ;; TODO was {body}{notes} author {committer}
   "Additional format string used with the `++header' argument."
   :package-version '(mercit . "0.0.0")
   :group 'mercit-log
@@ -410,23 +409,23 @@ commits before and half after."
   ["History simplification"
    (  "-D" "*Simplify by decoration"                  "--simplify-by-decoration")
    (mercit:--)
-   (  "-f" "*Follow renames when showing single-file log"     "--follow") ;3
+   (  "-f" "Follow renames when showing single-file log"     "--follow") ;3
    (6 "/s" "*Only commits changing given paths"               "--sparse")
    (7 "/d" "*Only selected commits plus meaningful history"   "--dense")
    (7 "/a" "*Only commits existing directly on ancestry path" "--ancestry-path")
    (6 "/f" "*Do not prune history"                            "--full-history")
    (7 "/m" "*Prune some history"                              "--simplify-merges")]
-  ["Commit ordering"
-   (mercit-log:--*-order)
-   ("-r" "*Reverse order" "--reverse")]
+  ;; ["Commit ordering"  TODO
+  ;;  (mercit-log:--*-order)
+  ;;  ("-r" "*Reverse order" "--reverse")]
   ["Formatting"
-   ("-g" "*Show graph"          "--graph")          ;1
+   ("-g" "Show graph"          "--graph")          ;1
    ("-c" "*Show graph in color" "--color")          ;2
-   ("-d" "*Show refnames"       "--decorate")       ;3
+   ("-d" "Show refnames"       "--decorate")       ;3
    ("=S" "*Show signatures"     "--show-signature") ;1
    ("-h" "*Show header"         "++header")         ;4
    ("-p" "*Show diffs"          ("-p" "--patch"))   ;2
-   ("-s" "*Show diffstats"      "--stat")]          ;2
+   ("-s" "Show diffstats"      "--stat")]          ;2
   [["Log"
     ("l" "*current"             mercit-log-current)
     ("h" "*HEAD"                mercit-log-head)
@@ -471,7 +470,7 @@ commits before and half after."
    ["History simplification"
     (  "-D" "*Simplify by decoration"                  "--simplify-by-decoration")
     (mercit:--)
-    (  "-f" "*Follow renames when showing single-file log"     "--follow") ;3
+    (  "-f" "Follow renames when showing single-file log"     "--follow") ;3
     (6 "/s" "*Only commits changing given paths"               "--sparse")
     (7 "/d" "*Only selected commits plus meaningful history"   "--dense")
     (7 "/a" "*Only commits existing directly on ancestry path" "--ancestry-path")
@@ -481,20 +480,20 @@ commits before and half after."
     (mercit-log:--*-order)
     ("-r" "*Reverse order" "--reverse")]
    ["Formatting"
-    ("-g" "*Show graph"              "--graph")
+    ("-g" "Show graph"              "--graph")
     ("-c" "*Show graph in color"     "--color")
-    ("-d" "*Show refnames"           "--decorate")
+    ("-d" "Show refnames"           "--decorate")
     ("=S" "*Show signatures"         "--show-signature")
     ("-h" "*Show header"             "++header")
     ("-p" "*Show diffs"              ("-p" "--patch"))
-    ("-s" "*Show diffstats"          "--stat")]]
+    ("-s" "Show diffstats"          "--stat")]]
   [:if-not-mode mercit-log-mode
    :description "Arguments"
    (mercit-log:-n)
-   (mercit-log:--*-order)
-   ("-g" "*Show graph"               "--graph")
+   ;; (mercit-log:--*-order)
+   ("-g" "Show graph"               "--graph")
    ("-c" "*Show graph in color"      "--color")
-   ("-d" "*Show refnames"            "--decorate")]
+   ("-d" "Show refnames"            "--decorate")]
   [["Refresh"
     ("g" "*buffer"                   mercit-log-refresh)
     ("s" "*buffer and set defaults"  transient-set  :transient nil)
@@ -532,14 +531,14 @@ commits before and half after."
   ;; stands for) this is the only argument where we do not use the
   ;; long argument ("--max-count").
   :shortarg "-n"
-  :argument "-n"
+  :argument "--limit="
   :reader #'transient-read-number-N+)
 
 (transient-define-argument mercit:--author ()
   :description "*Limit to author"
   :class 'transient-option
-  :key "-A"
-  :argument "--author="
+  :key "-u"
+  :argument "--user="
   :reader #'mercit-transient-read-person)
 
 (transient-define-argument mercit-log:--since ()
@@ -556,7 +555,7 @@ commits before and half after."
   :argument "--until="
   :reader #'transient-read-date)
 
-(transient-define-argument mercit-log:--*-order ()
+(transient-define-argument mercit-log:--*-order ()  ;; TODO
   :description "*Order commits by"
   :class 'transient-switches
   :key "-o"
@@ -633,7 +632,7 @@ one or more revs read from the minibuffer."
   (mercit-log-setup-buffer (list "--rev=.") args files))
 
 ;;;###autoload
-(defun mercit-log-related (revs &optional args files)
+(defun mercit-log-related (revs &optional args files)  ;; TODO
   "Show log for the current branch, its upstream and its push target.
 When the upstream is a local branch, then also show its own
 upstream.  When `HEAD' is detached, then show log for that, the
@@ -769,7 +768,7 @@ restrict the log to the lines that the region touches."
   (require 'mercit)
   (mercit-log-setup-buffer
    (list rev)
-   (cons (format "-L:%s%s:%s"
+   (cons (format "-L:%s%s:%s"  ;; TODO
                  (string-replace ":" "\\:" (regexp-quote fn))
                  (if (derived-mode-p 'lisp-mode 'emacs-lisp-mode)
                      ;; Git doesn't treat "-" the same way as
@@ -794,7 +793,7 @@ restrict the log to the lines that the region touches."
       (call-interactively #'mercit-log-trace-definition))))
 
 ;;;###autoload
-(defun mercit-log-merged (commit branch &optional args files)
+(defun mercit-log-merged (commit branch &optional args files)  ;; TODO
   "Show log for the merge of COMMIT into BRANCH.
 
 More precisely, find merge commit M that brought COMMIT into
@@ -863,7 +862,7 @@ limit.  Otherwise set it to 256."
 
 (defun mercit-log-set-commit-limit (fn)
   (let* ((val mercit-buffer-log-args)
-         (arg (--first (string-match "^-n\\([0-9]+\\)?$" it) val))
+         (arg (--first (string-match "^--limit=\\([0-9]+\\)?$" it) val))
          (num (and arg (string-to-number (match-string 1 arg))))
          (num (if num (funcall fn num 2) 256)))
     (setq val (delete arg val))
@@ -904,7 +903,7 @@ is displayed in the current frame."
     (when (mercit-section-match 'commit)
       (let* ((section (mercit-current-section))
              (parent-rev (format "%s^%s" (oref section value) (or n 1))))
-        (if-let ((parent-hash (mercit-rev-parse "--short" parent-rev)))
+        (if-let ((parent-hash (mercit-rev-parse "-T" "{node:short}" parent-rev)))
             (if-let ((parent (--first (equal (oref it value)
                                              parent-hash)
                                       (mercit-section-siblings section 'next))))
@@ -938,7 +937,7 @@ of the current repository first; creating it if necessary."
 ;;;; Shortlog Commands
 
 ;;;###autoload (autoload 'mercit-shortlog "mercit-log" nil t)
-(transient-define-prefix mercit-shortlog ()
+(transient-define-prefix mercit-shortlog ()  ;; TODO
   "Show a history summary."
   :man-page "git-shortlog"
   :value '("--numbered" "--summary")
@@ -954,7 +953,7 @@ of the current repository first; creating it if necessary."
    ("s" "*since" mercit-shortlog-since)
    ("r" "*range" mercit-shortlog-range)])
 
-(defun mercit-git-shortlog (rev args)
+(defun mercit-git-shortlog (rev args)  ;; TODO
   (let ((dir default-directory))
     (with-current-buffer (get-buffer-create "*mercit-shortlog*")
       (setq default-directory dir)
@@ -1022,7 +1021,7 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
   (setq mercit--imenu-item-types 'commit))
 
 (put 'mercit-log-mode 'mercit-log-default-arguments
-     '("--graph" "--limit=256"))  ;; was "--decorate"
+     '("--graph" "--decorate" "--limit=256"))
 
 (defun mercit-log-setup-buffer (revs args files &optional locked focus)
   (require 'mercit)
@@ -1058,17 +1057,20 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
                             (> limit 1024) ; otherwise it's fast enough
                             (setq revs (car revs))
                             (not (string-search ".." revs))
-                            (not (member revs '("--all" "--branches")))
+                            (not (string-search "::" revs))
+                            (not (member revs '("--all" "--branches"))) ;; TODO
                             (-none-p (lambda (arg)
                                        (--any-p
                                         (string-prefix-p it arg)
                                         mercit-log-disable-graph-hack-args))
                                      args)
-                            (mercit-git-string "rev-list" "--count"
+                            (mercit-git-string "rev-list" "--count"  ;; TODO
                                               "--first-parent" args revs))))
       (setq revs (if (< (string-to-number count) limit)
-                     revs
+                    (mapcan (lambda (x) (format "..%s" x)) revs)  ;; TODO no format?
                    (format "%s~%s..%s" revs limit revs))))
+    ;; FIXME: only if when-let does not trigger
+    (setq revs (mapcan (lambda (x) (format "..%s" x)) revs))
     (mercit-insert-section (logbuf)
       (mercit-insert-log revs args files))))
 
@@ -1082,9 +1084,8 @@ Type \\[mercit-reset] to reset `HEAD' to the commit at point.
   "Return string describing some of the used arguments."
   (mapconcat (lambda (arg)
                (if (string-search " " arg)
-                   (prin1 arg)
                  arg))
-             `("git" "log" ,@args ,@revs "--" ,@files)
+             `("hg" "log" ,@args ,@revs "--" ,@files)
              " "))
 
 (defun mercit-log-header-line-sentence (revs args files)
@@ -1113,31 +1114,37 @@ Do not add this to a hook variable."
            "%m " ;; left (<), right (>) or boundary (-) mark  TODO
          "")
        "{node|short}"
-       (if (member "--decorate" args) "{branch}" "") ;; ref names without the " (", ")" wrapping.
+       (if (member "--decorate" args)
+           (concat "{ifcontains(rev, revset('.'), "
+                   "   ifcontains(rev, revset('head()'), 'HEAD -> ', 'HEAD,'))}"
+                   "{ifcontains(rev, revset('head()'), " ;; branch/topic heads only
+                   "   indent(if(topic, indent(topic, 'topic/') , branch),"
+                   "          'refs/heads/'))}"
+                   "{if(tags, indent(join(tags), 'tag: refs/tags/', ', tag: refs/tags/'))}"
+                   ))
+       ""
+       ;; ref names without the " (", ")" wrapping.
        (if (member "--show-signature" args)
-           (progn (setq args (remove "--show-signature" args)) "%G?")
+           (progn (setq args (remove "--show-signature" args)) "%G?")  ;; TODO
          "")
-       "{author}{date(date, '%s')}"
-       ;; (if (member "++header" args)
-       ;;     (if (member "--graph" (setq args (remove "++header" args)))
-       ;;         (concat "\n" mercit-log-revision-headers-format "\n")
-       ;;       (concat "\n" mercit-log-revision-headers-format "\n"))
-       ;;   "")
-       "{desc}\n")
+       "{author|person}{date(date, '%s')}{desc|firstline}"
+       (if (member "++header" args)
+           (if (member "--graph" (setq args (remove "++header" args)))
+               (concat "\n" mercit-log-revision-headers-format "\n")
+             (concat "\n" mercit-log-revision-headers-format "\n"))
+         "\n"))
       (progn
-        (--when-let (--first (string-match "^\\+\\+order=\\(.+\\)$" it) args)
-          (setq args (cons (format "--%s-order" (match-string 1 it))
-                           (remove it args))))
-        ;; TODO
-        ;; (when (member "--decorate" args)
-        ;;   (setq args (cons "--decorate=full" (remove "--decorate" args))))
-        ;; (when (member "--reverse" args)
-        ;;   (setq args (remove "--graph" args)))
+        ;; (--when-let (--first (string-match "^\\+\\+order=\\(.+\\)$" it) args)
+        ;;   (setq args (cons (format "--%s-order" (match-string 1 it))  ;; TODO
+        ;;                    (remove it args))))
+        (when (member "--decorate" args)
+          (setq args (remove "--decorate" args)))
+        (when (member "--reverse" args)
+          (setq args (remove "--graph" args)))
         (setq args (mercit-diff--maybe-add-stat-arguments args))
         args)
-      ;; TODO "--use-mailmap"
-      ;; TODO "--noprefix"
-      revs "--" files)))
+      ;; TODO "--use-mailmap" function: mailmap(author)
+      "--rev" revs "--" files)))  ;; TODO handel several revs
 
 (cl-defmethod mercit-menu-common-value ((_section mercit-commit-section))
   (or (mercit-diff--region-range)
@@ -1171,11 +1178,9 @@ Do not add this to a hook variable."
   (concat "^"
           "\\(?4:[-_/|\\*o<>. ]*\\)"               ; graph
           "\\(?1:[0-9a-fA-F]+\\)?"               ; hash
-          "\\(?3:[^\n]+\\)?"                   ; refs
+          "\\(?3:[^\n]+\\)?"                   ; refs (branch, topic, tags)
           "\\(?7:[BGUXYREN]\\)?"                 ; gpg
           "\\(?5:[^\n]*\\)"                    ; author
-          ;; Note: Date is optional because, prior to Git v2.19.0,
-          ;; `git rebase -i --root` corrupts the root's author date.
           "\\(?6:[^\n]*\\)"                    ; date
           "\\(?2:.*\\)$"))                         ; msg
 
@@ -1352,7 +1357,9 @@ Do not add this to a hook variable."
           (save-excursion
             (backward-char)
             (apply #'mercit-log-format-margin hash
-                   (split-string (mercit-rev-format "%aN%x00%ct" hash) "\0"))))
+                   (split-string
+                    (mercit-rev-format "{author|person}\0{date(date, '%s')}" hash)
+                    "\0"))))
         (when (and graph
                    (not (eobp))
                    (not (looking-at non-graph-re)))
@@ -1615,7 +1622,7 @@ Type \\[mercit-log-select-quit] to abort without selecting a commit."
   (hack-dir-local-variables-non-file-buffer))
 
 (put 'mercit-log-select-mode 'mercit-log-default-arguments
-     '("--graph" "--limit=256"))  ;; was  "--decorate"
+     '("--graph" "--decorate" "--limit=256"))
 
 (defun mercit-log-select-setup-buffer (revs args)
   (mercit-setup-buffer #'mercit-log-select-mode nil
@@ -1790,14 +1797,14 @@ in the pushremote case."
 (defun mercit-insert-unpulled-from-upstream ()
   "Insert commits that haven't been pulled from the upstream yet."
   (when-let ((upstream (mercit-get-upstream-branch)))
-    (mercit-insert-section (unpulled (concat "--rev=" upstream ":."
-                                             "and not . and not 000000000000")
+    (mercit-insert-section (unpulled (concat "--rev=" upstream ":. "
+                                             "and not 000000000000")
                                      t)
       (mercit-insert-heading
        (format (propertize "Unpulled from %s."  ;; TODO: name of remote repo?
                            'font-lock-face 'mercit-section-heading)
                upstream))
-      (mercit-insert-log (concat "--rev=" upstream ":.")
+      (mercit-insert-log (concat ".:" upstream)
                          mercit-buffer-log-args)
       (mercit-log-insert-child-count))))
 

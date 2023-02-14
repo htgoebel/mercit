@@ -408,7 +408,7 @@ Type \\[mercit-commit] to create a commit.
 (put 'mercit-status-mode 'mercit-diff-default-arguments
      '("--git"))  ;; was "--no-ext-diff"
 (put 'mercit-status-mode 'mercit-log-default-arguments
-     '("--limit=256" ))  ;; TODO: "--decorate" ?
+     '("--limit=256" "--decorate"))
 
 ;;;###autoload
 (defun mercit-status-setup-buffer (&optional directory)

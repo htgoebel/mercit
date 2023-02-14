@@ -2256,6 +2256,7 @@ and this option only controls what face is used.")
                 (re (format "^%s/.+" (regexp-opt (mercit-list-remotes)))))
             (setq names
                   (--map (cond ((string-equal it "HEAD")     it)
+                               ((string-equal it "tip")     it)
                                ((string-prefix-p "refs/" it) it)
                                ((member it branches) (concat "refs/heads/" it))
                                ((string-match re it) (concat "refs/remotes/" it))

@@ -1964,14 +1964,6 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
                   (mercit-list-remote-branches remote)))
     (mercit-list-refnames (concat "refs/remotes/" remote))))
 
-(defun mercit-format-refs (format &rest args)  ;; TODO
-  (let ((lines (mercit-git-lines
-                "for-each-ref" (concat "--format=" format)
-                (or args (list "refs/heads" "refs/remotes" "refs/tags")))))
-    (if (string-search "\f" format)
-        (--map (split-string it "\f") lines)
-      lines)))
-
 (defun mercit-list-remotes ()
   (mercit-git-lines "remote"))
 

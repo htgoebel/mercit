@@ -62,8 +62,7 @@ STYLE controls how to format the author or committer date.
   It can be one of `age' (to show the age of the commit),
   `age-abbreviated' (to abbreviate the time unit to a character),
   or a string (suitable for `format-time-string') to show the
-  actual date.  Option `mercit-log-margin-show-committer-date'
-  controls which date is being displayed.
+  actual date.
 WIDTH controls the width of the margin.  This exists for forward
   compatibility and currently the value should not be changed.
 AUTHOR controls whether the name of the author is also shown by

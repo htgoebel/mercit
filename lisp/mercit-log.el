@@ -100,8 +100,7 @@ STYLE controls how to format the author or committer date.
   It can be one of `age' (to show the age of the commit),
   `age-abbreviated' (to abbreviate the time unit to a character),
   or a string (suitable for `format-time-string') to show the
-  actual date.  Option `mercit-log-margin-show-committer-date'
-  controls which date is being displayed.
+  actual date.
 WIDTH controls the width of the margin.  This exists for forward
   compatibility and currently the value should not be changed.
 AUTHOR controls whether the name of the author is also shown by
@@ -114,18 +113,6 @@ AUTHOR-WIDTH has to be an integer.  When the name of the author
   :type mercit-log-margin--custom-type
   :initialize #'mercit-custom-initialize-reset
   :set (apply-partially #'mercit-margin-set-variable 'mercit-log-mode))
-
-(defcustom mercit-log-margin-show-committer-date nil
-  "Whether to show the committer date in the margin.
-
-This option only controls whether the committer date is displayed
-instead of the author date.  Whether some date is displayed in
-the margin and whether the margin is displayed at all is
-controlled by other options."
-  :package-version '(mercit . "0.0.0")
-  :group 'mercit-log
-  :group 'mercit-margin
-  :type 'boolean)
 
 (defcustom mercit-log-show-refname-after-summary nil
   "Whether to show refnames after commit summaries.
@@ -232,8 +219,7 @@ STYLE controls how to format the author or committer date.
   It can be one of `age' (to show the age of the commit),
   `age-abbreviated' (to abbreviate the time unit to a character),
   or a string (suitable for `format-time-string') to show the
-  actual date.  Option `mercit-log-margin-show-committer-date'
-  controls which date is being displayed.
+  actual date.
 WIDTH controls the width of the margin.  This exists for forward
   compatibility and currently the value should not be changed.
 AUTHOR controls whether the name of the author is also shown by
@@ -272,8 +258,7 @@ STYLE controls how to format the author or committer date.
   It can be one of `age' (to show the age of the commit),
   `age-abbreviated' (to abbreviate the time unit to a character),
   or a string (suitable for `format-time-string') to show the
-  actual date.  Option `mercit-log-margin-show-committer-date'
-  controls which date is being displayed.
+  actual date.
 WIDTH controls the width of the margin.  This exists for forward
   compatibility and currently the value should not be changed.
 AUTHOR controls whether the name of the author is also shown by
@@ -1132,10 +1117,7 @@ Do not add this to a hook variable."
        (if (member "--show-signature" args)
            (progn (setq args (remove "--show-signature" args)) "%G?")
          "")
-       "{author}"
-       (if mercit-log-margin-show-committer-date
-           "{date(commitdate, '%s')}\"
-         "{date(date, '%s')}")
+       "{author}{date(date, '%s')}"
        ;; (if (member "++header" args)
        ;;     (if (member "--graph" (setq args (remove "++header" args)))
        ;;         (concat "\n" mercit-log-revision-headers-format "\n")

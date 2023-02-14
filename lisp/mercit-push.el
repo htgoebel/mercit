@@ -52,8 +52,7 @@
     ("r" "*explicit refspecs" mercit-push-refspecs)
     ("m" "*matching branches" mercit-push-matching)]
    [("T" "*a tag"             mercit-push-tag)
-    ("t" "*all tags"          mercit-push-tags)
-    (6 "n" "*a note ref"      mercit-push-notes-ref)]]
+    ("t" "*all tags"          mercit-push-tags)]]
   ["Configure"
    ("C" "*Set variables..."  mercit-branch-configure)])
 
@@ -254,17 +253,6 @@ branch as default."
            (mercit-push-arguments))))
   (run-hooks 'mercit-credential-hook)
   (mercit-run-git-async "push" remote tag args))
-
-;;;###autoload
-(defun mercit-push-notes-ref (ref remote &optional args)
-  "Push a notes ref to another repository."
-  (interactive
-   (let ((note (mercit-notes-read-ref "Push notes" nil nil)))
-     (list note
-           (mercit-read-remote (format "Push %s to remote" note) nil t)
-           (mercit-push-arguments))))
-  (run-hooks 'mercit-credential-hook)
-  (mercit-run-git-async "push" remote ref args))
 
 ;;;###autoload (autoload 'mercit-push-implicitly "mercit-push" nil t)
 (transient-define-suffix mercit-push-implicitly (args)

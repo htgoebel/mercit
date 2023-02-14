@@ -80,7 +80,6 @@ ELS += mercit-branch.el
 ELS += mercit-merge.el
 ELS += mercit-tag.el
 ELS += mercit-worktree.el
-ELS += mercit-notes.el
 ELS += mercit-obsolete.el
 ELS += mercit-sequence.el
 ELS += mercit-commit.el

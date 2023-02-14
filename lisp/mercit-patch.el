@@ -82,7 +82,6 @@ which creates patches for all commits that are reachable from
    ("C-m r  " "*RFC subject prefix" "--rfc")
    ("C-m l  " "*Add cover letter" "--cover-letter")
    (5 mercit-format-patch:--cover-from-description)
-   (5 mercit-format-patch:--notes)
    (mercit-format-patch:--output-directory)]
   ["Diff arguments"
    (mercit-diff:-U)
@@ -196,13 +195,6 @@ which creates patches for all commits that are reachable from
     (?s "*[s]ubject" "subject")
     (?a "*[a]uto"    "auto")
     (?n "*[n]othing" "none")))
-
-(transient-define-argument mercit-format-patch:--notes ()
-  :description "*Insert commentary from notes"
-  :class 'transient-option
-  :key "C-m n  "
-  :argument "--notes="
-  :reader #'mercit-notes-read-ref)
 
 (transient-define-argument mercit-format-patch:--from ()
   :description "*From"

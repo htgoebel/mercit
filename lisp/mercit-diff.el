@@ -344,7 +344,6 @@ and `--compact-summary'.  See the git-diff(1) manpage."
   '(mercit-insert-revision-tag
     mercit-insert-revision-headers
     mercit-insert-revision-message
-    mercit-insert-revision-notes
     mercit-insert-revision-diff
     mercit-insert-xref-buttons)
   "Hook run to insert sections into a `mercit-revision-mode' buffer."
@@ -2650,34 +2649,6 @@ or a ref which is not a branch, then it inserts nothing."
                      (list face 'mercit-keyword)
                    'mercit-keyword))))))
         (goto-char (point-max))))))
-
-(defun mercit-insert-revision-notes ()
-  "Insert commit notes into a revision buffer."
-  (let* ((var "core.notesRef")
-         (def (or (mercit-get var) "refs/notes/commits")))
-    (dolist (ref (or (mercit-list-active-notes-refs)))
-      (mercit-insert-section section (notes ref (not (equal ref def)))
-        (oset section heading-highlight-face 'mercit-diff-hunk-heading-highlight)
-        (let ((beg (point))
-              (rev mercit-buffer-revision))
-          (insert (with-temp-buffer
-                    (mercit-git-insert "-c" (concat "core.notesRef=" ref)
-                                      "notes" "show" rev)
-                    (mercit-revision--wash-message)))
-          (if (= (point) beg)
-              (mercit-cancel-section)
-            (goto-char beg)
-            (end-of-line)
-            (insert (format " (%s)"
-                            (propertize (if (string-prefix-p "refs/notes/" ref)
-                                            (substring ref 11)
-                                          ref)
-                                        'font-lock-face 'mercit-refname)))
-            (forward-char)
-            (mercit--add-face-text-property beg (point) 'mercit-diff-hunk-heading)
-            (mercit-insert-heading)
-            (goto-char (point-max))
-            (insert ?\n)))))))
 
 (defun mercit-revision--wash-message ()
   (let ((major-mode 'git-commit-mode))

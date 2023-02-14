@@ -355,7 +355,6 @@ Also see info node `(mercit)Commands for Buffers Visiting Files'."
     ;; s                  ↓
     ;; S                  ↓
     ("t" "*Tag"            mercit-tag)
-    ("T" "*Note"           mercit-notes)
     ;; u                  ↓
     ;; U                  ↓
     ;; v                  ↓
@@ -707,7 +706,6 @@ For X11 something like ~/.xinitrc should work.\n"
   (require 'mercit-merge)
   (require 'mercit-tag)
   (require 'mercit-worktree)
-  (require 'mercit-notes)
   (require 'mercit-sequence)
   (require 'mercit-commit)
   (require 'mercit-remote)

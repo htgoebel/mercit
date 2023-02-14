@@ -374,7 +374,6 @@ recommended value."
     (define-key map "s" 'mercit-stage-file)
     (define-key map "S" 'mercit-stage-modified)
     (define-key map "t" 'mercit-tag)
-    (define-key map "T" 'mercit-notes)
     (define-key map "u" 'mercit-unstage-file)
     (define-key map "U" 'mercit-unstage-all)
     (define-key map "v" 'mercit-revert-no-commit)
@@ -489,8 +488,6 @@ which visits the thing at point using `browse-url'."
      "---"
      ["Apply patches..."          mercit-am t]
      ["Format patches..."         mercit-patch t]
-     "---"
-     ["Note..."                   mercit-notes t]
      "---"
      ["Submodule..."              mercit-submodule t]
      ["Subtree..."                mercit-subtree t]

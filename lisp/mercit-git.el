@@ -1973,15 +1973,6 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
 (defun mercit-list-stashes (&optional format)
   (mercit-git-lines "shelve" "--list" "--template" (or format "%gd")))  ;; TODO
 
-(defun mercit-list-active-notes-refs ()  ;; TODO
-  "Return notes refs according to `core.notesRef' and `notes.displayRef'."
-  (mercit-git-lines "for-each-ref" "--format=%(refname)"
-                   (or (mercit-get "core.notesRef") "refs/notes/commits")
-                   (mercit-get-all "notes.displayRef")))
-
-(defun mercit-list-notes-refnames ()  ;; TODO
-  (--map (substring it 6) (mercit-list-refnames "refs/notes")))
-
 (defun mercit-remote-list-tags (remote)  ;; TODO
   (--keep (and (not (string-suffix-p "^{}" it))
                (substring it 51))

@@ -42,7 +42,6 @@ mercit-branch.elc:          mercit.elc mercit-reset.elc
 mercit-merge.elc:           mercit.elc mercit-diff.elc
 mercit-tag.elc:             mercit.elc
 mercit-worktree.elc:        mercit.elc
-mercit-notes.elc:           mercit.elc
 mercit-sequence.elc:        mercit.elc
 mercit-commit.elc:          mercit.elc mercit-sequence.elc
 mercit-remote.elc:          mercit.elc

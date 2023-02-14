@@ -542,7 +542,7 @@ If `HEAD' is detached, then insert information about that commit
 instead.  The optional BRANCH argument is for internal use only."
   (let ((branch (or branch (mercit-get-current-branch)))
         (output (mercit-rev-format "{node|short} {desc|firstline}"
-                                   (concat "--rev=" (or branch ".")))))
+                                   (or branch "."))))
     (string-match "^\\([^ ]+\\) \\(.*\\)" output)
     (mercit-bind-match-strings (commit summary) output
       (when (equal summary "")

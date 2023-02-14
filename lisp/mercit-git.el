@@ -1872,21 +1872,21 @@ When NAMESPACES is non-nil, list refs from these namespaces
 rather than those from `mercit-list-refs-namespaces'.
 
 FORMAT is passed to the `--format' flag of `git for-each-ref'
-and defaults to \"%(refname)\".  If the format is \"%(refname)\"
-or \"%(refname:short)\", then drop the symbolic-ref `HEAD'.
+and defaults to \"%(refname)\".  If the format is \"{branch}\"
+or \"{branch}\", then drop the symbolic-ref `HEAD'.
 
 SORTBY is a key or list of keys to pass to the `--sort' flag of
 `git for-each-ref'.  When nil, use `mercit-list-refs-sortby'"
   (unless format
-    (setq format "%(refname)"))
-  (let ((refs (mercit-git-lines "for-each-ref"
-                               (concat "--format=" format)
-                               (--map (concat "--sort=" it)
-                                      (pcase (or sortby mercit-list-refs-sortby)
-                                        ((and val (pred stringp)) (list val))
-                                        ((and val (pred listp)) val)))
-                               (or namespaces mercit-list-refs-namespaces))))
-    (if (member format '("%(refname)" "%(refname:short)"))
+    (setq format "{branch}\n"))
+  (let ((refs (mercit-git-lines "branches" "--template" format
+                               ;; (--map (concat "--sort=" it)  TODO
+                               ;;        (pcase (or sortby mercit-list-refs-sortby)
+                               ;;          ((and val (pred stringp)) (list val))
+                               ;;          ((and val (pred listp)) val)))
+                               ;; (or namespaces mercit-list-refs-namespaces)
+                               )))
+    (if (member format '("{branch}\n" "{branch}\n"))
         (let ((case-fold-search nil))
           (--remove (string-match-p "\\(\\`\\|/\\)HEAD\\'" it)
                     refs))
@@ -1894,10 +1894,10 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
 
 (defun mercit-list-branches ()
   ;; local and remote branches
-  (mercit-git-lines "branches" "-T" "{branch}\n"))
+  (mercit-git-lines "branches" "--template" "{branch}\n"))
 
 (defun mercit-list-local-branches ()
-  (mercit-git-lines "branches" "-T" "{branch}\n"))
+  (mercit-git-lines "branches" "--template" "{branch}\n"))
 
 (defun mercit-list-remote-branches (&optional remote)  ;; TODO
   (mercit-list-refs (concat "refs/remotes/" remote)))
@@ -1911,7 +1911,7 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
   (mercit-list-related-branches "--contains" commit args))
 
 (defun mercit-list-publishing-branches (&optional commit)  ;; TODO
-  (--filter (mercit-rev-ancestor-p (or commit "HEAD") it)
+  (--filter (mercit-rev-ancestor-p (or commit ".") it)
             mercit-published-branches))
 
 (defun mercit-list-merged-branches (&optional commit &rest args)  ;; TODO
@@ -1935,7 +1935,7 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
             (mercit-git-lines "show-ref"))))
 
 (defun mercit-list-refnames (&optional namespaces include-special)  ;; TODO
-  (nconc (mercit-list-refs namespaces "%(refname:short)")
+  (nconc (mercit-list-refs namespaces "{branch}\n")  ;; TODO topics, tags, branch
          (and include-special
               (mercit-list-special-refnames))))
 
@@ -2180,7 +2180,7 @@ Return a list of two integers: (A>B B>A)."
                     (--map (split-string it " ")
                            (mercit-git-lines
                             "log" "--format=%H %P"
-                            (or args (list "--branches" "--tags" "--remotes"))
+                            ;; (or args (list "--branches" "--tags" "--remotes"))
                             "--not" commit)))))
 
 (defun mercit-commit-parents (commit)  ;; TODO
@@ -2200,19 +2200,19 @@ Return a list of two integers: (A>B B>A)."
   ;; Prefer `git log --no-walk' to `git show --no-patch' because it
   ;; performs better in some scenarios.
   (let ((str (mercit-git-string "log" "--limit=1"
-                               "--template" format args
-                               (if rev (mercit--rev-dereference rev) "HEAD")
-                               "--")))
+                                "--template" format args
+                                "--rev"
+                                (if rev (mercit--rev-dereference rev) ".")
+                                "--")))
     (and (not (string-equal str ""))
          str)))
 
-(defun mercit-rev-insert-format (format &optional rev args)  ;; TODO
-  ;; Prefer `git log --no-walk' to `git show --no-patch' because it
-  ;; performs better in some scenarios.
-  (mercit-git-insert "log" "--no-walk"
-                    (concat "--format=" format) args
-                    (if rev (mercit--rev-dereference rev) "HEAD")
-                    "--"))
+(defun mercit-rev-insert-format (format &optional rev args)
+  (mercit-git-insert "log" "--limit=1"
+                     "--template" format args
+                     "--rev"
+                     (if rev (mercit--rev-dereference rev) ".")
+                     "--"))
 
 (defun mercit-format-rev-summary (rev)  ;; TODO
   (when-let* ((str (mercit-rev-format "{node|short} {desc|firstline}" rev)))
